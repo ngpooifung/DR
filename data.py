@@ -41,9 +41,12 @@ for name in folder:
     for img in imglist:
         if img.split('.')[0] in list(gradable['IMG']):
             image = cv2.imread(os.path.join(*[dir, img]))
-            index = gradable.index[gradable['IMG'] == img.split('.')[0]].item()
+            index = gradable.index[gradable['IMG'] == img.split('.')[0]]
+            if len(index)>1:
+                print(index)
+                continue
             for cla in classes:
-                label = gradable[cla][index]
+                label = gradable[cla][index.item()]
                 tifffile.imsave(os.path.join(*[output_dir, cla, str(label), img.split('.')[0] + '.tif']), image)
 
         elif img.split('.')[0] in list(ungradable['IMG']):
