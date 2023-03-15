@@ -8,7 +8,7 @@ import cv2
 class Imagefolder(datasets.ImageFolder):
     def __init__(self, img_dir, size= (500, 500), resize = (480, 384), transform=None):
         super(Imagefolder, self).__init__(img_dir)
-        self.transform = transforms
+        self.transform = transform
         self.resize = resize
         self.size = size
 
