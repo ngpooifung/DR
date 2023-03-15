@@ -21,7 +21,7 @@ class modeltrainer():
 class Resmodel(nn.Module):
 
     def __init__(self, base_model, out_dim, pretrained):
-        super(ResNetSimCLR, self).__init__()
+        super(Resmodel, self).__init__()
 
         self.backbone = self._get_basemodel(base_model, pretrained = pretrained)
         dim_mlp = self.backbone.fc.in_features

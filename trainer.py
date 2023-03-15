@@ -18,7 +18,7 @@ class Restrainer(object):
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
-        log_dir = os.path.join(os.path.split(self.args.dir)[0], os.path.splitext(os.path.split(self.args.dir)[1])[0])
+        log_dir = self.args.dir
         self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
