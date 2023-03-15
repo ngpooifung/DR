@@ -26,6 +26,7 @@ class Resmodel(nn.Module):
         self.backbone = self._get_basemodel(base_model, pretrained = pretrained)
         dim_mlp = self.backbone.fc.in_features
         self.backbone.fc = nn.Linear(in_features=dim_mlp, out_features=out_dim, bias=True)
+        # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(2), nn.Sigmoid())
 
     def _get_basemodel(self, model_name, pretrained=False):
         model = torch.hub.load('pytorch/vision:v0.11.2', model_name, pretrained=pretrained)

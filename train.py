@@ -86,7 +86,7 @@ def main():
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
-    model = modeltrainer._get_model(base_model = args.arch, out_dim = args.out_dim, pretrained = args.pretrained).to(args.device)
+    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, pretrained = args.pretrained).to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
