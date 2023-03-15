@@ -112,7 +112,7 @@ def eval():
 
     test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
     test_sampler = DistributedSampler(test_dataset)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
 
     file = os.path.join(os.path.split(args.dir)[0], os.path.splitext(os.path.split(args.dir)[1])[0])
     path = os.path.join(file, '%s_%04d.pth.tar'%('main', args.saved_epochs))
