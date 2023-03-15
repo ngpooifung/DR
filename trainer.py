@@ -22,7 +22,7 @@ class Restrainer(object):
         self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
-    def train(train_loader):
+    def train(self, train_loader):
         self.model.train()
 
         logging.info(f"Start training for {self.args.epochs} epochs.")
@@ -59,7 +59,7 @@ class Restrainer(object):
         }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
-    def eval(test_loader):
+    def eval(self, test_loader):
         self.model.eval()
 
         logging.info(f"Testing with gpu: {not self.args.disable_cuda}.")
