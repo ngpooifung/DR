@@ -1,7 +1,7 @@
 # %%
 import numpy as np
 import torch
-from utils import topacc, save_checkpoint
+from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
 from torch.cuda.amp import GradScaler, autocast
 import os
@@ -17,8 +17,8 @@ class Restrainer(object):
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
-        self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
-        # self.criterion = torch.nn.BCELoss().to(self.args.device)
+        # self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
+        self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
         self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
@@ -40,7 +40,7 @@ class Restrainer(object):
                 logits = self.model(img)
                 loss = self.criterion(logits, lbl)
 
-                top1 = topacc(logits, lbl, topk=(1,))
+                top1 = bceacc(logits, lbl, topk=(1,))
                 top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
