@@ -37,7 +37,7 @@ class Restrainer(object):
                 img = img.to(self.args.device)
 
                 logits = self.model(img)
-                lbl = lbl[1].view(-1, 1).expand_as(logits).to(self.args.device)
+                lbl = lbl[1].view(-1, 1).float().expand_as(logits).to(self.args.device)
                 loss = self.criterion(logits, lbl)
 
                 top1 = bceacc(logits, lbl, topk=(1,))
