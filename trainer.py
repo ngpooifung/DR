@@ -35,9 +35,9 @@ class Restrainer(object):
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
-                lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
+                lbl = lbl[1].view(-1, 1).expand_as(logits).to(self.args.device)
                 loss = self.criterion(logits, lbl)
 
                 top1 = bceacc(logits, lbl, topk=(1,))
