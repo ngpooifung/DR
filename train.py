@@ -36,8 +36,6 @@ parser.add_argument('--arch', default='resnet50', type = str,
                     help='model architecture')
 parser.add_argument('--out_dim', default=2, type=int,
                     help='feature dimension (default: 2)')
-parser.add_argument('--pretrained', action='store_true',
-                    help='pretrained model')
 
 # Training
 parser.add_argument('--epochs', type = int, default = 100,
@@ -86,7 +84,7 @@ def main():
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, pretrained = args.pretrained).to(args.device)
+    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
@@ -119,7 +117,7 @@ def eval():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
-    model = modeltrainer._get_model(base_model = args.arch, out_dim = args.out_dim, pretrained = args.pretrained).to(args.device)
+    model = modeltrainer._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)

@@ -17,8 +17,8 @@ class Restrainer(object):
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
-        # self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
-        self.criterion = torch.nn.BCELoss().to(self.args.device)
+        self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
+        # self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
         self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
@@ -35,14 +35,13 @@ class Restrainer(object):
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
-                lbl = lbl[1].float().to(self.args.device)
+                lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
-                logits = logits.squeeze()
-                # label = lbl.view(-1, 1).float().expand_as(logits).to(self.args.device)
+                # logits = logits.squeeze()
                 loss = self.criterion(logits, lbl)
 
-                top1 = bceacc(logits, lbl)
+                top1 = topacc(logits, lbl, topk = (1,))
                 top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
