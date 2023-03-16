@@ -54,8 +54,8 @@ import cv2
 #             tifffile.imsave(os.path.join(*[ungrad_dir, img.split('.')[0] + '.tif']), image)
 
 # %%
-jpg_dir = '/sratch/PI/eeaaquadeer/Phoom/RDR'
-tiff_dir = '/sratch/PI/eeaaquadeer/Phoom/RDRt'
+jpg_dir = '/scratch/PI/eeaaquadeer/Phoom/RDR'
+tiff_dir = '/scratch/PI/eeaaquadeer/Phoom/RDRt'
 split = ['test', 'training', 'validation']
 classes = ['0', '1']
 for sp in split:
