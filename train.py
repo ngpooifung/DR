@@ -26,9 +26,9 @@ parser.add_argument('--dir', type = str,
                     help = 'Path to training data directory')
 parser.add_argument('--test-dir', type = str, default = None,
                     help = 'Path to test data directory')
-parser.add_argument('--resize', default = (480, 384), type = tuple,
+parser.add_argument('--resize', default = (480, 384), nargs = 2, type = int,
                     help='resize images in training')
-parser.add_argument('--min_size', default = (500, 500), type = tuple,
+parser.add_argument('--min_size', default = (500, 500), nargs = 2, type = int,
                     help='min image size in training')
 
 # Model
