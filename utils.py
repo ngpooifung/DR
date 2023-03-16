@@ -24,14 +24,14 @@ def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     torch.save(state, filename)
     if is_best:
         shutil.copyfile(filename, 'model_best.pth.tar')
-        
+
 
 def bceacc(output, target):
     with torch.no_grad():
         assert output.size() == target.size()
         batch_size = target.size(0)
         res = []
-        correct = (output > 0.5).eq(target.bool()).sum(1, keepdim = True)
+        correct = (output > 0.5).eq(target.bool()).float().sum(1, keepdim = True)
         res.append(correct.mul_(100.0 / batch_size))
 
         return res
