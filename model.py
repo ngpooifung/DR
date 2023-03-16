@@ -29,7 +29,7 @@ class Resmodel(nn.Module):
         # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
 
     def _get_basemodel(self, model_name):
-        model = torch.hub.load('pytorch/vision:v0.11.2', model_name, weights = 'IMAGENET1K_V2')
+        model = torch.hub.load('pytorch/vision:v0.11.2', model_name, pretrained = True)
         return model
 
     def forward(self, x):
