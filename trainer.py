@@ -35,7 +35,7 @@ class Restrainer(object):
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
-                lbl = lbl[1].to(self.args.device)
+                lbl = lbl[1].float().to(self.args.device)
 
                 logits = self.model(img)
                 logits = logits.squeeze()
