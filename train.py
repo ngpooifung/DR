@@ -44,7 +44,7 @@ parser.add_argument('--epochs', type = int, default = 100,
                     help = 'Number of training epochs')
 parser.add_argument('--saved-epochs', type = int, default = 100,
                     help = 'Load save checkpoints epochs')
-parser.add_argument('--lr', type = float, default = 0.0001,
+parser.add_argument('--lr', type = float, default = 0.0003,
                     help  = 'Learning rate')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
