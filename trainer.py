@@ -40,7 +40,7 @@ class Restrainer(object):
                 lbl = lbl[1].view(-1, 1).float().expand_as(logits).to(self.args.device)
                 loss = self.criterion(logits, lbl)
 
-                top1 = bceacc(logits, lbl, topk=(1,))
+                top1 = bceacc(logits, lbl)
                 top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
