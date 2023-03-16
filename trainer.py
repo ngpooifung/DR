@@ -52,7 +52,7 @@ class Restrainer(object):
             self.scheduler.step()
             top1_train_accuracy /= (counter + 1)
 
-            logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy}\tLR: {self.scheduler.get_last_lr()}")
+            logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
 
         logging.info("Training has finished.")
         checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, self.args.epochs)

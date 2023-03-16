@@ -31,7 +31,7 @@ def bceacc(output, target):
         assert output.size() == target.size()
         batch_size = target.size(0)
         res = []
-        correct = (output > 0.5).eq(target.bool()).float().sum(1, keepdim = True)
+        correct = (output > 0.5).eq(target.bool()).float().sum(0, keepdim = True)
         res.append(correct.mul_(100.0 / batch_size))
 
         return res
