@@ -117,7 +117,7 @@ def eval():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
-    model = modeltrainer._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
