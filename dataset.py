@@ -47,7 +47,8 @@ class Modeldataset:
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.08,1.0)),
                                               transforms.RandomHorizontalFlip(),
-                                              transforms.RandomRotation(degrees = (0,180))
+                                              # RotationTransform(angles=[0, 90, 180, 270])
+                                              # transforms.RandomRotation(degrees = (0,180))
                                               ])
         return data_transforms
 
@@ -58,3 +59,14 @@ class Modeldataset:
             dataset = Imagefolder(img_dir = self.root_folder, resize = resize)
 
         return dataset
+
+
+class RotationTransform:
+    """Rotate by one of the given angles."""
+
+    def __init__(self, angles):
+        self.angles = angles
+
+    def __call__(self, x):
+        angle = random.choice(self.angles)
+        return TF.rotate(x, angle)
