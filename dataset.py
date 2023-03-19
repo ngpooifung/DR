@@ -4,6 +4,8 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import tifffile
 import cv2
+import torchvision.transforms.functional as TF
+import random
 # %%
 class Imagefolder(datasets.ImageFolder):
     def __init__(self, img_dir, size= (100, 100), resize = (480, 384), transform=None):
