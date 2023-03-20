@@ -49,7 +49,7 @@ class Modeldataset:
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.08,1.0)),
                                               transforms.RandomHorizontalFlip(),
-                                              RotationTransform(angles=[0, 90, 180, 270])
+                                              # RotationTransform(angles=[0, 90, 180, 270])
                                               # transforms.RandomRotation(degrees = (0,180))
                                               ])
         return data_transforms
