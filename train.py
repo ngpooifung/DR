@@ -19,7 +19,7 @@ function_names = ['main', 'eval']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
-                    help='process: ' +  ' | '.join(function_names))
+                    help = 'process: ' +  ' | '.join(function_names))
 
 # Data
 parser.add_argument('--dir', type = str,
@@ -27,15 +27,15 @@ parser.add_argument('--dir', type = str,
 parser.add_argument('--test-dir', type = str, default = None,
                     help = 'Path to test data directory')
 parser.add_argument('--resize', default = (480, 384), nargs = 2, type = int,
-                    help='resize images in training')
+                    help = 'resize images in training')
 parser.add_argument('--min_size', default = (100, 100), nargs = 2, type = int,
-                    help='min image size in training')
+                    help = 'min image size in training')
 
 # Model
 parser.add_argument('--arch', default='resnet50', type = str,
-                    help='model architecture')
+                    help = 'model architecture')
 parser.add_argument('--out_dim', default=2, type=int,
-                    help='feature dimension (default: 2)')
+                    help = 'feature dimension (default: 2)')
 
 # Training
 parser.add_argument('--epochs', type = int, default = 100,
@@ -43,7 +43,7 @@ parser.add_argument('--epochs', type = int, default = 100,
 parser.add_argument('--saved-epochs', type = int, default = 100,
                     help = 'Load save checkpoints epochs')
 parser.add_argument('--lr', type = float, default = 0.0003,
-                    help  = 'Learning rate')
+                    help = 'Learning rate')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
 parser.add_argument('--disable_cuda', action = 'store_true',
@@ -51,11 +51,11 @@ parser.add_argument('--disable_cuda', action = 'store_true',
 parser.add_argument('--gpu-index', type = int, default = 0,
                     help = 'GPU index')
 parser.add_argument('--log-every-n-steps', default = 100, type = int,
-                    help= 'Log every n steps')
+                    help = 'Log every n steps')
 parser.add_argument('--checkpoint-n-steps', default = 50, type = int,
                     help = 'Save checkpoint every n steps')
 parser.add_argument('--fp16-precision', action='store_true',
-                    help='Whether or not to use 16-bit precision GPU training.')
+                    help = 'Whether or not to use 16-bit precision GPU training.')
 parser.add_argument('--workers', type = int, default = 16,
                     help = 'Number of data loading workers')
 parser.add_argument('--batch_size', type = int, default = 32,
