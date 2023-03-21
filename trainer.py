@@ -57,8 +57,7 @@ class Restrainer(object):
         checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, self.args.epochs)
         save_checkpoint({
             'epoch': self.args.epochs,
-            'state_dict': self.model.module.state_dict(),
-        }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
+            'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
     def eval(self, test_loader):
