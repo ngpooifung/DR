@@ -23,7 +23,7 @@ class Restrainer(object):
         self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
-    def train(self, train_loader):
+    def train(self, train_loader, test_loader = None):
         self.model.train()
 
         logging.info(f"Start training for {self.args.epochs} epochs.")
@@ -32,7 +32,9 @@ class Restrainer(object):
 
         for epoch_counter in range(self.args.epochs):
             train_loader.sampler.set_epoch(epoch_counter)
+            test_loader.sampler.set_epoch(epoch_counter)
             top1_train_accuracy = 0
+            top1_valid_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
@@ -51,7 +53,18 @@ class Restrainer(object):
             self.scheduler.step()
             top1_train_accuracy /= (counter + 1)
 
-            logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            if test_loader is not None:
+                with torch.no_grad():
+                    for counter, (img, lbl) in enumerate(test_loader):
+                        img = img.to(self.args.device)
+                        lbl = lbl[1].to(self.args.device)
+
+                        logits = self.model(img)
+                        top1 = topacc(logits, lbl, topk = (1,))
+                        top1_valid_accuracy += top1[0]
+                    top1_valid_accuracy /= (counter + 1)
+
+            logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
 
         logging.info("Training has finished.")
         checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, self.args.epochs)
