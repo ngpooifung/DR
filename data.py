@@ -31,7 +31,7 @@ img_dir = '/scratch/PI/eeaaquadeer/UWF'
 output_dir = '/scratch/PI/eeaaquadeer/Adam'
 ungrad_dir = '/scratch/PI/eeaaquadeer/Adam/ungradable'
 folder = os.listdir(img_dir)
-classes = ['VTDR', 'RDR']
+classes = ['VTDRlong', 'RDRlong']
 
 for name in folder:
     if os.path.exists(os.path.join(*[img_dir, name, 'REDGREEN'])):
