@@ -44,8 +44,8 @@ for name in folder:
         if '(' in img or (img[-3:]!="tif" and img[-3:]!="jpg"):
             continue
         image = cv2.imread(os.path.join(*[dir, img]))
-        height, width, channels = img.shape
-        if height<500 or width<500 or channels!=3 or img[:,:,0].sum()==img[:,:,1].sum():
+        height, width, channels = image.shape
+        if height<500 or width<500 or channels!=3 or image[:,:,0].sum()==image[:,:,1].sum():
             continue
         image = cv2.resize(image, (960, 768))
 
