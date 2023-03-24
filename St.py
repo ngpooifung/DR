@@ -82,8 +82,8 @@ for folder in filenames:
         if name not in sevs.keys():
             continue
         label=sevs[name]
-        dirname='/scratch/PI/eeaaquadeer/sp'+str(label)+"/"
+        dirname='/scratch/PI/eeaaquadeer/sp/'+str(label)+"/"
         if not os.path.exists(dirname):
             os.mkdir(dirname)
-        path = '/scratch/PI/eeaaquadeer/sp'+str(label)+"/"+name+".jpg"
+        path = '/scratch/PI/eeaaquadeer/sp/'+str(label)+"/"+name+".jpg"
         cv2.imwrite(path,img)
