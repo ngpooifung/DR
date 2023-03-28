@@ -14,7 +14,7 @@ sevs = {}
 with open('H.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        level= int(row["VTDR"])
+        level= int(row["Referable DR"])
         for visit in range(1,8):
             curr = "Im"+str(visit)
             if row[curr]!="":
@@ -31,7 +31,7 @@ for name in files:
 filenames = sorted(filenames)
 has={}
 i=0
-dirname='/scratch/PI/eeaaquadeer/sp'
+dirname='/scratch/PI/eeaaquadeer/rdrsp'
 if not os.path.exists(dirname):
     os.mkdir(dirname)
 for folder in filenames:
@@ -82,8 +82,8 @@ for folder in filenames:
         if name not in sevs.keys():
             continue
         label=sevs[name]
-        dirname='/scratch/PI/eeaaquadeer/sp/'+str(label)+"/"
+        dirname='/scratch/PI/eeaaquadeer/rdrsp/'+str(label)+"/"
         if not os.path.exists(dirname):
             os.mkdir(dirname)
-        path = '/scratch/PI/eeaaquadeer/sp/'+str(label)+"/"+name+".jpg"
+        path = '/scratch/PI/eeaaquadeer/rdrsp/'+str(label)+"/"+name+".jpg"
         cv2.imwrite(path,img)
