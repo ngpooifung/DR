@@ -118,5 +118,5 @@ for c in cls:
     l = []
     imglist = os.listdir(os.path.join(*[tiff_dir, c]))
     for img in imglist:
-        l.append(img.split('-')[0][4:7])
+        l.append(img.split('-')[0])
     print(len(set(l)))
