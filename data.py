@@ -112,7 +112,7 @@ from sklearn.metrics import classification_report
 
 
 # # %%
-tiff_dir = '/scratch/PI/eeaaquadeer/sp'
+tiff_dir = '/scratch/PI/eeaaquadeer/rdrsp'
 cls = ['0', '1']
 for c in cls:
     l = []
