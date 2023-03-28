@@ -114,9 +114,9 @@ from sklearn.metrics import classification_report
 # # %%
 tiff_dir = '/scratch/PI/eeaaquadeer/sp'
 cls = ['0', '1']
-l = []
 for c in cls:
+    l = []
     imglist = os.listdir(os.path.join(*[tiff_dir, c]))
     for img in imglist:
         l.append(img.split('-')[0][4:7] + img.split('-')[2][0])
-print(len(set(l)))
+    print(len(set(l)))
