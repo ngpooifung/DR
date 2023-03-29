@@ -13,7 +13,7 @@ class modeltrainer():
 
         if type == 'torchvision.models.resnet':
             return Resmodel(base_model, out_dim)
-        elif type = 'torchvision.models.inception':
+        elif type == 'torchvision.models.inception':
             return Inceptionmodel(base_model, out_dim)
         else:
             raise InvalidBackboneError(
