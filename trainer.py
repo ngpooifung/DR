@@ -40,7 +40,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
-                logits = logits.logtis
+                logits = logits.logits
                 # logits = logits.squeeze()
                 loss = self.criterion(logits, lbl)
 
@@ -61,7 +61,7 @@ class Restrainer(object):
                         lbl = lbl[1].to(self.args.device)
 
                         logits = self.model(img)
-                        logits = logits.logtis
+                        logits = logits.logits
                         top1 = topacc(logits, lbl, topk = (1,))
                         top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
@@ -93,7 +93,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
-                logits = logits.logtis
+                logits = logits.logits
                 loss = self.criterion(logits, lbl)
 
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
