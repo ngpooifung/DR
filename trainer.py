@@ -42,7 +42,7 @@ class Restrainer(object):
                 logits = self.model(img)
                 try:
                     logits = logits.logtis
-                else:
+                except:
                     pass
                 # logits = logits.squeeze()
                 loss = self.criterion(logits, lbl)
@@ -66,7 +66,7 @@ class Restrainer(object):
                         logits = self.model(img)
                         try:
                             logits = logits.logtis
-                        else:
+                        except:
                             pass
                         top1 = topacc(logits, lbl, topk = (1,))
                         top1_valid_accuracy += top1[0]
@@ -101,7 +101,7 @@ class Restrainer(object):
                 logits = self.model(img)
                 try:
                     logits = logits.logtis
-                else:
+                except:
                     pass
                 loss = self.criterion(logits, lbl)
 
