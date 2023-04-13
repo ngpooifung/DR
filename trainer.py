@@ -61,7 +61,7 @@ class Restrainer(object):
                         img = img.to(self.args.device)
                         lbl = lbl[1].to(self.args.device)
 
-                        logits = self.model(img)
+                        logits, aux_logits = self.model(img)
                         top1 = topacc(logits, lbl, topk = (1,))
                         top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
