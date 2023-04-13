@@ -39,7 +39,7 @@ class Restrainer(object):
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img)
+                logits, aux_logits = self.model(img)
                 # logits = logits.squeeze()
                 loss = self.criterion(logits, lbl)
 
