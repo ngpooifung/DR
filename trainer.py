@@ -41,7 +41,9 @@ class Restrainer(object):
 
                 logits, aux_logits = self.model(img)
                 # logits = logits.squeeze()
-                loss = self.criterion(logits, lbl)
+                loss1 = self.criterion(logits, lbl)
+                loss2 = self.criterion(aux_logits, lbl)
+                loss = loss1 + 0.4*loss2
 
                 top1 = topacc(logits, lbl, topk = (1,))
                 top1_train_accuracy += top1[0]
