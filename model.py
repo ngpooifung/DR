@@ -49,7 +49,7 @@ class Vision(nn.Module):
         self.backbone.heads.head = nn.Linear(in_features=dim_mlp, out_features=out_dim, bias=True)
 
     def _get_basemodel(self, model_name):
-        model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V2")
+        model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
         return model
 
     def forward(self, x):
