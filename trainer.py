@@ -92,7 +92,7 @@ class Restrainer(object):
                 path = lbl[0]
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img).logits
+                logits = self.model(img)
                 loss = self.criterion(logits, lbl)
 
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
