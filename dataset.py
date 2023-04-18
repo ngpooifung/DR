@@ -27,10 +27,10 @@ class Imagefolder(datasets.ImageFolder):
         # if img.ndim ==2:
         #     img = img[..., np.newaxis]
         #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-        shape = img.shape
-        if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
-            raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
-        img = img.astype('float32')
+        # shape = img.shape
+        # if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
+        #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
+        # img = img.astype('float32')
         data_transforms = transforms.Compose([
                                               transforms.ToTensor(),
                                               transforms.Resize((self.resize[0],self.resize[1]))
