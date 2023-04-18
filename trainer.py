@@ -4,6 +4,7 @@ import torch
 from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
 from torch.cuda.amp import GradScaler, autocast
+from sklearn.linear_model import LogisticRegression
 import os
 import logging
 from tqdm import tqdm
@@ -11,6 +12,44 @@ import pandas as pd
 torch.manual_seed(0)
 
 # %%
+class Classictrainer(object):
+    def __init__(self, model, preprocess, args):
+        self.model = model
+        self.preprocess = preprocess
+        self.args = args
+        log_dir = self.args.dir
+        self.writer = SummaryWriter(log_dir = log_dir)
+        logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
+
+
+    def get_features(self, dataloader):
+        all_features = []
+        all_labels = []
+
+        with torch.no_grad():
+            for images, labels in tqdm(dataloader):
+                features = model.encode_image(images.to(self.args.device))
+
+                all_features.append(features)
+                all_labels.append(labels[1])
+
+        return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
+
+    def Logistic(self, train_loader, test_loader = None):
+        self.model.eval()
+
+        train_features, train_labels = get_features(train_loader)
+        test_features, test_labels = get_features(test_loader)
+
+        classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
+        classifier.fit(train_features, train_labels)
+
+        # Evaluate using the logistic regression classifier
+        predictions = classifier.predict(test_features)
+        accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
+        print(f"Accuracy = {accuracy:.3f}")
+
+
 class Restrainer(object):
     def  __init__(self, model, optimizer, scheduler, args):
         self.model = model

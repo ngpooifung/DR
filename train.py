@@ -2,11 +2,12 @@
 import argparse
 import torch
 import numpy as np
+import clip
 from torch import nn
 import torch.backends.cudnn as cudnn
 from dataset import Modeldataset
 from model import modeltrainer
-from trainer import Restrainer
+from trainer import Restrainer, Classictrainer
 from exceptions import NotImplementError
 import os
 import torch.distributed as dist
@@ -15,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval']
+function_names = ['main', 'eval', 'clip']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -130,12 +131,46 @@ def eval():
     trainer = Restrainer(model, optimizer, scheduler, args)
     trainer.eval(test_loader)
 
+def clip():
+    if not args.disable_cuda and torch.cuda.is_available():
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
+        args.device_count = torch.cuda.device_count()
+        cudnn.deterministic = True
+        cudnn.benchmark = True
+    else:
+        args.device = torch.device('cpu')
+        args.gpu_index = -1
+        args.device_count = -1
+
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True)
+    train_sampler = DistributedSampler(train_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+
+    if args.test_dir is not None:
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
+        test_sampler = DistributedSampler(test_dataset)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
+    else:
+        test_loader = None
+
+    model, preprocess = clip.load("ViT-B/16", device=args.device)
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+
+    trainer = Classictrainer(model, preprocess, args)
+    trainer.Logistic(train_loader, test_loader)
+
+
 def allocate():
     torch.set_num_threads(args.workers)
     if args.process == 'main':
         main()
     elif args.process == 'eval':
         eval()
+    elif args.process == 'clip':
+        clip()
 
 if __name__ == "__main__":
     allocate()
