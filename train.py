@@ -145,21 +145,21 @@ def clip():
         args.gpu_index = -1
         args.device_count = -1
 
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True)
+    model, preprocess = clip.load("ViT-B/16", device=args.device)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
         test_loader = None
 
-    model, preprocess = clip.load("ViT-B/16", device=args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
-    trainer = Classictrainer(model, preprocess, args)
+    trainer = Classictrainer(model, args)
     trainer.Logistic(train_loader, test_loader)
 
 

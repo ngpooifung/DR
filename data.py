@@ -73,17 +73,17 @@ from sklearn.metrics import classification_report
 #             tifffile.imsave(os.path.join(*[tiff_dir, sp, cla, img.split('.')[0] + '.tif']), image)
 
 
-# # %% read Phoom accuracy
-# sp = 'validation'
-# csv = 'Phoom/vlong.csv'
-# csv = pd.read_csv(csv)
-# predict = []
-# for i in range(sum(csv['Split'] == sp)):
-#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:6]))
-# predict = np.array(predict)
-# predict = (predict > 0.5)*1
-# label = np.array(csv['Label'][csv['Split'] == sp])
-# print(classification_report(label, predict, digits = 4))
+# %% read Phoom accuracy
+sp = 'validation'
+csv = 'referableprobs.csv'
+csv = pd.read_csv(csv)
+predict = []
+for i in range(sum(csv['Split'] == sp)):
+    predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:6]))
+predict = np.array(predict)
+predict = (predict > 0.5)*1
+label = np.array(csv['Label'][csv['Split'] == sp])
+print(classification_report(label, predict, digits = 4))
 
 
 # # %% read Phoom gradtest
@@ -102,16 +102,16 @@ from sklearn.metrics import classification_report
 # print(classification_report(label, predict, digits = 4))
 
 
-# # %%
-# # %% read sensitivity
-# csv = 'RDR.csv'
-# csv = pd.read_csv(csv)
-# predict = np.array(csv['Predicted label'])
-# label = np.array(csv['True label'])
-# print(classification_report(label, predict, digits = 4))
+# %%
+# %% read sensitivity
+csv = '/home/pwuaj/hkust/DR/test.csv'
+csv = pd.read_csv(csv)
+predict = np.array(csv['Predicted label'])
+label = np.array(csv['True label'])
+print(classification_report(label, predict, digits = 4))
 
 
-# # %%
+# %%
 tiff_dir = '/scratch/PI/eeaaquadeer/rdrsp'
 cls = ['0', '1']
 for c in cls:

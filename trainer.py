@@ -13,9 +13,8 @@ torch.manual_seed(0)
 
 # %%
 class Classictrainer(object):
-    def __init__(self, model, preprocess, args):
+    def __init__(self, model, args):
         self.model = model
-        self.preprocess = preprocess
         self.args = args
         log_dir = self.args.dir
         self.writer = SummaryWriter(log_dir = log_dir)

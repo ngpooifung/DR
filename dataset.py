@@ -8,11 +8,12 @@ import torchvision.transforms.functional as TF
 import random
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, size= (100, 100), resize = (480, 384), transform=None):
+    def __init__(self, img_dir, size= (100, 100), resize = (480, 384), transform=None, preprocess = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
         self.size = size
+        self.preprocess = preprocess
 
     def __len__(self):
         return len(self.samples)
@@ -36,6 +37,8 @@ class Imagefolder(datasets.ImageFolder):
         img = data_transforms(img)
         if self.transform is not None:
             img = self.transform(img)
+        if self.preprocess is not None:
+            img = self.preprocess(img)
 
         return (img, sample)
 
@@ -54,11 +57,11 @@ class Modeldataset:
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = (480, 384), transform = True):
+    def get_dataset(self, resize = (480, 384), transform = True, preprocess = None):
         if transform:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize))
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess)
         else:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize)
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, preprocess = preprocess)
 
         return dataset
 
