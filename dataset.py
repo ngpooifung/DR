@@ -24,9 +24,9 @@ class Imagefolder(datasets.ImageFolder):
         path = sample[0]
         lbl = sample[1]
         img = Image.open(path)
-        if img.ndim ==2:
-            img = img[..., np.newaxis]
-            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        # if img.ndim ==2:
+        #     img = img[..., np.newaxis]
+        #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         shape = img.shape
         if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
             raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
