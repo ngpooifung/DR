@@ -145,7 +145,7 @@ def Clip():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load("ViT-B/32", device=args.device)
+    model, preprocess = clip.load("ViT-B/16", device=args.device)
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
