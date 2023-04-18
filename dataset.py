@@ -6,6 +6,7 @@ import tifffile
 import cv2
 import torchvision.transforms.functional as TF
 import random
+from PIL import Image
 # %%
 class Imagefolder(datasets.ImageFolder):
     def __init__(self, img_dir, size= (100, 100), resize = (480, 384), transform=None, preprocess = None):
@@ -22,7 +23,7 @@ class Imagefolder(datasets.ImageFolder):
         sample = self.samples[idx]
         path = sample[0]
         lbl = sample[1]
-        img = tifffile.imread(path)
+        img = Image.open(path)
         if img.ndim ==2:
             img = img[..., np.newaxis]
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
@@ -34,11 +35,11 @@ class Imagefolder(datasets.ImageFolder):
                                               transforms.ToTensor(),
                                               transforms.Resize((self.resize[0],self.resize[1]))
                                               ])
-        img = data_transforms(img)
-        if self.transform is not None:
-            img = self.transform(img)
+        # img = data_transforms(img)
         if self.preprocess is not None:
             img = self.preprocess(img)
+        if self.transform is not None:
+            img = self.transform(img)
 
         return (img, sample)
 
