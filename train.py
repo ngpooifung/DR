@@ -16,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'clip']
+function_names = ['main', 'eval', 'Clip']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -131,7 +131,7 @@ def eval():
     trainer = Restrainer(model, optimizer, scheduler, args)
     trainer.eval(test_loader)
 
-def clip():
+def Clip():
     if not args.disable_cuda and torch.cuda.is_available():
         local_rank = int(os.environ["LOCAL_RANK"])
         torch.cuda.set_device(local_rank)
@@ -169,8 +169,8 @@ def allocate():
         main()
     elif args.process == 'eval':
         eval()
-    elif args.process == 'clip':
-        clip()
+    elif args.process == 'Clip':
+        Clip()
 
 if __name__ == "__main__":
     allocate()
