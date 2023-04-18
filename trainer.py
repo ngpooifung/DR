@@ -27,7 +27,7 @@ class Classictrainer(object):
 
         with torch.no_grad():
             for images, labels in tqdm(dataloader):
-                features = self.model.encode_image(images.to(self.args.device))
+                features = self.model.module.encode_image(images.to(self.args.device))
 
                 all_features.append(features)
                 all_labels.append(labels[1])
