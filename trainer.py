@@ -37,8 +37,8 @@ class Classictrainer(object):
     def Logistic(self, train_loader, test_loader = None):
         self.model.eval()
 
-        train_features, train_labels = get_features(train_loader)
-        test_features, test_labels = get_features(test_loader)
+        train_features, train_labels = self.get_features(train_loader)
+        test_features, test_labels = self.get_features(test_loader)
 
         classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
         classifier.fit(train_features, train_labels)
