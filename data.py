@@ -125,7 +125,7 @@ for i in range(len(csv)):
         store_lbl = int(csv['Label_OR'][i])
         save_lbl = int(csv['Label_R0'][i])
         try:
-            shutil.copy(os.path.join(*[rdr, str(store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
+            shutil.copyfile(os.path.join(*[rdr, str(store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
         except:
-            shutil.copy(os.path.join(*[rdr, str(1-store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
+            shutil.copyfile(os.path.join(*[rdr, str(1-store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
             print(name)
