@@ -121,7 +121,7 @@ vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
 rdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtest'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
-    store_lbl = int(csv['Label_OR'])
-    save_lbl = int(csv['Label_R0'])
     if isinstance(name, str):
+        store_lbl = str(int(csv['Label_OR'][i]))
+        save_lbl = str(int(csv['Label_R0'][i]))
         shutil.copy(os.path.join(*[rdr, store_lbl, name]), os.path.join(*[rdrtest, save_lbl, name]))
