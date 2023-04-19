@@ -5,7 +5,7 @@ import pandas as pd
 import torchvision.datasets as datasets
 import tifffile
 import cv2
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, balanced_accuracy_score
 import shutil
 
 # # %%
@@ -74,18 +74,45 @@ import shutil
 #             tifffile.imsave(os.path.join(*[tiff_dir, sp, cla, img.split('.')[0] + '.tif']), image)
 
 
-# %% read Phoom accuracy
+# # %% read Phoom accuracy
 # sp = 'validation'
-# csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
+# csv = '/home/pwuaj/hkust/DR/Phoom/rlong.csv'
 # csv = pd.read_csv(csv)
 # predict = []
 # for i in range(sum(csv['Split'] == sp)):
-#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:6]))
+#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
 # predict = np.array(predict)
-# predict = (predict > 0.5)*1
 # label = np.array(csv['Label'][csv['Split'] == sp])
+# predict = (predict > 0.5)*1
 # print(classification_report(label, predict, digits = 4))
-
+#
+#
+# # %% read excel accuracy
+# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+# csv = pd.read_excel(csv)
+# predict = []
+# label = []
+# for i in range(571):
+#     predict.append(csv['Pred_V0'][i])
+#     label.append(int(csv['Label_V0'][i]))
+# predict = np.array(predict)
+# label = np.array(label)
+# predict = (predict > 0.5)*1
+# print(classification_report(label, predict, digits = 4))
+#
+# # %%
+# threshold = []
+# accuracy = []
+# for p in np.unique(predict):
+#   threshold.append(p)
+#   y_pred = (predict >= p).astype(int)
+#   accuracy.append(balanced_accuracy_score(label,y_pred))
+# threshold[np.argmax(accuracy)]
+#
+# # %%
+# from sklearn.metrics import roc_curve
+# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+# thresholds[np.argmin(np.abs(fpr+tpr-1))]
 
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
@@ -115,9 +142,9 @@ import shutil
 # %%
 csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
 csv = pd.read_excel(csv)
-rdr = '/scratch/PI/eeaaquadeer/Phoom/RDRlong/test'
+rdr = '/scratch/PI/eeaaquadeer/Phoom/RDR/test'
 rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtrue/test'
-vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
+vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDR/test'
 vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtrue/test'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
