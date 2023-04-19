@@ -129,3 +129,14 @@ for i in range(len(csv)):
         except:
             shutil.copyfile(os.path.join(*[rdr, str(1-store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
             print(name)
+
+for i in range(len(csv)):
+    name = csv['Image_V0'][i]
+    if isinstance(name, str):
+        store_lbl = int(csv['Label_OV'][i])
+        save_lbl = int(csv['Label_V0'][i])
+        try:
+            shutil.copyfile(os.path.join(*[vtdr, str(store_lbl), name]), os.path.join(*[vtdrtest, str(save_lbl), name]))
+        except:
+            shutil.copyfile(os.path.join(*[vtdr, str(1-store_lbl), name]), os.path.join(*[vtdrtest, str(save_lbl), name]))
+            print(name)
