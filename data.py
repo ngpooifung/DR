@@ -116,9 +116,9 @@ import shutil
 csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
 csv = pd.read_excel(csv)
 rdr = '/scratch/PI/eeaaquadeer/Phoom/RDRlong/test'
-rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtest'
+rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtrue/test'
 vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
-vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtest'
+vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtrue/test'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
     if isinstance(name, str):
