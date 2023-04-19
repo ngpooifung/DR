@@ -122,6 +122,10 @@ rdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtest'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
     if isinstance(name, str):
-        store_lbl = str(int(csv['Label_OR'][i]))
-        save_lbl = str(int(csv['Label_R0'][i]))
-        shutil.copy(os.path.join(*[rdr, store_lbl, name]), os.path.join(*[rdrtest, save_lbl, name]))
+        store_lbl = int(csv['Label_OR'][i])
+        save_lbl = int(csv['Label_R0'][i])
+        try:
+            shutil.copy(os.path.join(*[rdr, str(store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
+        except:
+            shutil.copy(os.path.join(*[rdr, str(1-store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
+            print(name)
