@@ -6,6 +6,7 @@ import torchvision.datasets as datasets
 import tifffile
 import cv2
 from sklearn.metrics import classification_report
+import shutil
 
 # # %%
 # csv_dir = './H.csv'
@@ -74,16 +75,16 @@ from sklearn.metrics import classification_report
 
 
 # %% read Phoom accuracy
-sp = 'validation'
-csv = 'referableprobs.csv'
-csv = pd.read_csv(csv)
-predict = []
-for i in range(sum(csv['Split'] == sp)):
-    predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:6]))
-predict = np.array(predict)
-predict = (predict > 0.5)*1
-label = np.array(csv['Label'][csv['Split'] == sp])
-print(classification_report(label, predict, digits = 4))
+# sp = 'validation'
+# csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
+# csv = pd.read_csv(csv)
+# predict = []
+# for i in range(sum(csv['Split'] == sp)):
+#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:6]))
+# predict = np.array(predict)
+# predict = (predict > 0.5)*1
+# label = np.array(csv['Label'][csv['Split'] == sp])
+# print(classification_report(label, predict, digits = 4))
 
 
 # # %% read Phoom gradtest
@@ -104,19 +105,23 @@ print(classification_report(label, predict, digits = 4))
 
 # %%
 # %% read sensitivity
-csv = '/home/pwuaj/hkust/DR/test.csv'
-csv = pd.read_csv(csv)
-predict = np.array(csv['Predicted label'])
-label = np.array(csv['True label'])
-print(classification_report(label, predict, digits = 4))
+# csv = '/home/pwuaj/hkust/DR/test.csv'
+# csv = pd.read_csv(csv)
+# predict = np.array(csv['Predicted label'])
+# label = np.array(csv['True label'])
+# print(classification_report(label, predict, digits = 4))
 
 
 # %%
-tiff_dir = '/scratch/PI/eeaaquadeer/rdrsp'
-cls = ['0', '1']
-for c in cls:
-    l = []
-    imglist = os.listdir(os.path.join(*[tiff_dir, c]))
-    for img in imglist:
-        l.append(img.split('-')[0][4:7])
-    print(len(set(l)))
+csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+csv = pd.read_excel(csv)
+rdr = '/scratch/PI/eeaaquadeer/Phoom/RDRlong/test'
+rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtest'
+vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
+rdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtest'
+for i in range(len(csv)):
+    name = csv['Image_R0 thr_0.66'][i]
+    store_lbl = int(csv['Label_OR'])
+    save_lbl = int(csv['Label_R0'])
+    if isinstance(name, str):
+        shutil.copy(os.path.join(*[rdr, store_lbl, name]), os.path.join(*[rdrtest, save_lbl, name]))
