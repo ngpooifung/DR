@@ -75,15 +75,15 @@ import shutil
 
 
 # # %% read Phoom accuracy
-# sp = 'validation'
-# csv = '/home/pwuaj/hkust/DR/Phoom/rlong.csv'
+# sp = 'test'
+# csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
 # csv = pd.read_csv(csv)
 # predict = []
 # for i in range(sum(csv['Split'] == sp)):
 #     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
 # predict = np.array(predict)
 # label = np.array(csv['Label'][csv['Split'] == sp])
-# predict = (predict > 0.5)*1
+# predict = (predict > 0.51)*1
 # print(classification_report(label, predict, digits = 4))
 #
 #
@@ -92,12 +92,12 @@ import shutil
 # csv = pd.read_excel(csv)
 # predict = []
 # label = []
-# for i in range(571):
-#     predict.append(csv['Pred_V0'][i])
-#     label.append(int(csv['Label_V0'][i]))
+# for i in range(572):
+#     predict.append(csv['Pred_R0'][i])
+#     label.append(int(csv['Label_R0'][i]))
 # predict = np.array(predict)
 # label = np.array(label)
-# predict = (predict > 0.5)*1
+# predict = (predict > 0.65088)*1
 # print(classification_report(label, predict, digits = 4))
 #
 # # %%
@@ -113,6 +113,7 @@ import shutil
 # from sklearn.metrics import roc_curve
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # thresholds[np.argmin(np.abs(fpr+tpr-1))]
+
 
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
@@ -142,9 +143,9 @@ import shutil
 # %%
 csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
 csv = pd.read_excel(csv)
-rdr = '/scratch/PI/eeaaquadeer/Phoom/RDR/test'
+rdr = '/scratch/PI/eeaaquadeer/Phoom/RDRlong/test'
 rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtrue/test'
-vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDR/test'
+vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
 vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtrue/test'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
