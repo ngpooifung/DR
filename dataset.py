@@ -9,7 +9,7 @@ import random
 from PIL import Image
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, size= (100, 100), resize = (480, 384), transform=None, preprocess = None):
+    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
@@ -51,14 +51,14 @@ class Modeldataset:
     @staticmethod
     def get_transform(size):
         data_transforms = transforms.Compose([
-                                              # transforms.RandomResizedCrop(size=size, scale = (0.08,1.0)),
+                                              transforms.RandomResizedCrop(size=size, scale = (0.08,1.0)),
                                               transforms.RandomHorizontalFlip(),
                                               # RotationTransform(angles=[0, 90, 180, 270])
                                               # transforms.RandomRotation(degrees = (0,180))
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = (480, 384), transform = True, preprocess = None):
+    def get_dataset(self, resize = (384, 480), transform = True, preprocess = None):
         if transform:
             dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess)
         else:
