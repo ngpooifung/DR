@@ -16,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip']
+function_names = ['main', 'eval', 'Clip', 'Cliptune']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -159,9 +159,37 @@ def Clip():
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
-    trainer = Classictrainer(model, args)
+    optimizer = None
+    scheduler = None
+    trainer = Classictrainer(model, optimizer, scheduler, args)
     trainer.Logistic(train_loader, test_loader)
 
+def Cliptune():
+    if not args.disable_cuda and torch.cuda.is_available():
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
+        args.device_count = torch.cuda.device_count()
+        cudnn.deterministic = True
+        cudnn.benchmark = True
+    else:
+        args.device = torch.device('cpu')
+        args.gpu_index = -1
+        args.device_count = -1
+
+    model, preprocess = clip.load("ViT-B/16", device=args.device)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    train_sampler = DistributedSampler(train_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+
+    optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0,
+                                                           last_epoch=-1)
+    trainer = Classictrainer(model, optimizer, scheduler, args)
+    trainer.finetune(train_loader)
 
 def allocate():
     torch.set_num_threads(args.workers)
@@ -171,6 +199,8 @@ def allocate():
         eval()
     elif args.process == 'Clip':
         Clip()
+    elif args.process == 'Cliptune':
+        Cliptune()
 
 if __name__ == "__main__":
     allocate()
