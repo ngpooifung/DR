@@ -40,7 +40,7 @@ class Classictrainer(object):
         train_features, train_labels = self.get_features(train_loader)
         test_features, test_labels = self.get_features(test_loader)
 
-        classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
+        classifier = LogisticRegression(random_state=0, C=1, max_iter=1000, verbose=1)
         classifier.fit(train_features, train_labels)
 
         # Evaluate using the logistic regression classifier
