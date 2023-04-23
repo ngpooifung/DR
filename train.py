@@ -5,7 +5,7 @@ import numpy as np
 import clip
 from torch import nn
 import torch.backends.cudnn as cudnn
-from dataset import Modeldataset
+from dataset import Modeldataset, Imagefolder
 from model import modeltrainer
 from trainer import Restrainer, Classictrainer
 from exceptions import NotImplementError
@@ -179,9 +179,13 @@ def Cliptune():
         args.device_count = -1
 
     model, preprocess = clip.load("ViT-B/16", device=args.device)
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+
+    for name, param in model.named_parameters():
+        if name not in ['visual.proj', 'text_projection']:
+            param.requires_grad = False
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 

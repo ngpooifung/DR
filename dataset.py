@@ -7,14 +7,18 @@ import cv2
 import torchvision.transforms.functional as TF
 import random
 from PIL import Image
+import pandas as pd
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = None):
+    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = None, clip_csv = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
         self.size = size
         self.preprocess = preprocess
+        self.clip_csv = clip_csv
+        if clip_csv is not None:
+            self.csv = pd.read_csv(clip_csv)
 
     def __len__(self):
         return len(self.samples)
@@ -24,6 +28,8 @@ class Imagefolder(datasets.ImageFolder):
         path = sample[0]
         lbl = sample[1]
         img = Image.open(path)
+        if self.clip_csv is not None:
+            text = self.csv['text'][csv['label'] == lbl].item()
         # if img.ndim ==2:
         #     img = img[..., np.newaxis]
         #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
@@ -41,7 +47,7 @@ class Imagefolder(datasets.ImageFolder):
         if self.transform is not None:
             img = self.transform(img)
 
-        return (img, sample)
+        return (img, text) if self.clip_csv is not None else (img, sample)
 
 # %%
 class Modeldataset:
@@ -58,11 +64,11 @@ class Modeldataset:
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = (384, 480), transform = True, preprocess = None):
+    def get_dataset(self, resize = (384, 480), transform = True, preprocess = None, clip_csv = None):
         if transform:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess)
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess, clip_csv = clip_csv)
         else:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, preprocess = preprocess)
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, preprocess = preprocess, clip_csv = clip_csv)
 
         return dataset
 
