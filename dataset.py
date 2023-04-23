@@ -41,9 +41,10 @@ class Imagefolder(datasets.ImageFolder):
                                               transforms.ToTensor(),
                                               transforms.Resize((self.resize[0],self.resize[1]))
                                               ])
-        img = data_transforms(img)
         if self.preprocess is not None:
             img = self.preprocess(img)
+        else:
+            img = data_transforms(img)
         if self.transform is not None:
             img = self.transform(img)
 
