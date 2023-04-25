@@ -83,7 +83,7 @@ import shutil
 #     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
 # predict = np.array(predict)
 # label = np.array(csv['Label'][csv['Split'] == sp])
-# predict = (predict > 0.51)*1
+# predict = (predict > 0.29)*1
 # print(classification_report(label, predict, digits = 4))
 #
 #
@@ -97,7 +97,7 @@ import shutil
 #     label.append(int(csv['Label_R0'][i]))
 # predict = np.array(predict)
 # label = np.array(label)
-# predict = (predict > 0.65088)*1
+# predict = (predict > 0.61755)*1
 # print(classification_report(label, predict, digits = 4))
 #
 # # %%
@@ -112,8 +112,8 @@ import shutil
 # # %%
 # from sklearn.metrics import roc_curve
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-# thresholds[np.argmin(np.abs(fpr+tpr-1))]
-
+# # thresholds[np.argmin(np.abs(fpr+tpr-1))]
+# thresholds[np.argmax(tpr-fpr)]
 
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
@@ -131,8 +131,8 @@ import shutil
 # print(classification_report(label, predict, digits = 4))
 
 
-# %%
-# %% read sensitivity
+# # %%
+# # read sensitivity
 # csv = '/home/pwuaj/hkust/DR/test.csv'
 # csv = pd.read_csv(csv)
 # predict = np.array(csv['Predicted label'])
@@ -141,16 +141,16 @@ import shutil
 
 
 # %%
-csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+csv = '/home/pwuaj/hkust/DR/All_20200715 emma_oneeye.xlsx'
 csv = pd.read_excel(csv)
 rdr = '/scratch/PI/eeaaquadeer/Phoom/RDRlong/test'
-rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtrue/test'
+rdrtest = '/scratch/PI/eeaaquadeer/Phoom/RDRtrue2/test'
 vtdr = '/scratch/PI/eeaaquadeer/Phoom/VTDRlong/test'
-vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtrue/test'
+vtdrtest = '/scratch/PI/eeaaquadeer/Phoom/VTDRtrue2/test'
 for i in range(len(csv)):
     name = csv['Image_R0 thr_0.66'][i]
     if isinstance(name, str):
-        store_lbl = int(csv['Label_OR'][i])
+        store_lbl = int(csv['Label_R0'][i])
         save_lbl = int(csv['Label_R0'][i])
         try:
             shutil.copyfile(os.path.join(*[rdr, str(store_lbl), name]), os.path.join(*[rdrtest, str(save_lbl), name]))
@@ -161,7 +161,7 @@ for i in range(len(csv)):
 for i in range(len(csv)):
     name = csv['Image_V0'][i]
     if isinstance(name, str):
-        store_lbl = int(csv['Label_OV'][i])
+        store_lbl = int(csv['Label_V0'][i])
         save_lbl = int(csv['Label_V0'][i])
         try:
             shutil.copyfile(os.path.join(*[vtdr, str(store_lbl), name]), os.path.join(*[vtdrtest, str(save_lbl), name]))
