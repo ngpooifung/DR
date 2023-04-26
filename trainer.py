@@ -70,7 +70,7 @@ class Classictrainer(object):
                 logits_per_image, logits_per_text = self.model.module(img, lbl)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 loss = self.criterion(logits_per_image, labels)
-                print(loss)
+                print(logits_per_image)
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
