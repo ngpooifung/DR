@@ -147,13 +147,13 @@ def Clip():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load("ViT-B/16", device=args.device)
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    model, preprocess = clip.load(args.arch, device=args.device)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess, clip_csv = args.clip_csv)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
@@ -180,14 +180,15 @@ def Cliptune():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load("ViT-B/16", device=args.device)
+    model, preprocess = clip.load(args.arch, device=args.device) #ViT-B/16
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
-    for name, param in model.named_parameters():
-        if name not in ['visual.proj', 'text_projection']:
-            param.requires_grad = False
+    if args.process == 'Cliplayertune':
+        for name, param in model.named_parameters():
+            if name not in ['visual.proj', 'text_projection']:
+                param.requires_grad = False
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
@@ -205,7 +206,9 @@ def allocate():
         eval()
     elif args.process == 'Clip':
         Clip()
-    elif args.process == 'Cliptune':
+    elif args.process == 'Cliplayertune':
+        Cliptune()
+    elif args.process == 'Clipfulltune':
         Cliptune()
 
 if __name__ == "__main__":
