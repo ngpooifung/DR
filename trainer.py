@@ -53,6 +53,17 @@ class Classictrainer(object):
         accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
         print(f"Accuracy = {accuracy:.3f}")
 
+    def loss(self, image_features, text_features):
+        image_features = image_features / image_features.norm(dim=1, keepdim=True)
+        text_features = text_features / text_features.norm(dim=1, keepdim=True)
+
+        # cosine similarity as logits
+        logit_scale = self.model.module.logit_scale.exp()
+        logits_per_image = logit_scale * image_features @ text_features.t()
+        logits_per_text = logits_per_image.t()
+
+        return logits_per_image, logits_per_text
+
     def finetune(self, train_loader):
         self.model.train()
 
@@ -67,8 +78,11 @@ class Classictrainer(object):
                 img = img.to(self.args.device)
                 lbl = clip.tokenize(lbl).to(self.args.device)
 
-                logits_per_image, logits_per_text = self.model.module(img, lbl)
+                # logits_per_image, logits_per_text = self.model.module(img, lbl)
+                image_features = self.model.module.encode_image(img)
+                text_features = self.model.module.encode_text(lbl)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
+                logits_per_image, logits_per_text = self.loss(image_features, text_features)
                 loss = self.criterion(logits_per_image, labels)
                 print(logits_per_image)
                 self.optimizer.zero_grad()
