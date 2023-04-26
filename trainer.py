@@ -56,8 +56,6 @@ class Classictrainer(object):
     def loss(self, image_features, text_features):
         image_features = image_features / image_features.norm(dim=1, keepdim=True)
         text_features = text_features / text_features.norm(dim=1, keepdim=True)
-        print(image_features)
-        print(text_features)
         # cosine similarity as logits
         logit_scale = self.model.module.logit_scale.exp()
         print(logit_scale)
