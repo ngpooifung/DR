@@ -16,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Cliptune']
+function_names = ['main', 'eval', 'Clip', 'Cliptune', 'Cliplayertune']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
