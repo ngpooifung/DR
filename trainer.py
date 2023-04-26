@@ -64,11 +64,11 @@ class Classictrainer(object):
             train_loader.sampler.set_epoch(epoch_counter)
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
-                img = img.to(args.device)
-                lbl = clip.tokenize(lbl).to(args.device)
+                img = img.to(self.args.device)
+                lbl = clip.tokenize(lbl).to(self.args.device)
 
                 logits_per_image, logits_per_text = self.model.module(img, lbl)
-                labels = torch.arange(args.batch_size, dtype=torch.long).to(args.device)
+                labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 loss = self.criterion(logits_per_image, labels)
 
                 self.optimizer.zero_grad()
