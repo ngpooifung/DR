@@ -58,7 +58,6 @@ class Classictrainer(object):
         text_features = text_features / text_features.norm(dim=1, keepdim=True)
         # cosine similarity as logits
         logit_scale = self.model.module.logit_scale.exp()
-        print(logit_scale)
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
 
@@ -81,6 +80,7 @@ class Classictrainer(object):
                 # logits_per_image, logits_per_text = self.model.module(img, lbl)
                 image_features = self.model.module.encode_image(img)
                 text_features = self.model.module.encode_text(lbl)
+                print(image_features, text_features)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 logits_per_image, logits_per_text = self.loss(image_features, text_features)
                 loss = self.criterion(logits_per_image, labels)
