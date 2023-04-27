@@ -16,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Cliptune', 'Cliplayertune']
+function_names = ['main', 'eval', 'Clip', 'Clipeval', 'Clipfulltune', 'Cliplayertune']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -124,7 +124,7 @@ def eval():
     state_dict = checkpoint['state_dict']
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
-    log = model.load_state_dict(state_dict, strict=True)
+    model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
@@ -159,6 +159,13 @@ def Clip():
     else:
         test_loader = None
 
+    if args.process == 'Clipeval':
+        file = os.path.join(os.path.split(args.dir)[0], os.path.splitext(os.path.split(args.dir)[1])[0])
+        path = os.path.join(file, '%s_%04d.pth.tar'%('Clipfulltune', args.saved_epochs))
+        checkpoint = torch.load(path, map_location = args.device)
+        state_dict = checkpoint['state_dict']
+        model.load_state_dict(state_dict, strict=True)
+        model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
@@ -205,6 +212,8 @@ def allocate():
     elif args.process == 'eval':
         eval()
     elif args.process == 'Clip':
+        Clip()
+    elif args.process = 'Clipeval':
         Clip()
     elif args.process == 'Cliplayertune':
         Cliptune()
