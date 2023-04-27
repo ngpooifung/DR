@@ -148,12 +148,12 @@ def Clip():
         args.device_count = -1
 
     model, preprocess = clip.load(args.arch, device=args.device)
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess, clip_csv = args.clip_csv)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
