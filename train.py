@@ -213,7 +213,7 @@ def allocate():
         eval()
     elif args.process == 'Clip':
         Clip()
-    elif args.process = 'Clipeval':
+    elif args.process == 'Clipeval':
         Clip()
     elif args.process == 'Cliplayertune':
         Cliptune()
