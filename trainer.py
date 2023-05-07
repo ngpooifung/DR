@@ -71,15 +71,15 @@ class Classictrainer(object):
         logging.info(f"Total GPU device: {self.args.device_count}.")
 
         for epoch_counter in range(self.args.epochs):
-            train_loader.sampler.set_epoch(epoch_counter)
+            # train_loader.sampler.set_epoch(epoch_counter)
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
                 lbl = clip.tokenize(lbl).to(self.args.device)
 
                 # logits_per_image, logits_per_text = self.model.module(img, lbl)
-                image_features = self.model.module.encode_image(img)
-                text_features = self.model.module.encode_text(lbl)
+                image_features = self.model.encode_image(img)
+                text_features = self.model.encode_text(lbl)
                 print(image_features, text_features)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 logits_per_image, logits_per_text = self.loss(image_features, text_features)
@@ -99,7 +99,7 @@ class Classictrainer(object):
                 checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter)
                 save_checkpoint({
                     'epoch': self.args.epochs,
-                    'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
+                    'state_dict': self.model.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
 
         logging.info("Training has finished.")
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
