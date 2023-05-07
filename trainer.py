@@ -60,8 +60,6 @@ class Classictrainer(object):
         logit_scale = self.model.module.logit_scale.exp()
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
-        print(image_features)
-
         return logits_per_image, logits_per_text
 
     def finetune(self, train_loader):
@@ -83,7 +81,7 @@ class Classictrainer(object):
                 text_features = self.model.module.encode_text(lbl)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 logits_per_image, logits_per_text = self.loss(image_features, text_features)
-                loss = self.criterion(logits_per_image, labels)
+                loss = self.criterion(logits_per_image.softmax(dim=-1), labels)
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
