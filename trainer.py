@@ -60,6 +60,7 @@ class Classictrainer(object):
         logit_scale = self.model.module.logit_scale.exp()
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
+        print(logits_per_image)
         return logits_per_image, logits_per_text
 
     def finetune(self, train_loader):
