@@ -60,6 +60,7 @@ class Classictrainer(object):
         # logit_scale = self.model.module.logit_scale.exp()
         logits_per_image = (1/0.07) * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
+        print(logits_per_image)
 
         return logits_per_image, logits_per_text
 
@@ -75,7 +76,6 @@ class Classictrainer(object):
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
-                print(lbl)
                 lbl = clip.tokenize(lbl).to(self.args.device)
 
                 # logits_per_image, logits_per_text = self.model.module(img, lbl)
