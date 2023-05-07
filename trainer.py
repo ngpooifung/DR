@@ -59,7 +59,7 @@ class Classictrainer(object):
         # cosine similarity as logits
         # logit_scale = self.model.module.logit_scale.exp()
         logits_per_image = (1/0.07) * image_features @ text_features.t()
-        print(logits_per_image)
+        print(logits_per_image.shape)
         logits_per_text = logits_per_image.t()
 
         return logits_per_image, logits_per_text
