@@ -29,7 +29,8 @@ class Imagefolder(datasets.ImageFolder):
         lbl = sample[1]
         img = Image.open(path)
         if self.clip_csv is not None:
-            text = self.csv['text'][self.csv['label'] == lbl].item()
+            # text = self.csv['text'][self.csv['label'] == lbl].item()
+            text = 'a photo of normal eye' if lbl==0 else 'a photo of eye with diabetic retinopathy disease'
         # if img.ndim ==2:
         #     img = img[..., np.newaxis]
         #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
