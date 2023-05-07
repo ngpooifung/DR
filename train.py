@@ -175,10 +175,10 @@ def Clip():
 
 def Cliptune():
     if not args.disable_cuda and torch.cuda.is_available():
-        # local_rank = int(os.environ["LOCAL_RANK"])
-        # torch.cuda.set_device(local_rank)
-        # dist.init_process_group(backend = 'nccl')
-        args.device = torch.device('cuda')
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
         args.device_count = torch.cuda.device_count()
         cudnn.deterministic = True
         cudnn.benchmark = True
@@ -189,15 +189,15 @@ def Cliptune():
 
     model, preprocess = clip.load(args.arch, device=args.device) #ViT-B/16
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
-    # train_sampler = DistributedSampler(train_dataset)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True, drop_last=True)
+    train_sampler = DistributedSampler(train_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.process == 'Cliplayertune':
         for name, param in model.named_parameters():
             if name not in ['visual.proj', 'text_projection']:
                 param.requires_grad = False
 
-    # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0,
