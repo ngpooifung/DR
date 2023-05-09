@@ -64,7 +64,7 @@ class Classictrainer(object):
 
     def finetune(self, train_loader):
         self.model.train()
-        with autograd.detect_anomaly():
+        with torch.autograd.detect_anomaly():
             logging.info(f"Start training for {self.args.epochs} epochs.")
             logging.info(f"Training with gpu: {not self.args.disable_cuda}.")
             logging.info(f"Total GPU device: {self.args.device_count}.")
