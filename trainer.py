@@ -12,7 +12,13 @@ import logging
 from tqdm import tqdm
 import pandas as pd
 torch.manual_seed(0)
-
+# device = "cuda" if torch.cuda.is_available() else "cpu"
+# model, preprocess = clip.load("ViT-B/32", device=device)
+# model.parameters()
+# for name, parameter in model.named_parameters():
+#     print(parameter.requires_grad)
+# parameters = list(filter(lambda p: p.requires_grad, model.parameters()))
+# assert len(parameters) == 2  # fc.weight, fc.bias
 # %%
 class Classictrainer(object):
     def __init__(self, model, optimizer, scheduler, args):
@@ -64,6 +70,8 @@ class Classictrainer(object):
 
     def finetune(self, train_loader):
         self.model.train()
+        for name, parameter in self.model.module.named_parameters():
+            print(parameter.requires_grad)
         with torch.autograd.detect_anomaly():
             logging.info(f"Start training for {self.args.epochs} epochs.")
             logging.info(f"Training with gpu: {not self.args.disable_cuda}.")
