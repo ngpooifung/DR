@@ -165,7 +165,7 @@ def Clip():
 
     if args.process == 'Clipeval':
         file = os.path.join(args.output, args.process)
-        path = os.path.join(file, '%s_%04d.pth.tar'%('Clipfulltune', args.saved_epochs))
+        path = os.path.join(file, '%s_%04d.pth.tar'%('Cliplayertune', args.saved_epochs))
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         model.load_state_dict(state_dict, strict=True)
