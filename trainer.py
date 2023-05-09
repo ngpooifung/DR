@@ -65,46 +65,44 @@ class Classictrainer(object):
     def finetune(self, train_loader):
         self.model.train()
 
-        with torch.autograd.detect_anomaly():
-            logging.info(f"Start training for {self.args.epochs} epochs.")
-            logging.info(f"Training with gpu: {not self.args.disable_cuda}.")
-            logging.info(f"Total GPU device: {self.args.device_count}.")
+        logging.info(f"Start training for {self.args.epochs} epochs.")
+        logging.info(f"Training with gpu: {not self.args.disable_cuda}.")
+        logging.info(f"Total GPU device: {self.args.device_count}.")
 
-            for epoch_counter in range(self.args.epochs):
-                train_loader.sampler.set_epoch(epoch_counter)
-                top1_train_accuracy = 0
-                for counter, (img, lbl) in enumerate(train_loader):
-                    img = img.to(self.args.device)
-                    lbl = clip.tokenize(lbl).to(self.args.device)
-                    print(img.shape, lbl.shape)
-                    # image_features = self.model.module.encode_image(img)
-                    # text_features = self.model.module.encode_text(lbl)
-                    labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
-                    logits_per_image, logits_per_text = self.model.module(img, lbl)
-                    # logits_per_image, logits_per_text = self.loss(image_features, text_features)
-                    loss1 = self.criterion(logits_per_image, labels)
-                    loss2 = self.criterion(logits_per_text, labels)
-                    loss = (loss1+loss2)/2
-                    self.optimizer.zero_grad()
-                    loss.backward()
-                    # torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
-                    self.optimizer.step()
+        for epoch_counter in range(self.args.epochs):
+            train_loader.sampler.set_epoch(epoch_counter)
+            top1_train_accuracy = 0
+            for counter, (img, lbl) in enumerate(train_loader):
+                img = img.to(self.args.device)
+                lbl = clip.tokenize(lbl).to(self.args.device)
+                # image_features = self.model.module.encode_image(img)
+                # text_features = self.model.module.encode_text(lbl)
+                labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
+                logits_per_image, logits_per_text = self.model.module(img, lbl)
+                # logits_per_image, logits_per_text = self.loss(image_features, text_features)
+                loss1 = self.criterion(logits_per_image, labels)
+                loss2 = self.criterion(logits_per_text, labels)
+                loss = (loss1+loss2)/2
+                self.optimizer.zero_grad()
+                loss.backward()
+                # torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
+                self.optimizer.step()
 
-                    top1 = topacc(logits_per_image, labels, topk=(1,))
-                    top1_train_accuracy += top1[0]
+                top1 = topacc(logits_per_image, labels, topk=(1,))
+                top1_train_accuracy += top1[0]
 
-                self.scheduler.step()
-                top1_train_accuracy /= (counter + 1)
+            self.scheduler.step()
+            top1_train_accuracy /= (counter + 1)
 
-                logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
-                if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
-                    checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter)
-                    save_checkpoint({
-                        'epoch': self.args.epochs,
-                        'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
+            logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
+                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter)
+                save_checkpoint({
+                    'epoch': self.args.epochs,
+                    'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
 
-            logging.info("Training has finished.")
-            logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+        logging.info("Training has finished.")
+        logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
 
 class Restrainer(object):
