@@ -76,6 +76,7 @@ class Classictrainer(object):
                 for counter, (img, lbl) in enumerate(train_loader):
                     img = img.to(self.args.device)
                     lbl = clip.tokenize(lbl).to(self.args.device)
+                    print(img.shape, lbl.shape)
                     # image_features = self.model.module.encode_image(img)
                     # text_features = self.model.module.encode_text(lbl)
                     labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
@@ -86,7 +87,7 @@ class Classictrainer(object):
                     loss = (loss1+loss2)/2
                     self.optimizer.zero_grad()
                     loss.backward()
-                    torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
+                    # torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
                     self.optimizer.step()
 
                     top1 = topacc(logits_per_image, labels, topk=(1,))
