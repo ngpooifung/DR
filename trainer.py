@@ -86,6 +86,7 @@ class Classictrainer(object):
                     # loss = (loss1+loss2)/2
                     self.optimizer.zero_grad()
                     loss.backward()
+                    torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), 5)
                     self.optimizer.step()
 
                     top1 = topacc(logits_per_image, labels, topk=(1,))
