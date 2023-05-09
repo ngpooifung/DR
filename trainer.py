@@ -22,7 +22,10 @@ class Classictrainer(object):
         self.scheduler = scheduler
         self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
         log_dir = self.args.dir
-        self.writer = SummaryWriter(log_dir = log_dir)
+        if self.args.output is not None:
+            self.writer = SummaryWriter(log_dir = os.path.join(self.args.output, self.args.process))
+        else:
+            self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
 

@@ -33,6 +33,8 @@ parser.add_argument('--resize', default = (384, 480), nargs = 2, type = int,
                     help = 'resize images in training')
 parser.add_argument('--min_size', default = (100, 100), nargs = 2, type = int,
                     help = 'min image size in training')
+parser.add_argument('--output', type = str, default = None,
+                    help = 'Path to output folder')
 
 # Model
 parser.add_argument('--arch', default='resnet50', type = str,
