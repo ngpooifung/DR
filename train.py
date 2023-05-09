@@ -61,7 +61,7 @@ parser.add_argument('--checkpoint_n_steps', type = int, default = 50,
                     help = 'Save checkpoins per n steps')
 parser.add_argument('--clip_grad_norm', type = float, default = 5,
                     help = 'Clip gradients norm (0 to disable)')
-                    
+
 args = parser.parse_args()
 
 
@@ -189,7 +189,8 @@ def Cliptune():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load(args.arch, device=args.device) #ViT-B/16
+    model, preprocess = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
+    model.float()
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
