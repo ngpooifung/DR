@@ -59,7 +59,9 @@ parser.add_argument('--batch_size', type = int, default = 32,
                     help = 'Batch size')
 parser.add_argument('--checkpoint_n_steps', type = int, default = 50,
                     help = 'Save checkpoins per n steps')
-
+parser.add_argument('--clip_grad_norm', type = float, default = 5,
+                    help = 'Clip gradients norm (0 to disable)')
+                    
 args = parser.parse_args()
 
 

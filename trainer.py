@@ -81,12 +81,12 @@ class Classictrainer(object):
                     labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                     logits_per_image, logits_per_text = self.model.module(img, lbl)
                     # logits_per_image, logits_per_text = self.loss(image_features, text_features)
-                    loss = self.criterion(logits_per_image, labels)
-                    # loss2 = self.criterion(logits_per_text, labels)
-                    # loss = (loss1+loss2)/2
+                    loss1 = self.criterion(logits_per_image, labels)
+                    loss2 = self.criterion(logits_per_text, labels)
+                    loss = (loss1+loss2)/2
                     self.optimizer.zero_grad()
                     loss.backward()
-                    torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), 5)
+                    torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
                     self.optimizer.step()
 
                     top1 = topacc(logits_per_image, labels, topk=(1,))
