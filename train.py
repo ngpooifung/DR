@@ -164,7 +164,7 @@ def Clip():
         test_loader = None
 
     if args.process == 'Clipeval':
-        file = os.path.join(self.args.output, self.args.process)
+        file = os.path.join(args.output, args.process)
         path = os.path.join(file, '%s_%04d.pth.tar'%('Clipfulltune', args.saved_epochs))
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
