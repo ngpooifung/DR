@@ -99,7 +99,7 @@ class Classictrainer(object):
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
-                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter)
+                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
                 save_checkpoint({
                     'epoch': self.args.epochs,
                     'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
@@ -163,7 +163,7 @@ class Restrainer(object):
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
 
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
-                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter)
+                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
                 save_checkpoint({
                     'epoch': self.args.epochs,
                     'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
