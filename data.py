@@ -74,31 +74,31 @@ import shutil
 #             tifffile.imsave(os.path.join(*[tiff_dir, sp, cla, img.split('.')[0] + '.tif']), image)
 
 
-# # %% read Phoom accuracy
-# sp = 'test'
-# csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
-# csv = pd.read_csv(csv)
-# predict = []
-# for i in range(sum(csv['Split'] == sp)):
-#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
-# predict = np.array(predict)
-# label = np.array(csv['Label'][csv['Split'] == sp])
-# predict = (predict > 0.29)*1
-# print(classification_report(label, predict, digits = 4))
+# %% read Phoom accuracy
+sp = 'test'
+csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
+csv = pd.read_csv(csv)
+predict = []
+for i in range(sum(csv['Split'] == sp)):
+    predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
+predict = np.array(predict)
+label = np.array(csv['Label'][csv['Split'] == sp])
+predict = (predict >= 0.43)*1
+print(classification_report(label, predict, digits = 4))
 #
 #
-# # %% read excel accuracy
-# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-# csv = pd.read_excel(csv)
-# predict = []
-# label = []
-# for i in range(572):
-#     predict.append(csv['Pred_R0'][i])
-#     label.append(int(csv['Label_R0'][i]))
-# predict = np.array(predict)
-# label = np.array(label)
-# predict = (predict > 0.61755)*1
-# print(classification_report(label, predict, digits = 4))
+# %% read excel accuracy
+csv = '/home/pwuaj/hkust/DR/All_20200715 emma_oneeye.xlsx'
+csv = pd.read_excel(csv)
+predict = []
+label = []
+for i in range(408): # 397 408
+    predict.append(csv['Pred_V0'][i])
+    label.append(int(csv['Label_V0'][i]))
+predict = np.array(predict)
+label = np.array(label)
+predict = (predict >= 0.5)*1
+print(classification_report(label, predict, digits = 4))
 #
 # # %%
 # threshold = []
@@ -109,11 +109,11 @@ import shutil
 #   accuracy.append(balanced_accuracy_score(label,y_pred))
 # threshold[np.argmax(accuracy)]
 #
-# # %%
-# from sklearn.metrics import roc_curve
-# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-# # thresholds[np.argmin(np.abs(fpr+tpr-1))]
-# thresholds[np.argmax(tpr-fpr)]
+# %%
+from sklearn.metrics import roc_curve
+fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+# thresholds[np.argmin(np.abs(fpr+tpr-1))]
+thresholds[np.argmax(tpr-fpr)]
 
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
