@@ -63,8 +63,8 @@ parser.add_argument('--clip_grad_norm', type = float, default = 5,
                     help = 'Clip gradients norm (0 to disable)')
 parser.add_argument('--finetune', default='',
                     help='finetune from checkpoint')
-parser.add_argument('--eval', action='store_true',
-                    help='Perform evaluation only')
+parser.add_argument('--use_mlp', action='store_true',
+                    help='Perform mlp')
 args = parser.parse_args()
 
 

@@ -7,6 +7,7 @@ from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
 from torch.cuda.amp import GradScaler, autocast
 from sklearn.linear_model import LogisticRegression
+from sklearn.neural_network import MLPClassifier
 import os
 import logging
 from tqdm import tqdm
@@ -48,7 +49,7 @@ class Classictrainer(object):
         train_features, train_labels = self.get_features(train_loader)
         test_features, test_labels = self.get_features(test_loader)
 
-        classifier = LogisticRegression(max_iter=10000)
+        classifier = MLPClassifier(max_iter = 10000) if args.use_mlp else classifier=LogisticRegression(max_iter=10000)
         classifier.fit(train_features, train_labels)
 
         # Evaluate using the logistic regression classifier
