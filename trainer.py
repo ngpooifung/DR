@@ -49,11 +49,11 @@ class Classictrainer(object):
         train_features, train_labels = self.get_features(train_loader)
         test_features, test_labels = self.get_features(test_loader)
 
-        if args.use_mlp:
+        if self.args.use_mlp:
             classifier = MLPClassifier(max_iter = 10000)
         else:
             classifier=LogisticRegression(max_iter=10000)
-            
+
         classifier.fit(train_features, train_labels)
 
         # Evaluate using the logistic regression classifier
