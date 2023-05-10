@@ -16,7 +16,7 @@ torch.manual_seed(0)
 # %%
 class Classictrainer(object):
     def __init__(self, model, optimizer, scheduler, args):
-        self.model = model
+        self.model = model.float()
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
@@ -56,15 +56,6 @@ class Classictrainer(object):
         accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
         print(f"Accuracy = {accuracy:.3f}")
 
-    def loss(self, image_features, text_features):
-        image_features = image_features / image_features.norm(dim=1, keepdim=True)
-        text_features = text_features / text_features.norm(dim=1, keepdim=True)
-        # cosine similarity as logits
-        logit_scale = self.model.module.logit_scale.exp()
-        logits_per_image = logit_scale * image_features @ text_features.t()
-        logits_per_text = logits_per_image.t()
-        return logits_per_image, logits_per_text
-
     def finetune(self, train_loader):
         self.model.train()
 
@@ -78,17 +69,13 @@ class Classictrainer(object):
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
                 lbl = clip.tokenize(lbl).to(self.args.device)
-                # image_features = self.model.module.encode_image(img)
-                # text_features = self.model.module.encode_text(lbl)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 logits_per_image, logits_per_text = self.model.module(img, lbl)
-                # logits_per_image, logits_per_text = self.loss(image_features, text_features)
                 loss1 = self.criterion(logits_per_image, labels)
                 loss2 = self.criterion(logits_per_text, labels)
                 loss = (loss1+loss2)/2
                 self.optimizer.zero_grad()
                 loss.backward()
-                # torch.nn.utils.clip_grad_norm_(self.model.module.parameters(), self.args.clip_grad_norm)
                 self.optimizer.step()
 
                 top1 = topacc(logits_per_image, labels, topk=(1,))
@@ -110,14 +97,17 @@ class Classictrainer(object):
 
 class Restrainer(object):
     def  __init__(self, model, optimizer, scheduler, args):
-        self.model = model
+        self.model = model.float()
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
         # self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
-        self.writer = SummaryWriter(log_dir = log_dir)
+        if self.args.output is not None:
+            self.writer = SummaryWriter(log_dir = os.path.join(self.args.output, self.args.process))
+        else:
+            self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
     def train(self, train_loader, test_loader = None):

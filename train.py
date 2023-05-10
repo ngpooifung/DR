@@ -33,7 +33,7 @@ parser.add_argument('--resize', default = (384, 480), nargs = 2, type = int,
                     help = 'resize images in training')
 parser.add_argument('--min_size', default = (100, 100), nargs = 2, type = int,
                     help = 'min image size in training')
-parser.add_argument('--output', type = str, default = None,
+parser.add_argument('--output', type = str, default = '',
                     help = 'Path to output folder')
 
 # Model
@@ -45,8 +45,6 @@ parser.add_argument('--out_dim', default=2, type=int,
 # Training
 parser.add_argument('--epochs', type = int, default = 100,
                     help = 'Number of training epochs')
-parser.add_argument('--saved-epochs', type = int, default = 100,
-                    help = 'Load save checkpoints epochs')
 parser.add_argument('--lr', type = float, default = 0.0003,
                     help = 'Learning rate')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
@@ -63,7 +61,10 @@ parser.add_argument('--checkpoint_n_steps', type = int, default = 50,
                     help = 'Save checkpoins per n steps')
 parser.add_argument('--clip_grad_norm', type = float, default = 5,
                     help = 'Clip gradients norm (0 to disable)')
-
+parser.add_argument('--finetune', default='',
+                    help='finetune from checkpoint')
+parser.add_argument('--eval', action='store_true',
+                    help='Perform evaluation only')
 args = parser.parse_args()
 
 
@@ -122,8 +123,7 @@ def eval():
     test_sampler = DistributedSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
 
-    file = os.path.join(os.path.split(args.dir)[0], os.path.splitext(os.path.split(args.dir)[1])[0])
-    path = os.path.join(file, '%s_%04d.pth.tar'%('main', args.saved_epochs))
+    path = os.path.join(args.output, args.finetune)
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
@@ -163,9 +163,8 @@ def Clip():
     else:
         test_loader = None
 
-    if args.process == 'Clipeval':
-        file = os.path.join(args.output, 'Cliplayertune')
-        path = os.path.join(file, '%s_%04d.pth.tar'%('Cliplayertune', args.saved_epochs))
+    if args.finetune:
+        path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         model.load_state_dict(state_dict, strict=True)
@@ -192,7 +191,6 @@ def Cliptune():
         args.device_count = -1
 
     model, preprocess = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
-    model.float()
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
@@ -217,8 +215,6 @@ def allocate():
     elif args.process == 'eval':
         eval()
     elif args.process == 'Clip':
-        Clip()
-    elif args.process == 'Clipeval':
         Clip()
     elif args.process == 'Cliplayertune':
         Cliptune()
