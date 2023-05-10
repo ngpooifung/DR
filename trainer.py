@@ -85,6 +85,8 @@ class Classictrainer(object):
             top1_train_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            print(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
                 checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
                 save_checkpoint({
@@ -151,6 +153,7 @@ class Restrainer(object):
                     top1_valid_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            print(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
 
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
                 checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
@@ -187,3 +190,4 @@ class Restrainer(object):
         result = pd.concat(result, ignore_index=True)
         result.to_csv(os.path.join(self.writer.log_dir, 'test.csv'))
         logging.debug(f"Top1 Test accuracy: {top1_accuracy.item()}")
+        print.debug(f"Top1 Test accuracy: {top1_accuracy.item()}")
