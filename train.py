@@ -65,6 +65,8 @@ parser.add_argument('--finetune', default='',
                     help='finetune from checkpoint')
 parser.add_argument('--use_mlp', action='store_true',
                     help='Perform mlp')
+parser.add_argument('--no_visual_proj', action='store_true',
+                    help='no visual projection')
 args = parser.parse_args()
 
 
@@ -169,7 +171,8 @@ def Clip():
         state_dict = checkpoint['state_dict']
         model.load_state_dict(state_dict, strict=True)
         model = model.to(args.device)
-    model.visual.proj = None
+    if args.no_visual_proj:
+        model.visual.proj = None
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
