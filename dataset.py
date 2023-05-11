@@ -39,7 +39,7 @@ class Imagefolder(datasets.ImageFolder):
                 eye = 'left eye'
             else:
                 eye = 'right eye'
-            text = f"Subject {sub}'s {eye} on date {date} is {text}"
+            text = f"Subject {subject}'s {eye} on date {date} is {text}"
         # if img.ndim ==2:
         #     img = img[..., np.newaxis]
         #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
