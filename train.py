@@ -169,6 +169,7 @@ def Clip():
         state_dict = checkpoint['state_dict']
         model.load_state_dict(state_dict, strict=True)
         model = model.to(args.device)
+    model.visual.proj = None
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
