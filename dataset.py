@@ -31,7 +31,7 @@ class Imagefolder(datasets.ImageFolder):
         img = Image.open(path)
         if self.clip_csv is not None:
             text = self.csv['text'][self.csv['label'] == lbl].item()
-            name = os.path.split(path)
+            name = os.path.split(path)[1]
             subject,date,eye,_ = name.split('-')
             subject = subject[4:]
             date = date.split('@')[0]
