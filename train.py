@@ -172,7 +172,7 @@ def Clip():
         model.load_state_dict(state_dict, strict=True)
         model = model.to(args.device)
     if args.no_visual_proj:
-        model.visual.proj = nn.Parameter(torch.randn((model.visual.proj.shape[0], 1024), device = args.device))
+        model.visual.proj = None
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
