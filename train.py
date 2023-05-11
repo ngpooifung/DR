@@ -167,7 +167,6 @@ def Clip():
 
     if args.finetune:
         model.ffn = None
-        model.visual.proj = None
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
