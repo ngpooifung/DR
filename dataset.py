@@ -29,8 +29,16 @@ class Imagefolder(datasets.ImageFolder):
         lbl = sample[1]
         img = Image.open(path)
         if self.clip_csv is not None:
-            # text = self.csv['text'][self.csv['label'] == lbl].item()
-            text = 'a photo of normal eye' if lbl==0 else 'a photo of eye with diabetic retinopathy disease'
+            text = self.csv['text'][self.csv['label'] == lbl].item()
+            name = os.path.split(path)
+            subject,date,eye,_ = name.split('-')
+            subject = subject[4:]
+            date = date.split('@')[0]
+            if eye[0] == 'L':
+                eye = 'left eye'
+            else:
+                eye = 'right eye'
+            text = f"Subject {sub}'s {eye} on date {date} is {text}"
         # if img.ndim ==2:
         #     img = img[..., np.newaxis]
         #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)

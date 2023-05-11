@@ -73,6 +73,7 @@ class Classictrainer(object):
             top1_train_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
+                print(lbl)
                 lbl = clip.tokenize(lbl).to(self.args.device)
                 labels = torch.arange(self.args.batch_size, dtype=torch.long).to(self.args.device)
                 logits_per_image, logits_per_text = self.model.module(img, lbl)
