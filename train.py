@@ -166,13 +166,14 @@ def Clip():
         test_loader = None
 
     if args.finetune:
+        model.ffn = None
+        model.visual.proj = None
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         model.load_state_dict(state_dict, strict=True)
         model = model.to(args.device)
-    if args.no_visual_proj:
-        model.visual.proj = None
+
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
@@ -200,10 +201,9 @@ def Cliptune():
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.process == 'Cliplayertune':
-        model.visual.proj = None
         for name, param in model.named_parameters():
             # if name not in ['visual.proj', 'text_projection']:
-            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias', 'text_projection']:
+            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias', 'text_projection', 'visual.proj']:
                 param.requires_grad = False
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
