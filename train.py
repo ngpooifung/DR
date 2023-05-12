@@ -65,7 +65,7 @@ parser.add_argument('--finetune', default='',
                     help='finetune from checkpoint')
 parser.add_argument('--use_mlp', action='store_true',
                     help='Perform mlp')
-parser.add_argument('--no_visual_proj', action='store_true',
+parser.add_argument('--no_mlp_proj', action='store_true',
                     help='no visual projection')
 args = parser.parse_args()
 
@@ -165,7 +165,8 @@ def Clip():
     else:
         test_loader = None
 
-    model.ffn = None
+    if args.no_mlp_proj:
+        model.ffn = None
     if args.finetune:
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
@@ -199,6 +200,8 @@ def Cliptune():
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
+    if args.no_mlp_proj:
+        model.ffn = None
     if args.process == 'Cliplayertune':
         for name, param in model.named_parameters():
             # if name not in ['visual.proj', 'text_projection']:
