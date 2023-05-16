@@ -252,10 +252,10 @@ def Cliptransfer():
         log = model.load_state_dict(state_dict, strict=False)
         assert log.missing_keys == ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias']
         for name, param in model.named_parameters():
-            if name not in ['ffn.weight', 'ffn.bias']:
+            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias']:
                 param.requires_grad = False
         parameters = list(filter(lambda p: p.requires_grad, model.parameters()))
-        assert len(parameters) == 2
+        assert len(parameters) == 4
         model = model.to(args.device)
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
