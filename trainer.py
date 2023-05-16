@@ -61,6 +61,56 @@ class Classictrainer(object):
         accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
         print(f"Accuracy = {accuracy:.3f}")
 
+    def transfer(self, train_loader, test_loader = None):
+        self.model.train()
+
+        logging.info(f"Start training for {self.args.epochs} epochs.")
+        logging.info(f"Training with gpu: {not self.args.disable_cuda}.")
+        logging.info(f"Total GPU device: {self.args.device_count}.")
+
+        for epoch_counter in range(self.args.epochs):
+            train_loader.sampler.set_epoch(epoch_counter)
+            test_loader.sampler.set_epoch(epoch_counter)
+            top1_train_accuracy = 0
+            for counter, (img, lbl) in enumerate(train_loader):
+                img = img.to(self.args.device)
+                lbl = lbl[1].to(self.args.device)
+                features = self.model.module.encode_image(img)
+                loss = self.criterion(features, lbl)
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
+
+                top1 = topacc(features, lbl, topk=(1,))
+                top1_train_accuracy += top1[0]
+
+            self.scheduler.step()
+            top1_train_accuracy /= (counter + 1)
+            top1_accuracy = 0
+            if test_loader is not None:
+                with torch.no_grad():
+                    for counter, (img, lbl) in enumerate(test_loader):
+                        img = img.to(self.args.device)
+                        lbl = lbl[1].to(self.args.device)
+                        features = self.model.module.encode_image(img)
+                        top1 = topacc(features, lbl, topk=(1,))
+                        top1_accuracy += top1[0]
+                top1_accuracy /= (counter + 1)
+                logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 Train accuracy {top1_train_accuracy.item()}\tTop1 Test accuracy: {top1_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+                print(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 Train accuracy {top1_train_accuracy.item()}\tTop1 Test accuracy: {top1_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            else:
+                logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 Train accuracy {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+                print(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 Train accuracy {top1_train_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+
+            if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
+                checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
+                save_checkpoint({
+                    'epoch': self.args.epochs,
+                    'state_dict': self.model.module.state_dict()}, is_best = False, filename = os.path.join(self.writer.log_dir, checkpoint_name))
+
+        logging.info("Training has finished.")
+        logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+
     def finetune(self, train_loader):
         self.model.train()
 
