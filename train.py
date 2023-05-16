@@ -249,7 +249,7 @@ def Cliptransfer():
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
-        log = model.load_state_dict(state_dict, strict=True)
+        log = model.load_state_dict(state_dict, strict=False)
         print(log)
         assert log.missing_keys == ['ffn.weight', 'ffn.bias']
         for name, param in model.named_parameters():
