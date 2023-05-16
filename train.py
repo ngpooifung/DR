@@ -16,7 +16,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune']
+function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune', 'Cliptransfer']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -216,6 +216,58 @@ def Cliptune():
     trainer = Classictrainer(model, optimizer, scheduler, args)
     trainer.finetune(train_loader)
 
+
+def Cliptransfer():
+    if not args.disable_cuda and torch.cuda.is_available():
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
+        args.device_count = torch.cuda.device_count()
+        cudnn.deterministic = True
+        cudnn.benchmark = True
+    else:
+        args.device = torch.device('cpu')
+        args.gpu_index = -1
+        args.device_count = -1
+
+    model, preprocess = clip.load(args.arch, device=args.device)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    train_sampler = DistributedSampler(train_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+
+    if args.test_dir is not None:
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
+        test_sampler = DistributedSampler(test_dataset)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
+    else:
+        test_loader = None
+
+    if args.finetune:
+        dim_mlp = model.visual.proj.shape[1]
+        model.ffn = nn.linear(dim_mlp, 2)
+        path = os.path.join(args.output, args.finetune)
+        checkpoint = torch.load(path, map_location = args.device)
+        state_dict = checkpoint['state_dict']
+        log = model.load_state_dict(state_dict, strict=True)
+        print(log)
+        assert log.missing_keys == ['ffn.weight', 'ffn.bias']
+        for name, param in model.named_parameters():
+            if name not in ['ffn.weight', 'ffn.bias']:
+                param.requires_grad = False
+        parameters = list(filter(lambda p: p.requires_grad, model.parameters()))
+        assert len(parameters) == 2
+        model = model.to(args.device)
+
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+
+    optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0,
+                                                           last_epoch=-1)
+    trainer = Classictrainer(model, optimizer, scheduler, args)
+    trainer.transfer(train_loader, test_loader)
+
+
 def allocate():
     torch.set_num_threads(args.workers)
     if args.process == 'main':
@@ -228,6 +280,8 @@ def allocate():
         Cliptune()
     elif args.process == 'Clipfulltune':
         Cliptune()
+    elif args.process == 'Cliptransfer':
+        Cliptransfer()
 
 if __name__ == "__main__":
     allocate()
