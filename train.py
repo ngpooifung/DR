@@ -245,7 +245,7 @@ def Cliptransfer():
 
     if args.finetune:
         dim_mlp = model.visual.proj.shape[1]
-        model.ffn = nn.Linear(dim_mlp, 2)
+        model.ffn = nn.Sequential(nn.Linear(dim_mlp, dim_mlp), nn.GELU(), nn.Linear(dim_mlp, 2))
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
