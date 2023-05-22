@@ -205,7 +205,7 @@ def Cliptune():
     if args.process == 'Cliplayertune':
         for name, param in model.named_parameters():
             # if name not in ['visual.proj', 'text_projection']:
-            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias', 'visual.proj']:
+            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias','ffn.4.weight', 'ffn.4.bias', 'visual.proj']:
                 param.requires_grad = False
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
