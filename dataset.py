@@ -10,6 +10,11 @@ import random
 from PIL import Image
 import os
 import pandas as pd
+try:
+    from torchvision.transforms import InterpolationMode
+    BICUBIC = InterpolationMode.BICUBIC
+except ImportError:
+    BICUBIC = Image.BICUBIC
 # %%
 class Imagefolder(datasets.ImageFolder):
     def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = True, clip_csv = None):
