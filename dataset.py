@@ -16,6 +16,7 @@ class Imagefolder(datasets.ImageFolder):
         self.transform = transform
         self.resize = resize
         self.size = size
+        preprocess.transforms.insert(2,transforms.RandomHorizontalFlip())
         self.preprocess = preprocess
         self.clip_csv = clip_csv
         if clip_csv is not None:
