@@ -1,6 +1,7 @@
 # %%
 import argparse
 import torch
+import torchvision
 import numpy as np
 import clip
 from torch import nn
