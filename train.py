@@ -173,7 +173,7 @@ def Clip():
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
-        model.load_state_dict(state_dict, strict=False)
+        model.load_state_dict(state_dict, strict=True)
         model = model.to(args.device)
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
