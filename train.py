@@ -196,6 +196,7 @@ def Cliptune():
         args.device_count = -1
 
     model, preprocess = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
+    preprocess.transforms.insert(2, torchvision.transforms.RandomHorizontalFlip())
     train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
