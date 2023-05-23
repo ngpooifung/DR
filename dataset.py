@@ -5,13 +5,14 @@ import torchvision.transforms as transforms
 import tifffile
 import cv2
 import torchvision.transforms.functional as TF
+from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
 import random
 from PIL import Image
 import os
 import pandas as pd
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = None, clip_csv = None):
+    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = True, clip_csv = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
@@ -47,13 +48,12 @@ class Imagefolder(datasets.ImageFolder):
         # if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
         #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
         # img = img.astype('float32')
-        data_transforms = transforms.Compose([
-                                              transforms.ToTensor(),
-                                              transforms.Resize((self.resize[0],self.resize[1]))
-                                              ])
-        if self.preprocess is not None:
-            img = self.preprocess(img)
-        else:
+        data_transforms = transforms.Compose([Resize(resize, interpolation=BICUBIC),
+                                              CenterCrop(resize),
+                                              _convert_image_to_rgb,
+                                              ToTensor(),
+                                              Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),])
+        if self.preprocess:
             img = data_transforms(img)
         if self.transform is not None:
             img = self.transform(img)
@@ -75,7 +75,7 @@ class Modeldataset:
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = (384, 480), transform = True, preprocess = None, clip_csv = None):
+    def get_dataset(self, resize = (384, 480), transform = True, preprocess = True, clip_csv = None):
         if transform:
             dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess, clip_csv = clip_csv)
         else:
@@ -93,3 +93,6 @@ class RotationTransform:
     def __call__(self, x):
         angle = random.choice(self.angles)
         return TF.rotate(x, angle)
+
+def _convert_image_to_rgb(image):
+    return image.convert("RGB")

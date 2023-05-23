@@ -154,13 +154,14 @@ def Clip():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load(args.arch, device=args.device)
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    model, _ = clip.load(args.arch, device=args.device)
+    n_px = model.visual.input_resolution
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = n_px, transform = False, preprocess = True)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
@@ -196,9 +197,9 @@ def Cliptune():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
-    preprocess.transforms.insert(2, torchvision.transforms.RandomHorizontalFlip())
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess, clip_csv = args.clip_csv)
+    model, _ = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
+    n_px = model.visual.input_resolution
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True, clip_csv = args.clip_csv)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
@@ -233,13 +234,14 @@ def Cliptransfer():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, preprocess = clip.load(args.arch, device=args.device)
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True, preprocess = preprocess)
+    model, _ = clip.load(args.arch, device=args.device)
+    n_px = model.visual.input_resolution
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False, preprocess = preprocess)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = n_px, transform = False, preprocess = True)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
