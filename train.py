@@ -89,7 +89,7 @@ def combine():
 
     clip_model, _ = clip.load('ViT-L/14@336px', device = args.device)
     n_px = clip_model.visual.input_resolution
-    clip_model.ffn = None
+    clip_model.ffn = nn.Identity()
     path = os.path.join('RDRlong', 'Cliplayertune/Cliplayertune_0100.pth.tar')
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
