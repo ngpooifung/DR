@@ -15,6 +15,43 @@ import pandas as pd
 torch.manual_seed(0)
 
 # %%
+class Comtrainer(object):
+    def __init__(self, model, clip_model, args):
+        self.clip_model = clip_model.float()
+        self.model = model.float()
+        self.args = args
+
+    def get_features(self, dataloader):
+        all_features = []
+        all_labels = []
+
+        with torch.no_grad():
+            for images, labels in tqdm(dataloader):
+                features = torch.cat((self.clip_model.module.encode_image(images.to(self.args.device)), self.model(images.to(self.args.device))))
+                all_features.append(features)
+                all_labels.append(labels[1])
+
+        return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
+
+    def Logistic(self, train_loader, test_loader = None):
+        self.clip_model.eval()
+        self.model.eval()
+
+        train_features, train_labels = self.get_features(train_loader)
+        test_features, test_labels = self.get_features(test_loader)
+
+        if self.args.use_mlp:
+            classifier = MLPClassifier(max_iter = 10000)
+        else:
+            classifier=LogisticRegression(max_iter=10000)
+
+        classifier.fit(train_features, train_labels)
+
+        # Evaluate using the logistic regression classifier
+        predictions = classifier.predict(test_features)
+        accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
+        print(f"Accuracy = {accuracy:.3f}")
+
 class Classictrainer(object):
     def __init__(self, model, optimizer, scheduler, args):
         self.model = model.float()
