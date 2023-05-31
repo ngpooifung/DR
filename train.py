@@ -72,6 +72,56 @@ args = parser.parse_args()
 
 
 # %%
+def combine():
+    if not args.disable_cuda and torch.cuda.is_available():
+        local_rank = int(os.environ["LOCAL_RANK"])
+        print(local_rank)
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
+        args.device_count = torch.cuda.device_count()
+        cudnn.deterministic = True
+        cudnn.benchmark = True
+    else:
+        args.device = torch.device('cpu')
+        args.gpu_index = -1
+        args.device_count = -1
+
+    clip_model, _ = clip.load('ViT-L/14@336px', device = args.device)
+    n_px = clip_model.visual.input_resolution
+    clip_model.ffn = None
+    path = os.path.join('RDRlong', 'Cliplayertune/Cliplayertune_0100.pth.tar')
+    checkpoint = torch.load(path, map_location = args.device)
+    state_dict = checkpoint['state_dict']
+    clip_model.load_state_dict(state_dict, strict=True)
+    clip_model = clip_model.to(args.device)
+
+    model = modeltrainer()._get_model(base_model = 'resnet50', out_dim = 2)
+    path = os.path.join('RDRlong', 'main/main_0100.pth.tar')
+    checkpoint = torch.load(path, map_location = args.device)
+    state_dict = checkpoint['state_dict']
+    model.load_state_dict(state_dict, strict=True)
+    model.backbone.fc = None
+    model = model.to(args.device)
+
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True)
+    train_sampler = DistributedSampler(train_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
+
+    if args.test_dir is not None:
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = n_px, transform = True)
+        test_sampler = DistributedSampler(test_dataset)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
+    else:
+        test_loader = None
+
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    clip_model = DDP(clip_model, device_ids = [local_rank], output_device=local_rank)
+
+    trainer = Comtrainer(model, clip_model, args)
+    trainer.Logistic(train_loader, test_loader)
+
+
 def main():
     if not args.disable_cuda and torch.cuda.is_available():
         local_rank = int(os.environ["LOCAL_RANK"])
@@ -87,12 +137,12 @@ def main():
         args.gpu_index = -1
         args.device_count = -1
 
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = 336, transform = True)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = True)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = 336, transform = True)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
