@@ -177,7 +177,8 @@ class Restrainer(object):
 
         for epoch_counter in range(self.args.epochs):
             train_loader.sampler.set_epoch(epoch_counter)
-            test_loader.sampler.set_epoch(epoch_counter)
+            if test_loader is not None:
+                test_loader.sampler.set_epoch(epoch_counter)
             top1_train_accuracy = 0
             top1_valid_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
