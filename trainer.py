@@ -38,6 +38,7 @@ class Comtrainer(object):
         self.model.eval()
 
         train_features, train_labels = self.get_features(train_loader)
+        print(train_features.shape)
         test_features, test_labels = self.get_features(test_loader)
 
         if self.args.use_mlp:
