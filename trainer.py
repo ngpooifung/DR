@@ -27,7 +27,10 @@ class Comtrainer(object):
 
         with torch.no_grad():
             for images, labels in tqdm(dataloader):
-                features = torch.cat((self.clip_model.module.encode_image(images.to(self.args.device)), self.model(images.to(self.args.device))),0)
+                f1 = self.clip_model.module.encode_image(images.to(self.args.device))
+                f2 = self.model(images.to(self.args.device))
+                print(f1.shape, f2.shape)
+                features = torch.cat((f1, f2),0)
                 all_features.append(features)
                 all_labels.append(labels[1])
 
