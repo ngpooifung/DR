@@ -97,7 +97,7 @@ def combine():
     clip_model = clip_model.to(args.device)
 
     model = modeltrainer()._get_model(base_model = 'resnet50', out_dim = 2)
-    path = os.path.join('RDRlong', 'main/main_0100.pth.tar')
+    path = os.path.join('RDRlong', 'main/main_0200.pth.tar')
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
     model.load_state_dict(state_dict, strict=True)
