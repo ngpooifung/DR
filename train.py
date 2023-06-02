@@ -172,7 +172,7 @@ def eval():
         args.gpu_index = -1
         args.device_count = -1
 
-    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = 336, transform = False)
+    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = 336, transform = True)
     test_sampler = DistributedSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
 
