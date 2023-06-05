@@ -89,6 +89,7 @@ def combine():
 
     clip_model, _ = clip.load('ViT-L/14@336px', device = args.device)
     n_px = clip_model.visual.input_resolution
+    print(n_px)
     clip_model.ffn = None
     path = os.path.join(args.output, args.finetune)
     checkpoint = torch.load(path, map_location = args.device)
