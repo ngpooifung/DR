@@ -80,7 +80,7 @@ class Modeldataset:
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = (384, 480), transform = True, preprocess = True, clip_csv = None):
+    def get_dataset(self, resize = 336, transform = True, preprocess = True, clip_csv = None):
         if transform:
             dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess, clip_csv = clip_csv)
         else:
