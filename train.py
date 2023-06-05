@@ -40,6 +40,8 @@ parser.add_argument('--arch', default='resnet50', type = str,
                     help = 'model architecture')
 parser.add_argument('--out_dim', default=2, type=int,
                     help = 'feature dimension (default: 2)')
+parser.add_argument('--hidden', default = 100, type = int,
+                    help = 'MLP hidden size')
 
 # Training
 parser.add_argument('--epochs', type = int, default = 100,

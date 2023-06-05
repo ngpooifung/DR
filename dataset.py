@@ -17,7 +17,7 @@ except ImportError:
     BICUBIC = Image.BICUBIC
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, resize = (384, 480), transform=None, preprocess = True, clip_csv = None):
+    def __init__(self, img_dir, resize = 336, transform=None, preprocess = True, clip_csv = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
