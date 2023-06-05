@@ -17,11 +17,10 @@ except ImportError:
     BICUBIC = Image.BICUBIC
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, size= (100, 100), resize = (384, 480), transform=None, preprocess = True, clip_csv = None):
+    def __init__(self, img_dir, resize = (384, 480), transform=None, preprocess = True, clip_csv = None):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
-        self.size = size
         self.preprocess = preprocess
         self.clip_csv = clip_csv
         if clip_csv is not None:

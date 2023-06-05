@@ -30,10 +30,8 @@ parser.add_argument('--test-dir', type = str, default = None,
                     help = 'Path to test data directory')
 parser.add_argument('--clip_csv', type = str, default = None,
                     help = 'Path to clip text')
-parser.add_argument('--resize', default = (384, 480), nargs = 2, type = int,
+parser.add_argument('--resize', default = 336, type = int,
                     help = 'resize images in training')
-parser.add_argument('--min_size', default = (100, 100), nargs = 2, type = int,
-                    help = 'min image size in training')
 parser.add_argument('--output', type = str, default = '',
                     help = 'Path to output folder')
 
@@ -138,12 +136,12 @@ def main():
         args.gpu_index = -1
         args.device_count = -1
 
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = 336, transform = True)
+    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
 
     if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = 336, transform = True)
+        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = True)
         test_sampler = DistributedSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
     else:
@@ -173,7 +171,7 @@ def eval():
         args.gpu_index = -1
         args.device_count = -1
 
-    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = 336, transform = True)
+    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = True)
     test_sampler = DistributedSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = test_sampler)
 
