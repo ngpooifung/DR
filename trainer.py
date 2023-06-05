@@ -90,7 +90,8 @@ class Classictrainer(object):
         test_features, test_labels = self.get_features(test_loader)
 
         if self.args.use_mlp:
-            classifier = MLPClassifier(hidden_layer_sizes=(self.args.hidden,), max_iter = 10000, learning_rate_init = self.args.lr, solver = 'adam', batch_size = 'auto')
+            classifier = MLPClassifier(max_iter = 10000)
+            # classifier = MLPClassifier(hidden_layer_sizes=(self.args.hidden,), max_iter = 10000, learning_rate_init = self.args.lr, solver = 'adam', batch_size = 'auto')
         else:
             classifier=LogisticRegression(max_iter=10000)
 
