@@ -102,7 +102,8 @@ def combine():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
     model.load_state_dict(state_dict, strict=True)
-    model.backbone.fc = nn.Identity()
+    model.backbone.fc[1] = nn.Identity()
+    model.backbone.fc[2] = nn.Identity()
     model = model.to(args.device)
 
     train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True)
