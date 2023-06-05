@@ -44,7 +44,7 @@ class Comtrainer(object):
         test_features, test_labels = self.get_features(test_loader)
 
         if self.args.use_mlp:
-            classifier = MLPClassifier(max_iter = 100000, solver = 'lbfgs')
+            classifier = MLPClassifier(max_iter = 100000)
         else:
             classifier=LogisticRegression(max_iter=100000)
 
