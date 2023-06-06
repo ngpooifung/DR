@@ -90,13 +90,11 @@ def combine():
     clip_model, _ = clip.load('ViT-L/14@336px', device = args.device)
     n_px = clip_model.visual.input_resolution
     print(n_px)
-    # clip_model.ffn = None
+    clip_model.ffn = None
     path = os.path.join(args.output, args.finetune)
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
     clip_model.load_state_dict(state_dict, strict=True)
-    clip_model.ffn[1] = nn.Identity()
-    clip_model.ffn[2] = nn.Identity()
     clip_model = clip_model.to(args.device)
 
     model = modeltrainer()._get_model(base_model = 'resnet50', out_dim = 2)
