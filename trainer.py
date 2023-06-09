@@ -226,7 +226,7 @@ class Restrainer(object):
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img)
+                logits = self.model.module.encode_image(img)
                 loss = self.criterion(logits, lbl)
 
                 top1 = topacc(logits, lbl, topk = (1,))
