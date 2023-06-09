@@ -153,7 +153,6 @@ def main():
     # model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
     model,_ = clip.load('RN50', device = args.device)
     model = model.visual
-    model.input_resolution = args.resize
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
