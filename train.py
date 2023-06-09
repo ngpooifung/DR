@@ -150,7 +150,10 @@ def main():
     else:
         test_loader = None
 
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    # model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    model,_ = clip.load('RN50', device = args.device)
+    model = model.visual
+    model.input_resolution = args.resize
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
@@ -182,7 +185,10 @@ def eval():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    # model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    model,_ = clip.load('RN50', device = args.device)
+    model = model.visual
+    model.input_resolution = args.resize
     model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
