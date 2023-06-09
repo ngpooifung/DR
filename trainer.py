@@ -245,7 +245,7 @@ class Restrainer(object):
                         img = img.to(self.args.device)
                         lbl = lbl[1].to(self.args.device)
 
-                        logits = self.model(img)
+                        logits = self.model.module.encode_image(img)
                         top1 = topacc(logits, lbl, topk = (1,))
                         top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
@@ -277,7 +277,7 @@ class Restrainer(object):
                 path = lbl[0]
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img)
+                logits = self.model.module.encode_image(img)
                 loss = self.criterion(logits, lbl)
 
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
