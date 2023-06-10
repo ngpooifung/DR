@@ -92,7 +92,7 @@ for i in range(len(csv)):
     name = csv.loc[i]['Image_Name']
     folder = name.split('-')[0]
     Ungradable = int(np.isnan(csv['Label_R2'][i]))
-    if Ungradable == 1:
+    if Ungradable != 1:
         RDR = int(csv.loc[i]['Label_R2'])
         VTDR = int(csv.loc[i]['Label_V2'])
     try:
