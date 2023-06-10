@@ -96,10 +96,10 @@ for i in range(len(csv)):
     Ungradable = csv.loc[i]['Ungradable Label']
     try:
         if Ungradable == 1:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/ungradable', name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/ungradable', name]))
         elif Ungradable == 0:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/RDR', str(RDR), name]))
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/VTDR', str(VTDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/RDR', str(RDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/VTDR', str(VTDR), name]))
     except:
         a.append(name)
 print(a)
