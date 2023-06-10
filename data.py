@@ -7,7 +7,6 @@ import tifffile
 import cv2
 from sklearn.metrics import classification_report, balanced_accuracy_score
 import shutil
-
 # # %%
 # csv_dir = './H.csv'
 # csv = pd.read_csv(csv_dir)
@@ -86,20 +85,22 @@ import shutil
 
 
 # %% SK data
-csv = pd.read_csv('/home/pwuaj/data/geiprobs.csv')
+csv = pd.read_excel('/home/pwuaj/hkust/DR/All_20200514.xlsx', usecols = 'P,V,X')
+int(np.isnan(csv['Label_R2'][291]))
 a = []
 for i in range(len(csv)):
-    name = csv.loc[i]['image']
-    # folder = csv.loc[i]['MRD']
-    RDR = csv.loc[i]['Referable']
-    VTDR = csv.loc[i]['VTDR']
-    Ungradable = csv.loc[i]['Ungradable Label']
+    name = csv.loc[i]['Image_Name']
+    folder = name.split('-')[0]
+    Ungradable = int(np.isnan(csv['Label_R2'][i]))
+    if Ungradable == 1:
+        RDR = int(csv.loc[i]['Label_R2'])
+        VTDR = int(csv.loc[i]['Label_V2'])
     try:
         if Ungradable == 1:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/ungradable', name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/SK_data',folder, name]), os.path.join(*['/home/pwuaj/data','SK/ungradable', name]))
         elif Ungradable == 0:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/RDR', str(RDR), name]))
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/VTDR', str(VTDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/SK_data',folder, name]), os.path.join(*['/home/pwuaj/data','SK/gradable/RDR', str(RDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/SK_data',folder, name]), os.path.join(*['/home/pwuaj/data','SK/gradable/VTDR', str(VTDR), name]))
     except:
         a.append(name)
 print(a)
