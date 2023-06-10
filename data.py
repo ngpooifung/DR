@@ -94,7 +94,7 @@ for i in range(len(csv)):
     VTDR = csv.loc[i]['VTDR']
     Ungradable = csv.loc[i]['Ungradable Label']
     if Ungradable == 1:
-        shutil.copyfile(os.path.join(*['SK_data', str(folder), name]), os.path.join(*['SK/ungradable', name]))
+        shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/ungradable', name]))
     elif Ungradable == 0:
-        shutil.copyfile(os.path.join(*['SK_data', str(folder), name]), os.path.join(*['SK/gradable/RDR', str(RDR), name]))
-        shutil.copyfile(os.path.join(*['SK_data', str(folder), name]), os.path.join(*['SK/gradable/VTDR', str(VTDR), name]))
+        shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/gradable/RDR', str(RDR), name]))
+        shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/gradable/VTDR', str(VTDR), name]))
