@@ -86,20 +86,20 @@ import shutil
 
 
 # %% SK data
-csv = pd.read_csv('/home/pwuaj/data/skprobs.csv')
+csv = pd.read_csv('/home/pwuaj/data/geiprobs.csv')
 a = []
 for i in range(len(csv)):
-    name = csv.loc[i]['Image_Name']
-    folder = csv.loc[i]['MRD']
+    name = csv.loc[i]['image']
+    # folder = csv.loc[i]['MRD']
     RDR = csv.loc[i]['Referable']
     VTDR = csv.loc[i]['VTDR']
     Ungradable = csv.loc[i]['Ungradable Label']
     try:
         if Ungradable == 1:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/ungradable', name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/ungradable', name]))
         elif Ungradable == 0:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/gradable/RDR', str(RDR), name]))
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data','SK_data', str(folder), name]), os.path.join(*['/home/pwuaj/data','SK/gradable/VTDR', str(VTDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/RDR', str(RDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data','External_GEI/all', name]), os.path.join(*['/home/pwuaj/data','GEI/gradable/VTDR', str(VTDR), name]))
     except:
         a.append(name)
 print(a)
