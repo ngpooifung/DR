@@ -263,7 +263,7 @@ class Restrainer(object):
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
     def eval(self, test_loader):
-        self.model.eval()
+        # self.model.eval()
 
         logging.info(f"Testing with gpu: {not self.args.disable_cuda}.")
         logging.info(f"Total GPU device: {self.args.device_count}.")
