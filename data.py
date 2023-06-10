@@ -86,7 +86,7 @@ import shutil
 
 
 # %% SK data
-csv = pd.read_csv('/home/pwuaj/hkust/DR/skprobs.csv')
+csv = pd.read_csv('/home/pwuaj/data/skprobs.csv')
 for i in range(len(csv)):
     name = csv.loc[i]['Image_Name']
     folder = csv.loc[i]['MRD']
