@@ -225,7 +225,7 @@ class Restrainer(object):
             top1_valid_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
                 img = img.to(self.args.device)
-                lbl = lbl[1].to(self.args.device)
+                lbl = lbl[1].unsqueeze(1).to(self.args.device)
 
                 logits = self.model(img)
                 loss = self.criterion(logits, lbl)
@@ -278,14 +278,14 @@ class Restrainer(object):
 
                 img = img.to(self.args.device)
                 path = lbl[0]
-                lbl = lbl[1].to(self.args.device)
+                lbl = lbl[1].unsqueeze(1).to(self.args.device)
 
                 logits = self.model(img)
                 loss = self.criterion(logits, lbl)
 
                 # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 top1 = accuracy_score(lbl, logits>0.5)
-                predict = int(logits>0.5)
+                predict = int(logits>0.5).squeeze()
                 top1_accuracy += top1[0]
                 result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict}))
 
