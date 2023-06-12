@@ -231,7 +231,7 @@ class Restrainer(object):
                 loss = self.criterion(logits, lbl.float())
 
                 # top1 = topacc(logits, lbl, topk = (1,))
-                top1 = accuracy_score(lbl, logits>0.5)
+                top1 = accuracy_score(lbl.cpu(), logits>0.5)
                 top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
@@ -249,7 +249,7 @@ class Restrainer(object):
 
                         logits = self.model(img)
                         # top1 = topacc(logits, lbl, topk = (1,))
-                        top1 = accuracy_score(lbl, logits>0.5)
+                        top1 = accuracy_score(lbl.cpu(), logits>0.5)
                         top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
 
