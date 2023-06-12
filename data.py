@@ -85,27 +85,21 @@ import shutil
 
 
 # %% SK data
-roots = []
-files = []
-for root, dir, file in os.walk('/home/pwuaj/data/Clarity_original'):
-   for name in file:
-       roots.append(root)
-       files.append(name)
-
-csv = pd.read_excel('/home/pwuaj/hkust/DR/All_20200514.xlsx', usecols = 'AA,AC')
+csv = pd.read_excel('/home/pwuaj/hkust/DR/All_20200514.xlsx', usecols = 'AV,AX,AZ,BB')
 csv
 a = []
-names = []
-for i in range(1321):
-    name = csv.loc[i]['Image_U1']
-    Ungradable = int(csv['Label_U1'][i])
-    folder = roots[files.index(name)]
+for i in range(95):
+    name = csv.loc[i]['Image_Name.2']
+    Ungradable = int(csv['Label_U4'][i])
+    if Ungradable != 1:
+        RDR = int(csv['Label_R4'][i])
+        VTDR = int(csv['Label_V4'][i])
     try:
         if Ungradable == 1:
-            shutil.copyfile(os.path.join(*[folder, name]), os.path.join(*['/home/pwuaj/data','Clarity/ungradable',name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','ungradable',name]))
         elif Ungradable == 0:
-            shutil.copyfile(os.path.join(*[folder, name]), os.path.join(*['/home/pwuaj/data','Clarity/gradable', name]))
-        names.append(name)
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','gradable/RDR', str(RDR), name]))
+            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','gradable/VTDR', str(VTDR), name]))
     except:
         a.append(name)
-print(len(set(names)))
+print(a)
