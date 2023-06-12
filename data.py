@@ -95,6 +95,7 @@ for root, dir, file in os.walk('/home/pwuaj/data/Clarity_original'):
 csv = pd.read_excel('/home/pwuaj/hkust/DR/All_20200514.xlsx', usecols = 'AA,AC')
 csv
 a = []
+names = []
 for i in range(1321):
     name = csv.loc[i]['Image_U1']
     Ungradable = int(csv['Label_U1'][i])
@@ -104,6 +105,7 @@ for i in range(1321):
             shutil.copyfile(os.path.join(*[folder, name]), os.path.join(*['/home/pwuaj/data','Clarity/ungradable',name]))
         elif Ungradable == 0:
             shutil.copyfile(os.path.join(*[folder, name]), os.path.join(*['/home/pwuaj/data','Clarity/gradable', name]))
+        names.append(name)
     except:
         a.append(name)
-print(a)
+print(len(set(names)))
