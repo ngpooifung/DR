@@ -76,12 +76,12 @@ import shutil
 # print(classification_report(label, predict, digits = 4))
 
 
-# # %% read sensitivity
-# csv = '/home/pwuaj/hkust/DR/test.csv'
-# csv = pd.read_csv(csv)
-# predict = np.array(csv['Predicted label'])
-# label = np.array(csv['True label'])
-# print(classification_report(label, predict, digits = 4))
+# %% read sensitivity
+csv = '/home/pwuaj/hkust/DR/test.csv'
+csv = pd.read_csv(csv)
+predict = np.array(csv['Predicted label'])
+label = np.array(csv['True label'])
+print(classification_report(label, predict, digits = 4))
 
 
 # %% SK data
