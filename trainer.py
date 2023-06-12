@@ -284,9 +284,9 @@ class Restrainer(object):
                 loss = self.criterion(logits, lbl.float())
 
                 # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
-                top1 = accuracy_score(lbl, logits>0.5)
-                predict = int(logits>0.5).squeeze()
-                top1_accuracy += top1[0]
+                top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                predict = int(logits>0.5).cpu().squeeze()
+                top1_accuracy += top1
                 result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict}))
 
         top1_accuracy /= (counter + 1)
