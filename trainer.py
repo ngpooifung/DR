@@ -228,7 +228,7 @@ class Restrainer(object):
                 lbl = lbl[1].unsqueeze(1).to(self.args.device)
 
                 logits = self.model(img)
-                loss = self.criterion(logits, lbl)
+                loss = self.criterion(logits, lbl.float())
 
                 # top1 = topacc(logits, lbl, topk = (1,))
                 top1 = accuracy_score(lbl, logits>0.5)
@@ -281,7 +281,7 @@ class Restrainer(object):
                 lbl = lbl[1].unsqueeze(1).to(self.args.device)
 
                 logits = self.model(img)
-                loss = self.criterion(logits, lbl)
+                loss = self.criterion(logits, lbl.float())
 
                 # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 top1 = accuracy_score(lbl, logits>0.5)
