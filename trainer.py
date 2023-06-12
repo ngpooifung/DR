@@ -278,6 +278,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
+                print(logits)
                 loss = self.criterion(logits, lbl)
 
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
