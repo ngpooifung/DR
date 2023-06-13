@@ -40,25 +40,30 @@ import shutil
 
 
 # # %% read excel accuracy
-# csv = '/home/pwuaj/hkust/DR/All_20200715 emma_oneeye.xlsx'
-# csv = pd.read_excel(csv)
+# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+# csv = pd.read_excel(csv, usecols = 'AN, AQ')
+# csv
 # predict = []
+# predictnan = []
 # label = []
-# for i in range(408): # 397 408
-#     predict.append(csv['Pred_V0'][i])
-#     label.append(int(csv['Label_V0'][i]))
+# for i in range(len(csv)): # 397 408
+#     try:
+#         predictnan.append(int(csv['Pred_R3'][i]))
+#         label.append(int(csv['Label_R3'][i]))
+#         predict.append(csv['Pred_R3'][i])
+#     except:
+#         continue
 # predict = np.array(predict)
 # label = np.array(label)
-# predict = (predict >= 0.5)*1
-# print(classification_report(label, predict, digits = 4))
 
 
 # # %% Youden
 # from sklearn.metrics import roc_curve
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # # thresholds[np.argmin(np.abs(fpr+tpr-1))]
-# thresholds[np.argmax(tpr-fpr)]
-
+# th = thresholds[np.argmax(tpr-fpr)]
+# predict = (predict >= th)*1
+# print(classification_report(label, predict, digits = 4))
 
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
@@ -76,30 +81,33 @@ import shutil
 # print(classification_report(label, predict, digits = 4))
 
 
-# %% read sensitivity
-csv = '/home/pwuaj/hkust/DR/test.csv'
-csv = pd.read_csv(csv)
-predict = np.array(csv['Predicted label'])
-label = np.array(csv['True label'])
-print(classification_report(label, predict, digits = 4))
-
+# # %% read sensitivity
+# from sklearn.metrics import roc_curve
+# csv = '/home/pwuaj/hkust/DR/test.csv'
+# csv = pd.read_csv(csv)
+# predict = np.array(csv['Probability'])
+# label = np.array(csv['True label'])
+# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+# th = thresholds[np.argmax(tpr-fpr)]
+# predict = (predict >= 0.5)*1
+# print(classification_report(label, predict, digits = 4))
 
 # %% SK data
-csv = pd.read_excel('/home/pwuaj/hkust/DR/All_20200514.xlsx', usecols = 'AV,AX,AZ,BB')
-csv
-a = []
-for i in range(95):
-    name = csv.loc[i]['Image_Name.2']
-    Ungradable = int(csv['Label_U4'][i])
-    if Ungradable != 1:
-        RDR = int(csv['Label_R4'][i])
-        VTDR = int(csv['Label_V4'][i])
-    try:
-        if Ungradable == 1:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','ungradable',name]))
-        elif Ungradable == 0:
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','gradable/RDR', str(RDR), name]))
-            shutil.copyfile(os.path.join(*['/home/pwuaj/data/Israel_renamed', name]), os.path.join(*['/home/pwuaj/data/israel','gradable/VTDR', str(VTDR), name]))
-    except:
-        a.append(name)
-print(a)
+RDRnames = []
+RDRfolders = []
+for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/RDRlong'):
+    RDRnames.append(file)
+    RDRfolders.append(root)
+VTDRnames = []
+VTDRfolders = []
+for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/VTDRlong'):
+    VTDRnames.append(file)
+    VTDRfolders.append(root)
+print(len(RDRnames), len(VTDRnames))
+for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/UWF'):
+    if file in RDRnames:
+        folder = RDRfolders[RDRnames.index(file)].split('/')[-1]
+        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder, file]))
+    if file in VTDRnames:
+        folder = VTDRfolders[VTDRnames.index(file)].split('/')[-1]
+        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder, file]))
