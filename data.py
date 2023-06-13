@@ -89,7 +89,7 @@ import shutil
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= 0.5)*1
+# predict = (predict >= th)*1
 # print(classification_report(label, predict, digits = 4))
 
 # %% SK data
@@ -106,8 +106,8 @@ for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/VTDRlong'):
 print(len(RDRnames), len(VTDRnames))
 for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/UWF'):
     if file in RDRnames:
-        folder = RDRfolders[RDRnames.index(file)].split('/')[-1]
-        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder, file]))
+        folder = RDRfolders[RDRnames.index(file)].split('/')
+        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder[-2], folder[-1], file]))
     if file in VTDRnames:
-        folder = VTDRfolders[VTDRnames.index(file)].split('/')[-1]
-        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder, file]))
+        folder = VTDRfolders[VTDRnames.index(file)].split('/')
+        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder[-2], folder[-1], file]))
