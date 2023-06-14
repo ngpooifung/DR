@@ -96,18 +96,21 @@ import shutil
 RDRnames = []
 RDRfolders = []
 for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/RDRlong'):
-    RDRnames.append(file)
-    RDRfolders.append(root)
+    for name in file:
+        RDRnames.append(name)
+        RDRfolders.append(root)
 VTDRnames = []
 VTDRfolders = []
 for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/VTDRlong'):
-    VTDRnames.append(file)
-    VTDRfolders.append(root)
+    for name in file:
+        VTDRnames.append(name)
+        VTDRfolders.append(root)
 print(len(RDRnames), len(VTDRnames))
 for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/UWF'):
-    if file in RDRnames:
-        folder = RDRfolders[RDRnames.index(file)].split('/')
-        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder[-2], folder[-1], file]))
-    if file in VTDRnames:
-        folder = VTDRfolders[VTDRnames.index(file)].split('/')
-        shutil.copyfile(os.path.join(*[root, file]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder[-2], folder[-1], file]))
+    for name in file:
+        if name in RDRnames:
+            folder = RDRfolders[RDRnames.index(name)].split('/')
+            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder[-2], folder[-1], name]))
+        if name in VTDRnames:
+            folder = VTDRfolders[VTDRnames.index(name)].split('/')
+            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder[-2], folder[-1], name]))
