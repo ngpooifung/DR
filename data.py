@@ -95,22 +95,24 @@ import shutil
 # %% SK data
 RDRnames = []
 RDRfolders = []
-for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/RDRlong'):
+for root, dir, file in os.walk('/home/pwuaj/data/RDRtrue'):
     for name in file:
         RDRnames.append(name)
         RDRfolders.append(root)
 VTDRnames = []
 VTDRfolders = []
-for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/Phoom/VTDRlong'):
+for root, dir, file in os.walk('/home/pwuaj/data/VTDRtrue'):
     for name in file:
         VTDRnames.append(name)
         VTDRfolders.append(root)
 print(len(RDRnames), len(VTDRnames))
-for root, dir, file in os.walk('/scratch/PI/eeaaquadeer/UWF'):
+for root, dir, file in os.walk('/home/pwuaj/data/RDRraw'):
     for name in file:
         if name in RDRnames:
             folder = RDRfolders[RDRnames.index(name)].split('/')
-            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/scratch/PI/eeaaquadeer/RDRraw', folder[-2], folder[-1], name]))
+            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/RDRrawtrue', folder[-2], folder[-1], name]))
+for root, dir, file in os.walk('/home/pwuaj/data/VTDRraw'):
+    for name in file:
         if name in VTDRnames:
             folder = VTDRfolders[VTDRnames.index(name)].split('/')
-            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/scratch/PI/eeaaquadeer/VTDRraw', folder[-2], folder[-1], name]))
+            shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/VTDRrawtrue', folder[-2], folder[-1], name]))
