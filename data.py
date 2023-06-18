@@ -81,16 +81,16 @@ import shutil
 # print(classification_report(label, predict, digits = 4))
 
 
-# # %% read sensitivity
-# from sklearn.metrics import roc_curve
-# csv = '/home/pwuaj/hkust/DR/test.csv'
-# csv = pd.read_csv(csv)
-# predict = np.array(csv['Probability'])
-# label = np.array(csv['True label'])
-# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-# th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= th)*1
-# print(classification_report(label, predict, digits = 4))
+# %% read sensitivity
+from sklearn.metrics import roc_curve
+csv = '/home/pwuaj/hkust/DR/test.csv'
+csv = pd.read_csv(csv)
+predict = np.array(csv['Probability'])
+label = np.array(csv['True label'])
+fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+th = thresholds[np.argmax(tpr-fpr)]
+predict = (predict >= th)*1
+print(classification_report(label, predict, digits = 4))
 
 # %% SK data
 RDRnames = []
