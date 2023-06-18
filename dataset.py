@@ -74,7 +74,7 @@ class Modeldataset:
     def get_transform(size):
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
-                                              # transforms.RandomHorizontalFlip(),
+                                              transforms.RandomHorizontalFlip(),
                                               GaussianBlur((7,9)),
                                               # transforms.RandomVerticalFlip(),
                                               # RotationTransform(angles=[0, 90, 180, 270])
