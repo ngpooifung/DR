@@ -53,7 +53,7 @@ class Imagefolder(datasets.ImageFolder):
         #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
         # img = img.astype('float32')
         data_transforms = transforms.Compose([Resize((self.resize, int(self.resize*1.25)), interpolation=BICUBIC),
-                                              # transforms.RandomHorizontalFlip(),
+                                              transforms.RandomHorizontalFlip(),
                                               # CenterCrop(self.resize),
                                               _convert_image_to_rgb,
                                               ToTensor(),
@@ -75,7 +75,7 @@ class Modeldataset:
     def get_transform(size):
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
-                                              transforms.RandomHorizontalFlip(),
+                                              # transforms.RandomHorizontalFlip(),
                                               GaussianBlur((7,9)),
                                               # transforms.RandomVerticalFlip(),
                                               # RotationTransform(angles=[0, 90, 180, 270])
