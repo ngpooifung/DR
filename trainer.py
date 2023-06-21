@@ -201,7 +201,8 @@ class Restrainer(object):
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
-        self.criterion = torch.nn.CrossEntropyLoss(weight = torch.FloatTensor(max(self.args.weight)/np.array(self.args.weight))).to(self.args.device)
+        # self.criterion = torch.nn.CrossEntropyLoss(weight = torch.FloatTensor(max(self.args.weight)/np.array(self.args.weight))).to(self.args.device)
+        self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
         # self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
         if self.args.output is not None:
