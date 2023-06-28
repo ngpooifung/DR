@@ -283,7 +283,7 @@ class Restrainer(object):
 
                 logits = self.model(img)
                 loss = self.criterion(logits, lbl)
-                exp_logits = torch.exp(logits)
+                exp_logits = torch.exp(logits)/self.args.temperature
                 prob = exp_logits[:,1]/exp_logits.sum(1)
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())

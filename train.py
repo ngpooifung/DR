@@ -70,6 +70,8 @@ parser.add_argument('--use_mlp', action='store_true',
                     help='Perform mlp')
 parser.add_argument('--no_mlp_proj', action='store_true',
                     help='no visual projection')
+parser.add_argument('--temperature', type = float, default = 1.,
+                    help = 'Temperature' )
 args = parser.parse_args()
 
 
