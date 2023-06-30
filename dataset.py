@@ -57,7 +57,7 @@ class Imagefolder(datasets.ImageFolder):
                                               # CenterCrop(self.resize),
                                               _convert_image_to_rgb,
                                               ToTensor(),
-                                              # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+                                              Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                               ])
         if self.preprocess:
             img = data_transforms(img)
