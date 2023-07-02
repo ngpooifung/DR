@@ -8,6 +8,7 @@ import cv2
 from sklearn.metrics import classification_report, balanced_accuracy_score
 import shutil
 import matplotlib.pyplot as plt
+import random
 # # %%
 # csv_dir = './H.csv'
 # csv = pd.read_csv(csv_dir)
