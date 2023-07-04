@@ -98,19 +98,21 @@ import random
 
 # %% SK data
 csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-csv = pd.read_excel(csv, usecols = 'AV,AX,AZ,BB')
-root = '/home/pwuaj/data/Argentina'
-for i in range(95):
-    name = csv['Image_Name.2'].iloc[i]
-    ungradable = int(csv['Label_U4'].iloc[i])
-    if ungradable != 1:
-        RDR = int(csv['Label_R4'].iloc[i])
-        VTDR = int(csv['Label_V4'].iloc[i])
-        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'RDR', str(RDR), name]))
-        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'VTDR', str(VTDR), name]))
-    else:
-        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/ungradable', name]))
-
+csv = pd.read_excel(csv, usecols = 'AA, AC')
+folder = '/home/pwuaj/data/Clarity_original'
+roots = []
+files = []
+for root, dir, file in os.walk(folder):
+   for name in file:
+      roots.append(root)
+      files.append(name)
+for i in range(1321):
+    name = csv['Image_U1'].iloc[i]
+    ungradable = int(csv['Label_U1'].iloc[i])
+    if ungradable == 1:
+        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/ungradable', name]))
+    elif ungradable == 0:
+        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/gradable', name]))
 
 # # %% RDR VTDR
 # a = ['RDR', 'VTDR']
