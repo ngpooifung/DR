@@ -96,45 +96,45 @@ import random
 # print(th,classification_report(label, predict, digits = 4))
 
 
-# %% SK data
-csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-csv = pd.read_excel(csv, usecols = 'AA, AC')
-folder = '/home/pwuaj/data/Clarity_original'
-roots = []
-files = []
-for root, dir, file in os.walk(folder):
-   for name in file:
-      roots.append(root)
-      files.append(name)
-for i in range(1321):
-    name = csv['Image_U1'].iloc[i]
-    ungradable = int(csv['Label_U1'].iloc[i])
-    if ungradable == 1:
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/ungradable', name]))
-    elif ungradable == 0:
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/gradable', name]))
+# # %% SK data
+# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+# csv = pd.read_excel(csv, usecols = 'AA, AC')
+# folder = '/home/pwuaj/data/Clarity_original'
+# roots = []
+# files = []
+# for root, dir, file in os.walk(folder):
+#    for name in file:
+#       roots.append(root)
+#       files.append(name)
+# for i in range(1321):
+#     name = csv['Image_U1'].iloc[i]
+#     ungradable = int(csv['Label_U1'].iloc[i])
+#     if ungradable == 1:
+#         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/ungradable', name]))
+#     elif ungradable == 0:
+#         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/gradable', name]))
 
-# # %% RDR VTDR
-# a = ['RDR', 'VTDR']
-# for i in a:
-#     root = os.path.join(*['/home/pwuaj/data/SK/gradable', i])
-#     classes = ['0', '1']
-#     for c in classes:
-#         files = os.listdir(os.path.join(*[root, c]))
-#         train = round(len(files)*16/25)
-#         valid = round(len(files)*4/25)
-#         test = round(len(files)*1/5)
-#         random.shuffle(files)
-#         trainlist = files[:train]
-#         validlist = files[train:train+valid]
-#         testlist = files[train+valid:]
-#         for l in trainlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'training', c, l]))
-#         for l in validlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'validation', c, l]))
-#         for l in testlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/SKtest', i, c, l]))
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
+# %% RDR VTDR
+a = ['RDR', 'VTDR']
+for i in a:
+    root = os.path.join(*['/home/pwuaj/data/IS/gradable', i])
+    classes = ['0', '1']
+    for c in classes:
+        files = os.listdir(os.path.join(*[root, c]))
+        train = round(len(files)*12/25)
+        valid = round(len(files)*1/25)
+        test = round(len(files)*12/25)
+        random.shuffle(files)
+        trainlist = files[:train]
+        validlist = files[train:train+valid]
+        testlist = files[train+valid:]
+        for l in trainlist:
+            shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'training', c, l]))
+        for l in validlist:
+            shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'validation', c, l]))
+        for l in testlist:
+            shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/IStest', i, c, l]))
+            shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 #
 # a = ['RDR', 'VTDR']
 # for i in a:
