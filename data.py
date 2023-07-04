@@ -106,10 +106,10 @@ for i in range(95):
     if ungradable != 1:
         RDR = int(csv['Label_R4'].iloc[i])
         VTDR = int(csv['Label_V4'].iloc[i])
-        shutile.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'RDR', RDR, name]))
-        shutile.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'VTDR', VTDR, name]))
+        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'RDR', RDR, name]))
+        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/gradable', 'VTDR', VTDR, name]))
     else:
-        shutile.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/ungradable', name]))
+        shutil.copyfile(os.path.join(*[root, name]), os.path.join(*['/home/pwuaj/data/IS/ungradable', name]))
 
 
 # # %% RDR VTDR
