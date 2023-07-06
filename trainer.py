@@ -247,22 +247,18 @@ class Restrainer(object):
         print(f"Top1 Test accuracy: {top1_accuracy.item()}")
 
     def class_activation(self, test_loader):
-        activation = {}
+        activation = []
 
-        def get_activation(name):
-            def hook(model, input, output):
-                activation[name] = output.detach()
-            return hook
+        def hook(model, input, output):
+            activation.append(output.clone().detach())
+
 
         self.model.eval()
-        self.model.module.backbone.layer4.register_forward_hook(get_activation('layer4'))
-        weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2,2048)
+        self.model.module.backbone.layer4.register_forward_hook(hook)
+        weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2, 2048)
 
-        features = []
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
                 feature = self.model(image.to(self.args.device))
-                features.append(activation['layer4'])
-                print(features[0].shape)
-        features = torch.cat(features).cpu().numpy()
+        features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
         print(features.shape)
