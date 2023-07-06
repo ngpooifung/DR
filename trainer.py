@@ -263,6 +263,6 @@ class Restrainer(object):
             for image, lbl in tqdm(test_loader):
                 feature = self.model(image.to(self.args.device))
                 features.append(activation['layer4'])
-                print(features.shape)
+                print(features[0].shape)
         features = torch.cat(features).cpu().numpy()
         print(features.shape)
