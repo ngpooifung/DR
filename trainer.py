@@ -260,5 +260,6 @@ class Restrainer(object):
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
                 feature = self.model(image.to(self.args.device))
+                top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
+                print(predict.shape)
         features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
-        print(features.shape)
