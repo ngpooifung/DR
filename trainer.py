@@ -264,4 +264,4 @@ class Restrainer(object):
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
                 predicts.append(predict)
         features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
-        predicts = torch.cat(predicts).cpu().numpy()
+        predicts = np.concatenate(predicts)
