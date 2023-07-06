@@ -244,3 +244,16 @@ class Restrainer(object):
         result.to_csv(os.path.join(self.writer.log_dir, 'test.csv'))
         logging.debug(f"Top1 Test accuracy: {top1_accuracy.item()}")
         print(f"Top1 Test accuracy: {top1_accuracy.item()}")
+
+    def class_activation(self, test_loader):
+        self.model.eval()
+
+        weight = model.backbone.fc.weight.detach().cpu().numpy() #(2,2048)
+        features = []
+        with torch.no_grad():
+            for image, lbl in tqdm(test_loader):
+                feature = self.model(image.to(self.args.device))
+                print(feature.shape)
+                features.append(feature)
+        features = torch.cat(features).cpu().numpy()
+        print(features.shape)

@@ -185,15 +185,18 @@ def eval():
     state_dict = checkpoint['state_dict']
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
-    model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
-    model.load_state_dict(state_dict, strict=True)
+    # model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
+    model.backbone.fc = nn.Identity()
+    model.backbone.avgpool = nn.Identity()
+    log = model.load_state_dict(state_dict, strict=False)
+    print(log)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = None
     scheduler = None
     trainer = Restrainer(model, optimizer, scheduler, args)
-    trainer.eval(test_loader)
+    trainer.class_activation(test_loader)
 
 def Clip():
     if not args.disable_cuda and torch.cuda.is_available():
