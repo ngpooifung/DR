@@ -248,7 +248,7 @@ class Restrainer(object):
     def class_activation(self, test_loader):
         self.model.eval()
 
-        weight = self.model.backbone.fc.weight.detach().cpu().numpy() #(2,2048)
+        weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2,2048)
         features = []
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
