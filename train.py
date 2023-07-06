@@ -152,6 +152,7 @@ def transfer():
         if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
             param.requires_grad = False
 
+    model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
