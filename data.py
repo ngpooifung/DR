@@ -88,11 +88,11 @@ from sklearn.metrics import roc_curve
 csv = '/home/pwuaj/hkust/DR/test.csv'
 csv = pd.read_csv(csv)
 predict = np.array(csv['Probability'])
-# plt.hist(predict, bins = 50)
-label = np.array(csv['True label'])
+plt.hist(predict, bins = 50)
+# label = np.array(csv['True label'])
 fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 th = thresholds[np.argmax(tpr-fpr)]
-predict = (predict >= 0.306)*1
+predict = (predict >= th)*1
 print(th,classification_report(label, predict, digits = 4))
 
 

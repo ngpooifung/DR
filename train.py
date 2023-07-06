@@ -185,7 +185,7 @@ def eval():
     state_dict = checkpoint['state_dict']
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
-    # model,_ = clip.load('RN50', device = args.device)
+    model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
     model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
