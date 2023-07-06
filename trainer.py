@@ -246,9 +246,13 @@ class Restrainer(object):
         print(f"Top1 Test accuracy: {top1_accuracy.item()}")
 
     def class_activation(self, test_loader):
+
         self.model.eval()
-        print(self.model.module.state_dict())
         weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2,2048)
+
+
+        self.model.module.backbone.fc = nn.Identity()
+        self.model.module.backbone.avgpool = nn.Identity()
         features = []
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
