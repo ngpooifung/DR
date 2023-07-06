@@ -255,7 +255,7 @@ class Restrainer(object):
             return hook
 
         self.model.eval()
-        self.model.module.layer4.register_forward_hook(get_activation('layer4'))
+        self.model.module.backbone.layer4.register_forward_hook(get_activation('layer4'))
         weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2,2048)
 
         features = []
