@@ -267,7 +267,7 @@ class Restrainer(object):
         features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
         predicts = np.concatenate(predicts)
         features = features[:5,:]
-        predicts = predicts[:5,:]
+        predicts = predicts[:5]
         weight_winner = weight[predicts, :] # (bs, 2048)
         mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
         final_output = np.dot(class_weights_winner, mat_for_mult.reshape((-1, 2048, 512*640))).reshape(-1, 512, 640)
