@@ -271,7 +271,7 @@ class Restrainer(object):
         weight_winner = weight[predicts, :] # (bs, 2048)
         mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
         final_output = np.dot(weight_winner, mat_for_mult.reshape((-1, 2048, 512*640))).reshape(-1, 512, 640)
-        for i in range(final_output.size(0)):
+        for i in range(final_output.shape[0]):
             image = final_output[i]
             image = Image.fromarray(image)
             image.save(os.path.join(*['/home/pwuaj/data/test', str(i)]) + '.jpg' )
