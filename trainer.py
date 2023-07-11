@@ -265,3 +265,4 @@ class Restrainer(object):
                 predicts.append(predict)
         features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
         predicts = np.concatenate(predicts)
+        print(predicts, weight.shape)
