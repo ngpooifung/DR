@@ -10,6 +10,7 @@ from torch.cuda.amp import GradScaler, autocast
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 import os
+import scipy
 import logging
 from tqdm import tqdm
 import pandas as pd
