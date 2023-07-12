@@ -273,6 +273,7 @@ class Restrainer(object):
         final_output = np.dot(weight_winner, mat_for_mult.reshape((-1, 2048, 512*640)))
         print(final_output.shape)
         fianl_output = final_output.reshape(-1, 512, 640)
+        print(final_output.shape)
         for i in range(final_output.shape[0]):
             image = final_output[i]
             image = Image.fromarray(image)
