@@ -270,7 +270,7 @@ class Restrainer(object):
         predicts = np.concatenate(predicts)
         features = features[:5,:]
         predicts = predicts[:5]
-        print(features)
+        print(features[1,1])
         weight_winner = exp_weight[predicts, :] # (bs, 2048)
         mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
         for i in range(features.shape[0]):
