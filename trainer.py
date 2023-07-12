@@ -257,6 +257,8 @@ class Restrainer(object):
         self.model.eval()
         self.model.module.backbone.layer4.register_forward_hook(hook)
         weight = self.model.module.state_dict()['backbone.fc.weight'].detach().cpu().numpy() #(2, 2048)
+        exp_weight = np.exp(weight)
+        exp_weight = exp_weight/exp_weight.sum(0)
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
@@ -268,12 +270,11 @@ class Restrainer(object):
         predicts = np.concatenate(predicts)
         features = features[:5,:]
         predicts = predicts[:5]
-        weight_winner = weight[predicts, :] # (bs, 2048)
+        print(features)
+        weight_winner = exp_weight[predicts, :] # (bs, 2048)
         mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
-        print(mat_for_mult.shape)
         for i in range(features.shape[0]):
             image = np.dot(mat_for_mult[i].reshape((2048, 512*640)).transpose(1, 0), weight_winner[i]).reshape(512, 640)
-            print(image)
             image = Image.fromarray(image)
             image = image.convert('RGB')
             image.save(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg' )
