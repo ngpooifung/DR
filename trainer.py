@@ -275,6 +275,7 @@ class Restrainer(object):
         mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
         for i in range(features.shape[0]):
             image = np.dot(mat_for_mult[i].reshape((2048, 512*640)).transpose(1, 0), weight_winner[i]).reshape(512, 640)
+            print(image)
             image = Image.fromarray(image)
             image = image.convert('RGB')
             image.save(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg' )
