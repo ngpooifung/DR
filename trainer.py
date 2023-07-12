@@ -274,4 +274,5 @@ class Restrainer(object):
         for i in range(final_output.shape[0]):
             image = final_output[i]
             image = Image.fromarray(image)
+            image = image.convert('RGB') 
             image.save(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg' )
