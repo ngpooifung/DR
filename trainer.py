@@ -262,8 +262,8 @@ class Restrainer(object):
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
-                print(lbl)
-                lbl = os.path.split(lbl[0][0])[1]
+                name = os.path.split(lbl[0][0])[1]
+                lbl = lbl[1]
                 feature = self.model(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
 
