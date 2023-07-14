@@ -268,10 +268,8 @@ class Restrainer(object):
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
 
                 features = activation[-1]   #(1, 2048, 16, 20)
-                print(features.shape)
                 predicts = torch.from_numpy(predict)
                 weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
-                print(weight_winner.shape)
                 cam = (weight_winner * features).sum(1, keepdim=True)
                 final_cam = F.interpolate(cam, (512, 640), mode="bilinear", align_corners=True)
 
