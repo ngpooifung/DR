@@ -277,3 +277,4 @@ class Restrainer(object):
                 plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
                 plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.3)
                 plt.savefig(os.path.join(*['/home/pwuaj/data/cam', name]))
+                plt.close()
