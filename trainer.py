@@ -279,4 +279,5 @@ class Restrainer(object):
         print(final_cam.shape)
         for i in range(features.shape[0]):
             image = final_cam[i].squeeze().cpu().numpy()
+            print(image)
             plt.imsave(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg',image)
