@@ -17,7 +17,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune', 'transfer', 'combine']
+function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune', 'transfer', 'combine','class_activation']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -103,56 +103,20 @@ def main():
         test_loader = None
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+
+    if self.args.process == 'transfer':
+        path = os.path.join(args.output, args.finetune)
+        checkpoint = torch.load(path, map_location = args.device)
+        state_dict = checkpoint['state_dict']
+        model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
+        log = model.load_state_dict(state_dict, strict=False)
+        print(log)
+        for name, param in model.named_parameters():
+            if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
+                param.requires_grad = False
+
+        model = model.to(args.device)
     # model,_ = clip.load('RN50', device = args.device)
-    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
-
-    optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0,
-                                                           last_epoch=-1)
-
-    trainer = Restrainer(model, optimizer, scheduler, args)
-    trainer.train(train_loader, test_loader)
-
-def transfer():
-    if not args.disable_cuda and torch.cuda.is_available():
-        local_rank = int(os.environ["LOCAL_RANK"])
-        print(local_rank)
-        torch.cuda.set_device(local_rank)
-        dist.init_process_group(backend = 'nccl')
-        args.device = torch.device('cuda', local_rank)
-        args.device_count = torch.cuda.device_count()
-        cudnn.deterministic = True
-        cudnn.benchmark = True
-    else:
-        args.device = torch.device('cpu')
-        args.gpu_index = -1
-        args.device_count = -1
-
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = args.resize, transform = True)
-    train_sampler = DistributedSampler(train_dataset)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler)
-
-    if args.test_dir is not None:
-        test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
-        test_sampler = DistributedSampler(test_dataset)
-        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = test_sampler)
-    else:
-        test_loader = None
-
-    path = os.path.join(args.output, args.finetune)
-    checkpoint = torch.load(path, map_location = args.device)
-    state_dict = checkpoint['state_dict']
-
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
-    model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
-    log = model.load_state_dict(state_dict, strict=False)
-    print(log)
-
-    for name, param in model.named_parameters():
-        if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
-            param.requires_grad = False
-
-    model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
@@ -193,7 +157,10 @@ def eval():
     optimizer = None
     scheduler = None
     trainer = Restrainer(model, optimizer, scheduler, args)
-    trainer.class_activation(test_loader)
+    if self.args.process == 'eval':
+        trainer.eval(test_loader)
+    elif self.args.process == 'class_activation':
+        trainer.class_activation(test_loader)
 
 def Clip():
     if not args.disable_cuda and torch.cuda.is_available():
@@ -330,10 +297,12 @@ def allocate():
     torch.set_num_threads(args.workers)
     if args.process == 'main':
         main()
+    elif args.process == 'transfer':
+        main()
     elif args.process == 'eval':
         eval()
-    elif args.process == 'transfer':
-        transfer()
+    elif args.process == 'class_activation':
+        eval()
     elif args.process == 'Clip':
         Clip()
     elif args.process == 'Cliplayertune':
