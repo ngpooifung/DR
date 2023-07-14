@@ -12,6 +12,8 @@ from sklearn.neural_network import MLPClassifier
 import os
 import scipy
 import logging
+import matplotlib.pyplot as plt
+import torch.nn.functional as F
 from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
@@ -257,8 +259,6 @@ class Restrainer(object):
         self.model.eval()
         self.model.module.backbone.layer4.register_forward_hook(hook)
         weight = self.model.module.state_dict()['backbone.fc.weight'].detach() #(2, 2048)
-        weight_softmax = torch.nn.functional.softmax(weight, dim=1)
-        weight_softmax = weight_softmax.cpu().numpy()
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
@@ -266,15 +266,17 @@ class Restrainer(object):
                 feature = self.model(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
                 predicts.append(predict)
-        features = torch.cat(activation).cpu().numpy() #(bs, 2048, 16, 20)
-        predicts = np.concatenate(predicts)
+        features = torch.cat(activation)   #(bs, 2048, 16, 20)
+        print(features.shape)
+        predicts = torch.from_numpy(np.concatenate(predicts))
         features = features[:5,:]
         predicts = predicts[:5]
-        weight_winner = weight_softmax[1, :] # (bs, 2048)
-        mat_for_mult = scipy.ndimage.zoom(features, (1, 1, 32, 32), order=1)
+        weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (bs, 2048, 1, 1)
+        print(weight_winner.shape)
+        cam = (weight_winner * features).sum(1, keepdim=True)
+        print(cam.shape)
+        final_cam = F.interpolate(cam, (512, 640), mode="bilinear", align_corners=True)
+        print(final_cam.shape)
         for i in range(features.shape[0]):
-            image = np.dot(mat_for_mult[i].reshape((2048, 512*640)).transpose(1, 0), weight_winner).reshape(512, 640)
-            print(image)
-            image = Image.fromarray(image)
-            image = image.convert('RGB')
-            image.save(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg' )
+            image = fianl_cam[i].squeeze().cpu().numpy()
+            plt.imsave(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg',image)
