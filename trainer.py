@@ -265,7 +265,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
                 feature = self.model(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
-                print(feature.shape, predict.shape)
+                print(activation[-1].shape)
                 predicts.append(predict)
         features = torch.cat(activation)   #(bs, 2048, 16, 20)
         predicts = torch.from_numpy(np.concatenate(predicts))
