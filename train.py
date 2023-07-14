@@ -104,7 +104,7 @@ def main():
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
 
-    if self.args.process == 'transfer':
+    if args.process == 'transfer':
         path = os.path.join(args.output, args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
@@ -157,9 +157,9 @@ def eval():
     optimizer = None
     scheduler = None
     trainer = Restrainer(model, optimizer, scheduler, args)
-    if self.args.process == 'eval':
+    if args.process == 'eval':
         trainer.eval(test_loader)
-    elif self.args.process == 'class_activation':
+    elif args.process == 'class_activation':
         trainer.class_activation(test_loader)
 
 def Clip():
