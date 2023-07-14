@@ -262,16 +262,19 @@ class Restrainer(object):
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
-                lbl = lbl[1].to(self.args.device)
+                lbl = os.path.split(lbl[0])[1]
                 feature = self.model(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
-                print(activation[-1].shape)
-                predicts.append(predict)
-        features = torch.cat(activation)   #(bs, 2048, 16, 20)
-        predicts = torch.from_numpy(np.concatenate(predicts))
-        weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (bs, 2048, 1, 1)
-        cam = (weight_winner * features).sum(1, keepdim=True)
-        final_cam = F.interpolate(cam, (512, 640), mode="bilinear", align_corners=True)
-        for i in range(features.shape[0]):
-            image = final_cam[i].squeeze().cpu().numpy()
-            plt.imsave(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg',image)
+
+                features = activation[-1]   #(1, 2048, 16, 20)
+                print(features.shape)
+                predicts = torch.from_numpy(predict)
+                weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
+                print(weight_winner.shape)
+                cam = (weight_winner * features).sum(1, keepdim=True)
+                final_cam = F.interpolate(cam, (512, 640), mode="bilinear", align_corners=True)
+
+                plt.figure()
+                plt.imshow(image)
+                plt.imshow(final_cam.squeeze().detach().numpy(), alpha=0.8)
+                plt.savefig(os.path.join(*['/home/pwuaj/data/cam', lbl]))
