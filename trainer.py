@@ -278,5 +278,5 @@ class Restrainer(object):
         final_cam = F.interpolate(cam, (512, 640), mode="bilinear", align_corners=True)
         print(final_cam.shape)
         for i in range(features.shape[0]):
-            image = fianl_cam[i].squeeze().cpu().numpy()
+            image = final_cam[i].squeeze().cpu().numpy()
             plt.imsave(os.path.join(*['/home/pwuaj/data/cam', str(i)]) + '.jpg',image)
