@@ -159,7 +159,7 @@ names = []
 for root, dir, file in os.walk(imgdir):
    for name in file:
       names.append(name)
-   for name in dir:
+   for name in root:
       folders.append(name)
 
 for i in range(len(csv)):
