@@ -59,14 +59,6 @@ import random
 # label = np.array(label)
 
 
-# # %% Youden
-# from sklearn.metrics import roc_curve
-# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-# # thresholds[np.argmin(np.abs(fpr+tpr-1))]
-# th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= th)*1
-# print(classification_report(label, predict, digits = 4))
-
 # # %% read Phoom gradtest
 # csv = 'skprobs.csv'
 # csv = pd.read_csv(csv)
@@ -158,7 +150,18 @@ import random
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 
 # %%
-folder = '/home/pwuaj/data/ungradable'
-name = os.listdir(folder)
-data = pd.DataFrame({'Image_Name': name})
-data.to_csv('/home/pwuaj/data/image.csv')
+csv = '/home/pwuaj/hkust/DR/image.csv'
+csv = pd.read_csv(csv)
+
+imgdir = '/home/pwuaj/data/UWF'
+folders = []
+names = []
+for root, dir, file in os.walk(imgdir):
+   for name in file:
+      names.append(name)
+   for name in dir:
+      folders.append(name)
+
+for i in range(len(csv)):
+    name = csv['Image_Name'].loc[i]
+    shutil.copyfile(os.path.join(*[folders[names.index(name)], name]), os.path.join(*['/home/pwuaj/data/ungradable', name]))
