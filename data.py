@@ -159,8 +159,7 @@ names = []
 for root, dir, file in os.walk(imgdir):
    for name in file:
       names.append(name)
-   for name in root:
-      folders.append(name)
+      folders.append(root)
 
 for i in range(len(csv)):
     name = csv['Image_Name'].loc[i]
