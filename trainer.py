@@ -271,7 +271,7 @@ class Restrainer(object):
                 predicts = torch.from_numpy(predict)
                 weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
                 cam = (weight_winner * features).sum(1, keepdim=True)
-                final_cam = F.interpolate(cam, (self.args.resize, int(self.resize*1.25)), mode="bilinear", align_corners=True)
+                final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
 
                 plt.figure()
                 plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
