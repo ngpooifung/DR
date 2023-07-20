@@ -150,17 +150,15 @@ import random
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 
 # %%
-csv = '/home/pwuaj/hkust/DR/image.csv'
-csv = pd.read_csv(csv)
-
-imgdir = '/home/pwuaj/data/UWF'
+imgdir = '/home/pwuaj/data/RDRraw'
 folders = []
 names = []
+lbl = []
 for root, dir, file in os.walk(imgdir):
    for name in file:
       names.append(name)
-      folders.append(root)
-
-for i in range(len(csv)):
-    name = csv['Image_Name'].loc[i]
-    shutil.copyfile(os.path.join(*[folders[names.index(name)], name]), os.path.join(*['/home/pwuaj/data/ungradable', name]))
+      lbl.append(1)
+print(len(names))
+folder.append(pd.DataFrame({'Image':names, 'Gradability':lbl}))
+folder = pd.concat(folder, ignore_index=True)
+folder.to_excel('/home/pwuaj/hkust/DR/Gradability.xlsx')
