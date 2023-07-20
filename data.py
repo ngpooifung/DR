@@ -151,7 +151,7 @@ import random
 
 # %%
 imgdir = '/home/pwuaj/data/RDRraw'
-folders = []
+folder = []
 names = []
 lbl = []
 for root, dir, file in os.walk(imgdir):
