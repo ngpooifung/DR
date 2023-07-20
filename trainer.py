@@ -274,7 +274,7 @@ class Restrainer(object):
                 final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
 
                 plt.figure()
-                plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
+                plt.imshow(np.asarray(image).squeeze())
                 plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.3)
                 plt.savefig(os.path.join(*['/home/pwuaj/data/cam', name]))
                 plt.close()
