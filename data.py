@@ -150,15 +150,19 @@ import random
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 
 # %%
-imgdir = '/home/pwuaj/data/RDRraw'
-folder = []
-names = []
-lbl = []
-for root, dir, file in os.walk(imgdir):
-   for name in file:
-      names.append(name)
-      lbl.append(1)
-print(len(names))
-folder.append(pd.DataFrame({'Image':names, 'Gradability':lbl}))
-folder = pd.concat(folder, ignore_index=True)
-folder.to_excel('/home/pwuaj/hkust/DR/Gradability.xlsx')
+SK = '/home/pwuaj/data/SK'
+GEI = '/home/pwuaj/data/GEI'
+IS = '/home/pwuaj/data/IS'
+dir = [SK, GEI, IS]
+types = ['RDR', 'VTDR']
+lbls = ['0', '1']
+for i in dir:
+    gradable = os.path.join(i, 'gradable')
+    ungradable = os.path.join(i, 'ungradable')
+    for name in os.listdir(ungradable):
+        shutil.copyfile(os.path.join(ungradable, name), os.path.join('/home/pwuaj/data/ex/ungradable', name))
+    for type in types:
+        for lbl in lbls:
+            for name in os.listdir(os.path.join(*[gradable, type, lbl])):
+                shutil.copyfile(os.path.join(*[gradable, type, lbl, name]), os.path.join(*['/home/pwuaj/data/ex/gradable', type, lbl, name]))
+        
