@@ -1,6 +1,7 @@
 # %%
 import numpy as np
 import os
+import torch
 import pandas as pd
 import torchvision.datasets as datasets
 import tifffile
