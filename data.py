@@ -10,71 +10,6 @@ from sklearn.metrics import classification_report, balanced_accuracy_score
 import shutil
 import matplotlib.pyplot as plt
 import random
-# # %%
-# csv_dir = './H.csv'
-# csv = pd.read_csv(csv_dir)
-# gradable = []
-# ungradable = []
-# for i in range(len(csv)):
-#     for j in range(1,8):
-#         if csv.loc[i][f'G{j}'] == 1:
-#             gradable.append(pd.DataFrame({'IMG': csv.loc[i][f'Im{j}'], 'VTDR': csv.loc[i]['VTDR'], 'RDR': csv.loc[i]['Referable DR']}, index = [0]))
-#         elif csv.loc[i][f'G{j}'] == 2:
-#             ungradable.append(pd.DataFrame({'IMG': csv.loc[i][f'Im{j}'], 'VTDR': csv.loc[i]['VTDR'], 'RDR': csv.loc[i]['Referable DR']}, index = [0]))
-#
-# gradable = pd.concat(gradable, ignore_index = True)
-# ungradable = pd.concat(ungradable, ignore_index = True)
-#
-# gradable.to_csv('./gradable.csv')
-# ungradable.to_csv('./ungradable.csv')
-
-
-# # %% read Phoom accuracy
-# sp = 'test'
-# csv = '/home/pwuaj/hkust/Phoom/vtdrprobs.csv'
-# csv = pd.read_csv(csv)
-# predict = []
-# for i in range(sum(csv['Split'] == sp)):
-#     predict.append(float(csv['Predicted Probability'][csv['Split'] == sp].iloc[i][1:5]))
-# predict = np.array(predict)
-# label = np.array(csv['Label'][csv['Split'] == sp])
-# predict = (predict >= 0.43)*1
-# print(classification_report(label, predict, digits = 4))
-
-
-# # %% read excel accuracy
-# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-# csv = pd.read_excel(csv, usecols = 'AN, AQ')
-# csv
-# predict = []
-# predictnan = []
-# label = []
-# for i in range(len(csv)): # 397 408
-#     try:
-#         predictnan.append(int(csv['Pred_R3'][i]))
-#         label.append(int(csv['Label_R3'][i]))
-#         predict.append(csv['Pred_R3'][i])
-#     except:
-#         continue
-# predict = np.array(predict)
-# label = np.array(label)
-
-
-# # %% read Phoom gradtest
-# csv = 'skprobs.csv'
-# csv = pd.read_csv(csv)
-# predict = []
-# label = []
-# for i in range(len(csv)):
-#     try:
-#         predict.append(float(csv['VTDR_predict'].iloc[i][1:6]))
-#         label.append(csv['VTDR'].iloc[i])
-#     except:
-#         pass
-# predict = np.array(predict)
-# predict = (predict > 0.5)*1
-# print(classification_report(label, predict, digits = 4))
-
 
 # # %% read sensitivity
 # from sklearn.metrics import roc_curve
@@ -89,23 +24,22 @@ import random
 # print(th,classification_report(label, predict, digits = 4))
 
 
-# # %% SK data
-# csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-# csv = pd.read_excel(csv, usecols = 'AA, AC')
-# folder = '/home/pwuaj/data/Clarity_original'
-# roots = []
-# files = []
-# for root, dir, file in os.walk(folder):
-#    for name in file:
-#       roots.append(root)
-#       files.append(name)
-# for i in range(1321):
-#     name = csv['Image_U1'].iloc[i]
-#     ungradable = int(csv['Label_U1'].iloc[i])
-#     if ungradable == 1:
-#         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/ungradable', name]))
-#     elif ungradable == 0:
-#         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/Clarity/gradable', name]))
+# %% UWF data
+csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
+csv = pd.read_excel(csv, usecols = 'A,C')
+csv
+folder = '/home/pwuaj/data/UWF'
+roots = []
+files = []
+for root, dir, file in os.walk(folder):
+   for name in file:
+      roots.append(root)
+      files.append(name)
+for i in range(572):
+    name = csv['Image_R0 thr_0.66'].loc[i]
+    lbl = int(csv['Label_OR'].loc[i])
+    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test2', str(lbl), name]))
+
 
 # # %% RDR VTDR
 # a = ['RDR', 'VTDR']
