@@ -39,7 +39,10 @@ for i in range(len(csv)):
     name = csv['Image'].loc[i]
     lbl = int(csv['Label (gradable = 0, ungradable =1)'].loc[i])
     type = csv['Split'].loc[i]
-    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad', type, str(lbl), name]))
+    try:
+        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad', type, str(lbl), name]))
+    except:
+        print(name)
 
 
 # # %% RDR VTDR
