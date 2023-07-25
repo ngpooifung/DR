@@ -76,7 +76,7 @@ class Modeldataset:
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
                                               transforms.RandomHorizontalFlip(),
-                                              ColorJitter(brightness = (0.6,1.4), contrast = (0.6, 1.4)),
+                                              ColorJitter(brightness = (0.6,1.4)),
                                               GaussianBlur((7,9), sigma = (0.1, 2.0)),
                                               # transforms.RandomVerticalFlip(),
                                               # RotationTransform(angles=[0, 90, 180, 270])
