@@ -25,8 +25,8 @@ import random
 
 
 # %% UWF data
-csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-csv = pd.read_excel(csv, usecols = 'A,C')
+csv = '/home/pwuaj/hkust/DR/gradabilityprobs_labels.csv'
+csv = pd.read_csv(csv)
 csv
 folder = '/home/pwuaj/data/UWF'
 roots = []
@@ -35,10 +35,11 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-for i in range(572):
-    name = csv['Image_R0 thr_0.66'].loc[i]
-    lbl = int(csv['Label_OR'].loc[i])
-    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test2', str(lbl), name]))
+for i in range(len(csv)):
+    name = csv['Image'].loc[i]
+    lbl = int(csv['Label (gradable = 0, ungradable =1)'].loc[i])
+    type = csv['Split'].loc[i]
+    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad', type, str(lbl), name]))
 
 
 # # %% RDR VTDR
