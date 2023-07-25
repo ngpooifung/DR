@@ -26,8 +26,7 @@ import random
 
 # %% UWF data
 csv = '/home/pwuaj/hkust/DR/All_20200514.xlsx'
-csv = pd.read_excel(csv, usecols = 'A,C')
-csv
+csv = pd.read_excel(csv, usecols = 'F,H')
 folder = '/home/pwuaj/data/UWF'
 roots = []
 files = []
@@ -35,9 +34,9 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-for i in range(572):
-    name = csv['Image_R0 thr_0.66'].loc[i]
-    lbl = int(csv['Label_OR'].loc[i])
+for i in range(571):
+    name = csv['Image_V0'].loc[i]
+    lbl = int(csv['Label_OV'].loc[i])
     shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test2', str(lbl), name]))
 
 
