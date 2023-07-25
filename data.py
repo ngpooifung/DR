@@ -37,7 +37,7 @@ for root, dir, file in os.walk(folder):
 for i in range(571):
     name = csv['Image_V0'].loc[i]
     lbl = int(csv['Label_OV'].loc[i])
-    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test2', str(lbl), name]))
+    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/VTDRraw/test2', str(lbl), name]))
 
 
 # # %% RDR VTDR
