@@ -79,7 +79,7 @@ class Modeldataset:
                                               GaussianBlur((7,9), sigma = (0.1, 2.0)),
                                               # RotationTransform(angles=[0, 90, 180, 270])
                                               transforms.RandomHorizontalFlip(),
-                                              transforms.RandomRotation(degrees = 15)
+                                              transforms.RandomRotation(degrees = 5)
                                               ])
         return data_transforms
 
