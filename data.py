@@ -24,25 +24,25 @@ import random
 # print(th,classification_report(label, predict, digits = 4))
 
 
-# %% UWF data
-csv = '/home/pwuaj/hkust/DR/gradabilityprobs_labels.csv'
-csv = pd.read_csv(csv)
-csv
-folder = '/home/pwuaj/data/UWF'
-roots = []
-files = []
-for root, dir, file in os.walk(folder):
-   for name in file:
-      roots.append(root)
-      files.append(name)
-for i in range(len(csv)):
-    name = csv['Image'].loc[i]
-    lbl = int(csv['Label (gradable = 0, ungradable =1)'].loc[i])
-    type = csv['Split'].loc[i]
-    try:
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad', type, str(lbl), name]))
-    except:
-        print(name)
+# # %% UWF data
+# csv = '/home/pwuaj/hkust/DR/gradabilityprobs_labels.csv'
+# csv = pd.read_csv(csv)
+# csv
+# folder = '/home/pwuaj/data/UWF'
+# roots = []
+# files = []
+# for root, dir, file in os.walk(folder):
+#    for name in file:
+#       roots.append(root)
+#       files.append(name)
+# for i in range(len(csv)):
+#     name = csv['Image'].loc[i]
+#     lbl = int(csv['Label (gradable = 0, ungradable =1)'].loc[i])
+#     type = csv['Split'].loc[i]
+#     try:
+#         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad', type, str(lbl), name]))
+#     except:
+#         print(name)
 
 
 # # %% RDR VTDR
@@ -88,21 +88,19 @@ for i in range(len(csv)):
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/GEItest', i, c, l]))
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 
-# # %%
-# SK = '/home/pwuaj/data/SK'
-# GEI = '/home/pwuaj/data/GEI'
-# IS = '/home/pwuaj/data/IS'
-# dir = [SK, GEI, IS]
-# types = ['RDR', 'VTDR']
-# lbls = ['0', '1']
-# for i in dir:
-#     gradable = os.path.join(i, 'gradable')
-#     ungradable = os.path.join(i, 'ungradable')
-#     for name in os.listdir(ungradable):
-#         shutil.copyfile(os.path.join(ungradable, name), os.path.join('/home/pwuaj/data/ex/ungradable', name))
-#     for type in types:
-#         for lbl in lbls:
-#             for name in os.listdir(os.path.join(*[gradable, type, lbl])):
-#                 shutil.copyfile(os.path.join(*[gradable, type, lbl, name]), os.path.join(*['/home/pwuaj/data/ex/gradable', type, lbl, name]))
+# %%
+SK = '/home/pwuaj/data/SK'
+GEI = '/home/pwuaj/data/GEI'
+IS = '/home/pwuaj/data/IS'
+dir = [SK, GEI, IS]
+types = ['0', '1']
+for i in dir:
+    gradable = os.path.join(i, 'gradable/RDR')
+    ungradable = os.path.join(i, 'ungradable')
+    for name in os.listdir(ungradable):
+        shutil.copyfile(os.path.join(ungradable, name), os.path.join('/home/pwuaj/data/grad', i, '0', name))
+    for type in types:
+        for name in os.listdir(os.path.join(*[gradable, type])):
+            shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*['/home/pwuaj/data/grad', i, '1', name]))
 
 torch.cuda.empty_cache()
