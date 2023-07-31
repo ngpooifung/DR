@@ -100,7 +100,7 @@ for i in dir:
     print(gradable, ungradable)
     for name in os.listdir(ungradable):
         input = os.path.join(ungradable, name)
-        output = os.path.join(*['/home/pwuaj/data/grad', i, '0', name])
+        output = os.path.join(*['/home/pwuaj/data', 'grad', i, '0', name])
         print(input, output)
         shutil.copyfile(input, output)
     for type in types:
