@@ -94,7 +94,7 @@ GEI = '/home/pwuaj/data/GEI'
 IS = '/home/pwuaj/data/IS'
 dir = [SK, GEI, IS]
 types = ['0', '1']
-output = '/home/pwuaj/data/grad'
+output = '/home/pwuaj/data1/grad'
 for i in dir:
     gradable = os.path.join(i, 'gradable/RDR')
     ungradable = os.path.join(i, 'ungradable')
