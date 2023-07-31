@@ -94,17 +94,14 @@ GEI = '/home/pwuaj/data/GEI'
 IS = '/home/pwuaj/data/IS'
 dir = [SK, GEI, IS]
 types = ['0', '1']
+output = '/home/pwuaj/data/grad'
 for i in dir:
     gradable = os.path.join(i, 'gradable/RDR')
     ungradable = os.path.join(i, 'ungradable')
-    print(gradable, ungradable)
     for name in os.listdir(ungradable):
-        input = os.path.join(ungradable, name)
-        output = os.path.join(*['/home/pwuaj/data/grad', i, '0', name])
-        print(input, output)
-        shutil.copyfile(input, output)
+        shutil.copyfile(os.path.join(ungradable, name), os.path.join(*[output, i, str(0), name]))
     for type in types:
         for name in os.listdir(os.path.join(*[gradable, type])):
-            shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*['/home/pwuaj/data/grad', i, '1', name]))
+            shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*[output, i, str(1), name]))
 
 torch.cuda.empty_cache()
