@@ -98,7 +98,7 @@ for i in dir:
     gradable = os.path.join(i, 'gradable/RDR')
     ungradable = os.path.join(i, 'ungradable')
     for name in os.listdir(ungradable):
-        shutil.copyfile(os.path.join(ungradable, name), os.path.join('/home/pwuaj/data/grad', i, '0', name))
+        shutil.copyfile(os.path.join(ungradable, name), os.path.join(*['/home/pwuaj/data/grad', i, '0', name]))
     for type in types:
         for name in os.listdir(os.path.join(*[gradable, type])):
             shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*['/home/pwuaj/data/grad', i, '1', name]))
