@@ -77,7 +77,7 @@ class Modeldataset:
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
                                               transforms.RandomHorizontalFlip(),
                                               # transforms.RandomRotation(degrees = 5),
-                                              RandomAffine(degrees = 7),
+                                              RandomAffine(degrees = 5),
                                               # ColorJitter(0.01, 0.01),
                                               GaussianBlur((7,9), sigma = (0.1, 2.0)),
                                               ])
