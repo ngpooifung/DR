@@ -14,7 +14,7 @@ import os
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data.distributed import DistributedSampler
-
+torch.manual_seed(0)
 # %%
 parser = argparse.ArgumentParser(description='DR')
 function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune', 'transfer', 'combine','class_activation']
