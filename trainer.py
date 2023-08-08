@@ -66,7 +66,7 @@ class Classictrainer(object):
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
-        self.criterion = torch.nn.CrossEntropyLoss().to(self.args.device)
+        self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
         if self.args.output is not None:
             self.writer = SummaryWriter(log_dir = os.path.join(self.args.output, self.args.process))
@@ -184,8 +184,8 @@ class Restrainer(object):
                 logits = self.model(img)
                 loss = self.criterion(logits, lbl)
 
-                top1 = topacc(logits, lbl, topk = (1,))
-                # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                # top1 = topacc(logits, lbl, topk = (1,))
+                top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
@@ -202,8 +202,8 @@ class Restrainer(object):
                         lbl = lbl[1].to(self.args.device)
 
                         logits = self.model(img)
-                        top1 = topacc(logits, lbl, topk = (1,))
-                        # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                        # top1 = topacc(logits, lbl, topk = (1,))
+                        top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                         top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
 
