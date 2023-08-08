@@ -234,13 +234,10 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
-                loss = self.criterion(logits, lbl)
-                exp_logits = torch.exp(logits/self.args.temperature)
-                prob = exp_logits[:,1]/exp_logits.sum(1)
-                top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
-                # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                top1_accuracy += top1[0]
-                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict, 'Probability': prob.cpu().numpy()}))
+                # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
+                top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                top1_accuracy += top1
+                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': (logits>0.5).cpu()*1, 'Probability': logits.squeeze().cpu().numpy()}))
 
         top1_accuracy /= (counter + 1)
         result = pd.concat(result, ignore_index=True)
