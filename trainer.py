@@ -185,7 +185,7 @@ class Restrainer(object):
 
                 # top1 = topacc(logits, lbl, topk = (1,))
                 top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                top1_train_accuracy += top1[0]
+                top1_train_accuracy += top1
 
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -203,7 +203,7 @@ class Restrainer(object):
                         logits = self.model(img)
                         # top1 = topacc(logits, lbl, topk = (1,))
                         top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                        top1_valid_accuracy += top1[0]
+                        top1_valid_accuracy += top1
                     top1_valid_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
