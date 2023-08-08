@@ -181,7 +181,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model(img)
-                loss = self.criterion(logits.squeeze(), lbl)
+                loss = self.criterion(logits.squeeze(), lbl.float())
 
                 # top1 = topacc(logits, lbl, topk = (1,))
                 top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
