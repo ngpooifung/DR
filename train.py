@@ -17,7 +17,7 @@ from torch.utils.data.distributed import DistributedSampler
 torch.manual_seed(0)
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Clipfulltune', 'Cliplayertune', 'transfer', 'combine','class_activation']
+function_names = ['main', 'eval', 'Clip', 'Cliplayertune', 'transfer', 'combine','class_activation']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -177,8 +177,9 @@ def Clip():
         args.gpu_index = -1
         args.device_count = -1
 
-    model, _ = clip.load(args.arch, device=args.device)
+    model, _ = clip.load(args.arch, device=args.device, jit=False)
     n_px = model.visual.input_resolution
+    model = model.visual
     train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True)
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
@@ -190,48 +191,9 @@ def Clip():
     else:
         test_loader = None
 
-    if args.no_mlp_proj:
-        model.ffn = None
-    if args.finetune:
-        path = os.path.join(args.output, args.finetune)
-        checkpoint = torch.load(path, map_location = args.device)
-        state_dict = checkpoint['state_dict']
-        model.load_state_dict(state_dict, strict=True)
-        model = model.to(args.device)
-
-    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
-
-    optimizer = None
-    scheduler = None
-    trainer = Classictrainer(model, optimizer, scheduler, args)
-    trainer.Logistic(train_loader, test_loader)
-
-def Cliptune():
-    if not args.disable_cuda and torch.cuda.is_available():
-        local_rank = int(os.environ["LOCAL_RANK"])
-        torch.cuda.set_device(local_rank)
-        dist.init_process_group(backend = 'nccl')
-        args.device = torch.device('cuda', local_rank)
-        args.device_count = torch.cuda.device_count()
-        cudnn.deterministic = True
-        cudnn.benchmark = True
-    else:
-        args.device = torch.device('cpu')
-        args.gpu_index = -1
-        args.device_count = -1
-
-    model, _ = clip.load(args.arch, device=args.device, jit=False) #ViT-B/16
-    n_px = model.visual.input_resolution
-    train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True, clip_csv = args.clip_csv)
-    train_sampler = DistributedSampler(train_dataset)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=True, sampler = train_sampler)
-
-    if args.no_mlp_proj:
-        model.ffn = None
     if args.process == 'Cliplayertune':
         for name, param in model.named_parameters():
-            # if name not in ['visual.proj', 'text_projection']:
-            if name not in ['ffn.0.weight', 'ffn.0.bias', 'ffn.2.weight', 'ffn.2.bias', 'visual.proj']:
+            if name not in ['fc.0.weight', 'fc.0.bias', 'fc.2.weight', 'fc.2.bias']:
                 param.requires_grad = False
 
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
@@ -239,8 +201,9 @@ def Cliptune():
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0,
                                                            last_epoch=-1)
-    trainer = Classictrainer(model, optimizer, scheduler, args)
-    trainer.finetune(train_loader)
+    trainer = Restrainer(model, optimizer, scheduler, args)
+    trainer.train(train_loader, test_loader)
+
 
 def combine():
     if not args.disable_cuda and torch.cuda.is_available():
@@ -307,8 +270,6 @@ def allocate():
     elif args.process == 'Clip':
         Clip()
     elif args.process == 'Cliplayertune':
-        Cliptune()
-    elif args.process == 'Clipfulltune':
         Cliptune()
     elif args.process == 'combine':
         combine()
