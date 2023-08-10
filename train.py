@@ -205,6 +205,38 @@ def Clip():
     trainer = Restrainer(model, optimizer, scheduler, args)
     trainer.train(train_loader, test_loader)
 
+def Clipeval():
+    if not args.disable_cuda and torch.cuda.is_available():
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend = 'nccl')
+        args.device = torch.device('cuda', local_rank)
+        args.device_count = torch.cuda.device_count()
+        cudnn.deterministic = True
+        cudnn.benchmark = True
+    else:
+        args.device = torch.device('cpu')
+        args.gpu_index = -1
+        args.device_count = -1
+
+    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
+    test_sampler = DistributedSampler(test_dataset)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = test_sampler)
+
+    path = os.path.join(args.output, args.finetune)
+    checkpoint = torch.load(path, map_location = args.device)
+    state_dict = checkpoint['state_dict']
+
+    model, _ = clip.load(args.arch, device=args.device, jit=False)
+    model = model.visual
+    log = model.load_state_dict(state_dict, strict=True)
+    model = model.to(args.device)
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+
+    optimizer = None
+    scheduler = None
+    trainer = Restrainer(model, optimizer, scheduler, args)
+    trainer.eval(test_loader)
 
 def combine():
     if not args.disable_cuda and torch.cuda.is_available():

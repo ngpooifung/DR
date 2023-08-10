@@ -237,7 +237,7 @@ class Restrainer(object):
                 path = lbl[0]
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img)
+                logits = self.model.module(img.type(self.dtype))
                 # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1
