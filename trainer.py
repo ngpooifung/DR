@@ -181,7 +181,6 @@ class Restrainer(object):
             top1_train_accuracy = 0
             top1_valid_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
-                print(counter)
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
 
@@ -205,7 +204,7 @@ class Restrainer(object):
                         img = img.to(self.args.device)
                         lbl = lbl[1].to(self.args.device)
 
-                        logits = self.model(img)
+                        logits = self.model.module(img.type(self.dtype))
                         # top1 = topacc(logits, lbl, topk = (1,))
                         top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                         top1_valid_accuracy += top1
