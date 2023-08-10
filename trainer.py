@@ -165,7 +165,7 @@ class Restrainer(object):
 
     @property
     def dtype(self):
-        return self.model.conv1.weight.dtype
+        return self.model.module.conv1.weight.dtype
 
     def train(self, train_loader, test_loader = None):
         print(self.dtype)
