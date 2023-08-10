@@ -175,7 +175,6 @@ class Restrainer(object):
         logging.info(f"Total GPU device: {self.args.device_count}.")
 
         for epoch_counter in range(self.args.epochs):
-            print(epoch_counter)
             train_loader.sampler.set_epoch(epoch_counter)
             if test_loader is not None:
                 test_loader.sampler.set_epoch(epoch_counter)
