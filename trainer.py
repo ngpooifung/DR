@@ -168,7 +168,6 @@ class Restrainer(object):
         return self.model.module.conv1.weight.dtype
 
     def train(self, train_loader, test_loader = None):
-        print(self.dtype)
         self.model.train()
 
         logging.info(f"Start training for {self.args.epochs} epochs.")
@@ -185,7 +184,7 @@ class Restrainer(object):
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model(img.type(self.dtype))
+                logits = self.model.module(img.type(self.dtype))
                 loss = self.criterion(logits.squeeze(), lbl.float())
 
                 # top1 = topacc(logits, lbl, topk = (1,))
