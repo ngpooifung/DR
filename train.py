@@ -179,6 +179,7 @@ def Clip():
 
     model, _ = clip.load(args.arch, device=args.device, jit=False)
     n_px = model.visual.input_resolution
+    print(n_px)
     model = model.visual
     train_dataset = Modeldataset(args.dir).get_dataset(resize = n_px, transform = True, preprocess = True)
     train_sampler = DistributedSampler(train_dataset)
