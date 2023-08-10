@@ -165,7 +165,8 @@ class Restrainer(object):
 
     @property
     def dtype(self):
-        return self.model.module.conv1.weight.dtype
+        # return self.model.module.conv1.weight.dtype
+        return torch.float32
 
     def train(self, train_loader, test_loader = None):
         self.model.train()
