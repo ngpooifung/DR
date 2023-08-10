@@ -200,11 +200,9 @@ class Restrainer(object):
             top1_train_accuracy /= (counter + 1)
 
             if test_loader is not None:
-                print('testing')
                 with torch.no_grad():
                     for counter, (img, lbl) in enumerate(test_loader):
                         img = img.to(self.args.device)
-                        print(img.shape)
                         lbl = lbl[1].to(self.args.device)
 
                         logits = self.model.module(img.type(self.dtype))
