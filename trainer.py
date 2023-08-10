@@ -181,6 +181,7 @@ class Restrainer(object):
             top1_train_accuracy = 0
             top1_valid_accuracy = 0
             for counter, (img, lbl) in enumerate(train_loader):
+                print(counter)
                 img = img.to(self.args.device)
                 lbl = lbl[1].to(self.args.device)
 
@@ -199,6 +200,7 @@ class Restrainer(object):
             top1_train_accuracy /= (counter + 1)
 
             if test_loader is not None:
+                print('testing')
                 with torch.no_grad():
                     for counter, (img, lbl) in enumerate(test_loader):
                         img = img.to(self.args.device)
