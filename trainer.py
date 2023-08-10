@@ -238,7 +238,7 @@ class Restrainer(object):
                 path = lbl[0]
                 lbl = lbl[1].to(self.args.device)
 
-                logits = self.model.module(img)
+                logits = self.model.module(img.type(self.dtype))
                 exp_logits = torch.exp(logits)
                 prob = exp_logits[:,1]/exp_logits.sum(1)
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
