@@ -17,7 +17,7 @@ from torch.utils.data.distributed import DistributedSampler
 torch.manual_seed(0)
 # %%
 parser = argparse.ArgumentParser(description='DR')
-function_names = ['main', 'eval', 'Clip', 'Cliplayertune', 'transfer', 'combine','class_activation']
+function_names = ['main', 'eval', 'Clip', 'Clipeval', 'Cliplayertune', 'transfer', 'combine','class_activation']
 
 # %% process
 parser.add_argument('--process', choices=function_names,
@@ -302,8 +302,10 @@ def allocate():
         eval()
     elif args.process == 'Clip':
         Clip()
+    elif args.process == 'Clipeval':
+        Clipeval()
     elif args.process == 'Cliplayertune':
-        Cliptune()
+        Clip()
     elif args.process == 'combine':
         combine()
 
