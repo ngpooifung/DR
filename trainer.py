@@ -163,7 +163,7 @@ class Restrainer(object):
             self.writer = SummaryWriter(log_dir = log_dir)
         logging.basicConfig(filename=os.path.join(self.writer.log_dir, 'training.log'), level=logging.DEBUG)
 
-        @property
+    @property
     def dtype(self):
         return self.model.conv1.weight.dtype
 
