@@ -219,7 +219,11 @@ def Clipeval():
         args.gpu_index = -1
         args.device_count = -1
 
-    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
+    model, _ = clip.load(args.arch, device=args.device, jit=False)
+    n_px = model.visual.input_resolution
+    model = model.visual
+
+    test_dataset = Modeldataset(args.test_dir).get_dataset(resize = n_px, transform = False)
     test_sampler = DistributedSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = test_sampler)
 
@@ -227,8 +231,6 @@ def Clipeval():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
-    model, _ = clip.load(args.arch, device=args.device, jit=False)
-    model = model.visual
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
