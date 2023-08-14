@@ -144,10 +144,10 @@ for root, dir, file in os.walk(folder):
 for i in gradable1:
     if i not in files:
         print(i)
-        gradable1.remove(i)
+        # gradable1.remove(i)
 
 for i in ungradable1:
     if i not in files:
-        ungradable1.remove(i)
+        # ungradable1.remove(i)
 
 print(len(gradable1), len(ungradable1))
