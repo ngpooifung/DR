@@ -132,6 +132,7 @@ for i in ungradable:
     if i not in ungradable1:
         ungradable1.append(i)
 
+# %%
 folder = '/home/pwuaj/data/UWF'
 roots = []
 files = []
@@ -139,7 +140,7 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-
+print(len(files))
 for i in gradable1:
     if i not in files:
         gradable1.remove(i)
@@ -148,4 +149,4 @@ for i in ungradable1:
     if i not in files:
         ungradable1.remove(i)
 
-print(print(len(gradable1), len(ungradable1)))
+print(len(gradable1), len(ungradable1))
