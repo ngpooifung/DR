@@ -143,6 +143,7 @@ for root, dir, file in os.walk(folder):
 
 for i in gradable1:
     if i+'.jpg' or i+'.tif' not in files:
+        print(i)
         gradable1.remove(i)
 
 for i in ungradable1:
