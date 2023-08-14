@@ -88,20 +88,39 @@ import random
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/GEItest', i, c, l]))
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
 
-# %%
-SK = '/home/pwuaj/data/SK'
-GEI = '/home/pwuaj/data/GEI'
-IS = '/home/pwuaj/data/IS'
-dir = [SK, GEI, IS]
-types = ['0', '1']
-for i in dir:
-    gradable = os.path.join(i, 'gradable/RDR')
-    ungradable = os.path.join(i, 'ungradable')
-    output = os.path.join(*['/home/pwuaj/data/grad', i.split('/')[-1]])
-    for name in os.listdir(ungradable):
-        shutil.copyfile(os.path.join(*[ungradable, name]), os.path.join(*[output, str(0), name]))
-    for type in types:
-        for name in os.listdir(os.path.join(*[gradable, type])):
-            shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*[output, str(1), name]))
+# # %%
+# SK = '/home/pwuaj/data/SK'
+# GEI = '/home/pwuaj/data/GEI'
+# IS = '/home/pwuaj/data/IS'
+# dir = [SK, GEI, IS]
+# types = ['0', '1']
+# for i in dir:
+#     gradable = os.path.join(i, 'gradable/RDR')
+#     ungradable = os.path.join(i, 'ungradable')
+#     output = os.path.join(*['/home/pwuaj/data/grad', i.split('/')[-1]])
+#     for name in os.listdir(ungradable):
+#         shutil.copyfile(os.path.join(*[ungradable, name]), os.path.join(*[output, str(0), name]))
+#     for type in types:
+#         for name in os.listdir(os.path.join(*[gradable, type])):
+#             shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*[output, str(1), name]))
+#
+# torch.cuda.empty_cache()
 
-torch.cuda.empty_cache()
+# %%
+csv = '/home/pwuaj/hkust/DR/Original Grading for WF project.xlsx'
+csv = pd.read_excel(csv)
+gradable = []
+ungradable = []
+result = []
+name = ['Image name 1', 'Image name 2', 'Image name 3', 'Image name 4', 'Image name 5', 'Image name 6', 'Image name 7']
+grad = ['Gradability 1 (gradable = 1 ungradable = 2)', 'Gradability 2', 'Gradability  3', 'Gradability  4', 'Gradability  5', 'Gradability  6', 'Gradability  7']
+for i in range(len(csv)):
+    for j in range(7):
+        if not np.isnan(csv.iloc[i][name[j]]):
+            if int(csv.iloc[i][grad[j]]) == 1:
+                gradable.append(csv.iloc[i][name[j]])
+            elif int(csv.iloc[i][grad[j]]) == 2:
+                ungradable.append(csv.iloc[i][name[j]])
+print(len(gradable), len(ungradable))
+df = pd.DataFrame({'gradable': gradable, 'ungradable': ungradable})
+df.to_csv('/home/pwuaj/hkust/DR/grad.csv')
