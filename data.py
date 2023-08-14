@@ -116,11 +116,30 @@ name = ['Image name 1', 'Image name 2', 'Image name 3', 'Image name 4', 'Image n
 grad = ['Gradability 1 (gradable = 1 ungradable = 2)', 'Gradability 2', 'Gradability  3', 'Gradability  4', 'Gradability  5', 'Gradability  6', 'Gradability  7']
 for i in range(len(csv)):
     for j in range(7):
-        if not np.isnan(csv.iloc[i][name[j]]):
-            if int(csv.iloc[i][grad[j]]) == 1:
+        if not pd.isnull(csv.iloc[i][name[j]]):
+            if csv.iloc[i][grad[j]] == 1.0:
                 gradable.append(csv.iloc[i][name[j]])
-            elif int(csv.iloc[i][grad[j]]) == 2:
+            elif csv.iloc[i][grad[j]] == 2.0:
                 ungradable.append(csv.iloc[i][name[j]])
-print(len(gradable), len(ungradable))
-df = pd.DataFrame({'gradable': gradable, 'ungradable': ungradable})
-df.to_csv('/home/pwuaj/hkust/DR/grad.csv')
+print(len(gradable1), len(ungradable1))
+gradable1 = []
+ungradable1 = []
+for i in gradable:
+    if i not in gradable1:
+        gradable1.append(i)
+
+for i in ungradable:
+    if i not in ungradable1:
+        ungradable1.append(i)
+
+folder = '/home/pwuaj/data/UWF'
+roots = []
+files = []
+for root, dir, file in os.walk(folder):
+   for name in file:
+      roots.append(root)
+      files.append(name)
+
+for i in gradable1+ungradable1:
+    if i not in files:
+        print(i)
