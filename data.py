@@ -140,8 +140,9 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-
+print(files[:20])
 for i in gradable1:
+    i = i+ '.jpg'
     if i not in files:
         print(i)
         # gradable1.remove(i)
