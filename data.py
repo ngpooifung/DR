@@ -121,7 +121,7 @@ for i in range(len(csv)):
                 gradable.append(csv.iloc[i][name[j]])
             elif csv.iloc[i][grad[j]] == 2.0:
                 ungradable.append(csv.iloc[i][name[j]])
-print(len(gradable1), len(ungradable1))
+print(len(gradable), len(ungradable))
 gradable1 = []
 ungradable1 = []
 for i in gradable:
