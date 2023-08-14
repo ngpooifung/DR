@@ -147,3 +147,5 @@ for i in gradable1:
 for i in ungradable1:
     if i not in files:
         ungradable1.remove(i)
+
+print(print(len(gradable1), len(ungradable1)))
