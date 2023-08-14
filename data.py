@@ -140,7 +140,7 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-print(len(files))
+print(files[:200])
 for i in gradable1:
     if i not in files:
         gradable1.remove(i)
