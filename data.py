@@ -140,15 +140,13 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       files.append(name)
-print(files[:20], len(files))
 for i in gradable1:
-    i = i + '.jpg'
-    if i not in files:
+    j = i + '.jpg'
+    if j not in files:
         gradable1.remove(i)
 
 for i in ungradable1:
-    i = i + '.jpg'
-    if i not in files:
-        print(i)
+    j = i + '.jpg'
+    if j not in files:
         ungradable1.remove(i)
 print(len(gradable), len(ungradable))
