@@ -121,7 +121,7 @@ for i in range(len(csv)):
                 gradable.append(csv.iloc[i][name[j]])
             elif csv.iloc[i][grad[j]] == 2.0:
                 ungradable.append(csv.iloc[i][name[j]])
-print(len(gradable), len(ungradable))
+
 gradable1 = []
 ungradable1 = []
 for i in gradable:
@@ -144,11 +144,11 @@ print(files[:20], len(files))
 for i in gradable1:
     i = i + '.jpg'
     if i not in files:
-        print(i)
-        # gradable1.remove(i)
+        gradable1.remove(i)
 
 for i in ungradable1:
     i = i + '.jpg'
     if i not in files:
         print(i)
-        # ungradable1.remove(i)
+        ungradable1.remove(i)
+print(len(gradable), len(ungradable))
