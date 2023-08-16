@@ -135,18 +135,34 @@ print(len(gradable1), len(ungradable1))
 # %%
 folder = '/home/pwuaj/data/UWF'
 roots = []
-files = []
+gradfiles = []
 for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
-      files.append(name)
+      gradfiles.append(name)
 for i in gradable1:
     j = i + '.jpg'
-    if j not in files:
+    if j not in gradfiles:
         gradable1.remove(i)
 
 for i in ungradable1:
     j = i + '.jpg'
-    if j not in files:
+    if j not in gradfiles:
         ungradable1.remove(i)
-print(len(gradable1), len(ungradable1))
+
+classes = [ungradable1, gradable1]
+for i in range(2):
+    files = classes[i]
+    train = round(len(files)*16/25)
+    valid = round(len(files)*4/25)
+    test = round(len(files)*1/5)
+    random.shuffle(files)
+    trainlist = files[:train]
+    validlist = files[train:train+valid]
+    testlist = files[train+valid:]
+    for l in trainlist:
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'training', i, l]))
+    for l in validlist:
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data', 'validation', i, l]))
+    for l in testlist:
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data', 'test', i, l]))
