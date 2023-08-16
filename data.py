@@ -149,4 +149,4 @@ for i in ungradable1:
     j = i + '.jpg'
     if j not in files:
         ungradable1.remove(i)
-print(len(gradable), len(ungradable))
+print(len(gradable1), len(ungradable1))
