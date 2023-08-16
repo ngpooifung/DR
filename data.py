@@ -162,10 +162,10 @@ for i in range(2):
     testlist = files[train+valid:]
     for l in trainlist:
         l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'training', i, l]))
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'training', str(i), l]))
     for l in validlist:
         l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'validation', i, l]))
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'validation', str(i), l]))
     for l in testlist:
         l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'test', i, l]))
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad', 'test', str(i), l]))
