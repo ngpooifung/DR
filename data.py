@@ -151,15 +151,23 @@ for root, dir, file in os.walk(folder):
    for name in file:
       roots.append(root)
       gradfiles.append(name)
-# for i in gradable1:
-#     j = i + '.jpg'
-#     if j not in gradfiles:
-#         gradable1.remove(i)
-#
-# for i in ungradable1:
-#     j = i + '.jpg'
-#     if j not in gradfiles:
-#         ungradable1.remove(i)
+
+for i in RDR:
+    j = i + '.jpg'
+    if j not in gradfiles:
+        RDR.remove(i)
+for i in nonRDR:
+    j = i + '.jpg'
+    if j not in gradfiles:
+        nonRDR.remove(i)
+for i in VTDR:
+    j = i + '.jpg'
+    if j not in gradfiles:
+        VTDR.remove(i)
+for i in nonVTDR:
+    j = i + '.jpg'
+    if j not in gradfiles:
+        nonVTDR.remove(i)
 
 classes = [RDR, nonRDR, VTDR, nonVTDR]
 filename = ['RDRraw2', 'RDRraw2', 'VTDRraw2', 'VTDRraw2']
