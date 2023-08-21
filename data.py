@@ -121,7 +121,7 @@ for i in range(len(csv)):
                 ungradable.append(csv.iloc[i][name[j]])
 
 folder = '/home/pwuaj/data/RDRraw'
-froots = []
+roots = []
 gradable = []
 for root, dir, file in os.walk(folder):
    for name in file:
