@@ -118,7 +118,7 @@ for i in range(len(csv)):
     for j in range(7):
         if not pd.isnull(csv.iloc[i][name[j]]):
             if csv.iloc[i][grad[j]] == 2.0:
-            ungradable.append(csv.iloc[i][name[j]])
+                ungradable.append(csv.iloc[i][name[j]])
 
 folder = '/home/pwuaj/data/RDRraw'
 froots = []
