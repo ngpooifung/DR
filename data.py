@@ -110,39 +110,36 @@ import random
 csv = '/home/pwuaj/hkust/DR/Original Grading for WF project.xlsx'
 csv = pd.read_excel(csv)
 csv
-RDR = []
-nonRDR = []
-VTDR = []
-nonVTDR = []
+gradable = []
 ungradable = []
 name = ['Image name 1', 'Image name 2', 'Image name 3', 'Image name 4', 'Image name 5', 'Image name 6', 'Image name 7']
 grad = ['Gradability 1 (gradable = 1 ungradable = 2)', 'Gradability 2', 'Gradability  3', 'Gradability  4', 'Gradability  5', 'Gradability  6', 'Gradability  7']
 for i in range(len(csv)):
     for j in range(7):
         if not pd.isnull(csv.iloc[i][name[j]]):
-            if csv.iloc[i][grad[j]] == 1.0:
-                if csv.iloc[i]['Referable DR'] == 0:
-                    nonRDR.append(csv.iloc[i][name[j]])
-                elif csv.iloc[i]['Referable DR'] == 1:
-                    RDR.append(csv.iloc[i][name[j]])
-                if csv.iloc[i]['VTDR'] == 0:
-                    nonVTDR.append(csv.iloc[i][name[j]])
-                elif csv.iloc[i]['VTDR'] == 1:
-                    VTDR.append(csv.iloc[i][name[j]])
-            elif csv.iloc[i][grad[j]] == 2.0:
-                ungradable.append(csv.iloc[i][name[j]])
+            if csv.iloc[i][grad[j]] == 2.0:
+            ungradable.append(csv.iloc[i][name[j]])
 
-# gradable1 = []
-# ungradable1 = []
-# for i in gradable:
-#     if i not in gradable1:
-#         gradable1.append(i)
-#
-# for i in ungradable:
-#     if i not in ungradable1:
-#         ungradable1.append(i)
-# print(len(gradable1), len(ungradable1))
-print(len(RDR), len(nonRDR), len(VTDR), len(nonVTDR))
+folder = '/home/pwuaj/data/RDRraw'
+froots = []
+gradable = []
+for root, dir, file in os.walk(folder):
+   for name in file:
+      roots.append(root)
+      gradable.append(name)
+
+
+gradable1 = []
+ungradable1 = []
+for i in gradable:
+    if i not in gradable1:
+        gradable1.append(i)
+
+for i in ungradable:
+    if i not in ungradable1:
+        ungradable1.append(i)
+print(len(gradable1), len(ungradable1))
+
 # %%
 folder = '/home/pwuaj/data/UWF'
 roots = []
@@ -152,27 +149,14 @@ for root, dir, file in os.walk(folder):
       roots.append(root)
       gradfiles.append(name)
 
-for i in RDR:
+for i in ungradable1:
     j = i + '.jpg'
     if j not in gradfiles:
-        RDR.remove(i)
-for i in nonRDR:
-    j = i + '.jpg'
-    if j not in gradfiles:
-        nonRDR.remove(i)
-for i in VTDR:
-    j = i + '.jpg'
-    if j not in gradfiles:
-        VTDR.remove(i)
-for i in nonVTDR:
-    j = i + '.jpg'
-    if j not in gradfiles:
-        nonVTDR.remove(i)
+        ungradable1.remove(i)
 
-classes = [RDR, nonRDR, VTDR, nonVTDR]
-filename = ['RDRraw2', 'RDRraw2', 'VTDRraw2', 'VTDRraw2']
-lbls = ['1', '0', '1', '0']
-for i in range(4):
+
+classes = [ungradable1, gradable1]
+for i in range(2):
     files = classes[i]
     train = round(len(files)*16/25)
     valid = round(len(files)*4/25)
@@ -182,11 +166,14 @@ for i in range(4):
     validlist = files[train:train+valid]
     testlist = files[train+valid:]
     for l in trainlist:
-        l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data', filename[i], 'training', lbls[i], l]))
+        if l[-3:] != 'jpg':
+            l = l + '.jpg'
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'training', str(i), l]))
     for l in validlist:
-        l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data', filename[i], 'validation', lbls[i], l]))
+        if l[-3:] != 'jpg':
+            l = l + '.jpg'
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'validation', str(i), l]))
     for l in testlist:
-        l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data', filename[i], 'test', lbls[i], l]))
+        if l[-3:] != 'jpg':
+            l = l + '.jpg'
+        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'test', str(i), l]))
