@@ -52,8 +52,8 @@ class Imagefolder(datasets.ImageFolder):
         # if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
         #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
         # img = img.astype('float32')
-        data_transforms = transforms.Compose([Resize(self.resize, interpolation=BICUBIC),
-                                              CenterCrop(self.resize),
+        data_transforms = transforms.Compose([Resize((self.resize, int(self.resize*1.25)), interpolation=BICUBIC),
+                                              # CenterCrop(self.resize),
                                               _convert_image_to_rgb,
                                               ToTensor(),
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
