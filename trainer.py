@@ -154,8 +154,8 @@ class Restrainer(object):
         self.args = args
         self.optimizer = optimizer
         self.scheduler = scheduler
-        # self.criterion = torch.nn.CrossEntropyLoss(weight = torch.FloatTensor(max(self.args.weight)/np.array(self.args.weight))).to(self.args.device)
-        self.criterion = torch.nn.BCELoss().to(self.args.device)
+        self.criterion = torch.nn.CrossEntropyLoss(weight = torch.FloatTensor(max(self.args.weight)/np.array(self.args.weight))).to(self.args.device)
+        # self.criterion = torch.nn.BCELoss().to(self.args.device)
         log_dir = self.args.dir
         if self.args.output is not None:
             self.writer = SummaryWriter(log_dir = os.path.join(self.args.output, self.args.process))
@@ -186,11 +186,11 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                loss = self.criterion(logits.squeeze(), lbl.float())
+                loss = self.criterion(logits.squeeze(), lbl)
 
-                # top1 = topacc(logits, lbl, topk = (1,))
-                top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                top1_train_accuracy += top1
+                top1 = topacc(logits, lbl, topk = (1,))
+                # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                top1_train_accuracy += top1[0]
 
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -206,9 +206,9 @@ class Restrainer(object):
                         lbl = lbl[1].to(self.args.device)
 
                         logits = self.model.module(img.type(self.dtype))
-                        # top1 = topacc(logits, lbl, topk = (1,))
-                        top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                        top1_valid_accuracy += top1
+                        top1 = topacc(logits, lbl, topk = (1,))
+                        # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                        top1_valid_accuracy += top1[0]
                     top1_valid_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
@@ -239,13 +239,13 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                # exp_logits = torch.exp(logits)
-                # prob = exp_logits[:,1]/exp_logits.sum(1)
-                # top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
-                top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
-                top1_accuracy += top1
-                # result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict, 'Probability': prob.cpu().numpy()}))
-                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': (logits>0.5).cpu()*1, 'Probability': logits.squeeze().cpu().numpy()}))
+                exp_logits = torch.exp(logits)
+                prob = exp_logits[:,1]/exp_logits.sum(1)
+                top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
+                # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
+                top1_accuracy += top1[0]
+                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict, 'Probability': prob.cpu().numpy()}))
+                # result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': (logits>0.5).cpu()*1, 'Probability': logits.squeeze().cpu().numpy()}))
 
         top1_accuracy /= (counter + 1)
         result = pd.concat(result, ignore_index=True)
