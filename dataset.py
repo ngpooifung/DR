@@ -57,7 +57,7 @@ class Imagefolder(datasets.ImageFolder):
                                               _convert_image_to_rgb,
                                               ToTensor(),
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
-                                              Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
+                                              # Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
                                               ])
         if self.preprocess:
             img = data_transforms(img)
@@ -75,11 +75,11 @@ class Modeldataset:
     def get_transform(size):
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
-                                              # transforms.RandomHorizontalFlip(),
+                                              transforms.RandomHorizontalFlip(),
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 5),
                                               # ColorJitter(0.01, 0.01),
-                                              # GaussianBlur((7,9), sigma = (0.1, 2.0)),
+                                              GaussianBlur((7,9), sigma = (0.1, 2.0)),
                                               ])
         return data_transforms
 
