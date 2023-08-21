@@ -48,7 +48,7 @@ parser.add_argument('--epochs', type = int, default = 100,
                     help = 'Number of training epochs')
 parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
                     help = 'weight')
-parser.add_argument('--lr', type = float, default = 0.0003,
+parser.add_argument('--lr', type = float, default = 0.0001,
                     help = 'Learning rate')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
@@ -62,16 +62,10 @@ parser.add_argument('--batch_size', type = int, default = 32,
                     help = 'Batch size')
 parser.add_argument('--checkpoint_n_steps', type = int, default = 50,
                     help = 'Save checkpoins per n steps')
-parser.add_argument('--clip_grad_norm', type = float, default = 5,
-                    help = 'Clip gradients norm (0 to disable)')
 parser.add_argument('--finetune', default='',
                     help='finetune from checkpoint')
 parser.add_argument('--use_mlp', action='store_true',
                     help='Perform mlp')
-parser.add_argument('--no_mlp_proj', action='store_true',
-                    help='no visual projection')
-parser.add_argument('--temperature', type = float, default = 1.,
-                    help = 'Temperature' )
 args = parser.parse_args()
 
 
