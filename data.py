@@ -162,7 +162,7 @@ for root, dir, file in os.walk(folder):
 #         ungradable1.remove(i)
 
 classes = [RDR, nonRDR, VTDR, nonVTDR]
-filenames = ['RDRraw2', 'RDRraw2', 'VTDRraw2', 'VTDRraw2']
+filename = ['RDRraw2', 'RDRraw2', 'VTDRraw2', 'VTDRraw2']
 lbls = ['1', '0', '1', '0']
 for i in range(4):
     files = classes[i]
