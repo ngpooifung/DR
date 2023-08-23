@@ -239,8 +239,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                exp_logits = torch.exp(logits)
-                prob = exp_logits[:,1]/exp_logits.sum(1)
+                prob = nn.Softmax()(logits)[:,1]
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1[0]
