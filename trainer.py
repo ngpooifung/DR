@@ -239,7 +239,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                prob = nn.Softmax()(logits)[:,1]
+                prob = nn.Softmax(dim=1)(logits)[:,1]
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1[0]
