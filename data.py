@@ -11,17 +11,17 @@ import shutil
 import matplotlib.pyplot as plt
 import random
 
-# %% read sensitivity
-from sklearn.metrics import roc_curve
-csv = '/home/pwuaj/hkust/DR/test.csv'
-csv = pd.read_csv(csv)
-predict = np.array(csv['Probability'])
-# plt.hist(predict, bins = 50)
-label = np.array(csv['True label'])
-fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-th = thresholds[np.argmax(tpr-fpr)]
-predict = (predict >= th)*1
-print(th,classification_report(label, predict, digits = 4))
+# # %% read sensitivity
+# from sklearn.metrics import roc_curve
+# csv = '/home/pwuaj/hkust/DR/test.csv'
+# csv = pd.read_csv(csv)
+# predict = np.array(csv['Probability'])
+# # plt.hist(predict, bins = 50)
+# label = np.array(csv['True label'])
+# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+# th = thresholds[np.argmax(tpr-fpr)]
+# predict = (predict >= th)*1
+# print(th,classification_report(label, predict, digits = 4))
 
 
 # # %% UWF data
@@ -106,74 +106,88 @@ print(th,classification_report(label, predict, digits = 4))
 #
 # torch.cuda.empty_cache()
 
+# # %%
+# csv = '/home/pwuaj/hkust/DR/Original Grading for WF project.xlsx'
+# csv = pd.read_excel(csv)
+# csv
+# gradable = []
+# ungradable = []
+# name = ['Image name 1', 'Image name 2', 'Image name 3', 'Image name 4', 'Image name 5', 'Image name 6', 'Image name 7']
+# grad = ['Gradability 1 (gradable = 1 ungradable = 2)', 'Gradability 2', 'Gradability  3', 'Gradability  4', 'Gradability  5', 'Gradability  6', 'Gradability  7']
+# for i in range(len(csv)):
+#     for j in range(7):
+#         if not pd.isnull(csv.iloc[i][name[j]]):
+#             if csv.iloc[i][grad[j]] == 2.0:
+#                 ungradable.append(csv.iloc[i][name[j]])
+#
+# folder = '/home/pwuaj/data/RDRraw'
+# roots = []
+# gradable = []
+# for root, dir, file in os.walk(folder):
+#    for name in file:
+#       roots.append(root)
+#       gradable.append(name)
+#
+#
+# gradable1 = []
+# ungradable1 = []
+# for i in gradable:
+#     if i not in gradable1:
+#         gradable1.append(i)
+#
+# for i in ungradable:
+#     if i not in ungradable1:
+#         ungradable1.append(i)
+# print(len(gradable1), len(ungradable1))
+#
+# # %%
+# folder = '/home/pwuaj/data/UWF'
+# roots = []
+# gradfiles = []
+# for root, dir, file in os.walk(folder):
+#    for name in file:
+#       roots.append(root)
+#       gradfiles.append(name)
+#
+# for i in ungradable1:
+#     j = i + '.jpg'
+#     if j not in gradfiles:
+#         ungradable1.remove(i)
+#
+#
+# classes = [ungradable1, gradable1]
+# for i in range(2):
+#     files = classes[i]
+#     train = round(len(files)*16/25)
+#     valid = round(len(files)*4/25)
+#     test = round(len(files)*1/5)
+#     random.shuffle(files)
+#     trainlist = files[:train]
+#     validlist = files[train:train+valid]
+#     testlist = files[train+valid:]
+#     for l in trainlist:
+#         if l[-3:] != 'jpg':
+#             l = l + '.jpg'
+#         shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'training', str(i), l]))
+#     for l in validlist:
+#         if l[-3:] != 'jpg':
+#             l = l + '.jpg'
+#         shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'validation', str(i), l]))
+#     for l in testlist:
+#         if l[-3:] != 'jpg':
+#             l = l + '.jpg'
+#         shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'test', str(i), l]))
+
+
 # %%
-csv = '/home/pwuaj/hkust/DR/Original Grading for WF project.xlsx'
-csv = pd.read_excel(csv)
-csv
-gradable = []
-ungradable = []
-name = ['Image name 1', 'Image name 2', 'Image name 3', 'Image name 4', 'Image name 5', 'Image name 6', 'Image name 7']
-grad = ['Gradability 1 (gradable = 1 ungradable = 2)', 'Gradability 2', 'Gradability  3', 'Gradability  4', 'Gradability  5', 'Gradability  6', 'Gradability  7']
-for i in range(len(csv)):
-    for j in range(7):
-        if not pd.isnull(csv.iloc[i][name[j]]):
-            if csv.iloc[i][grad[j]] == 2.0:
-                ungradable.append(csv.iloc[i][name[j]])
+nonVTDRdir = '/home/pwuaj/data/SK/gradable/VTDR/0'
+VTDRdir = '/home/pwuaj/data/SK/gradable/VTDR/1'
 
-folder = '/home/pwuaj/data/RDRraw'
-roots = []
-gradable = []
-for root, dir, file in os.walk(folder):
-   for name in file:
-      roots.append(root)
-      gradable.append(name)
+for i in os.listdir(nonVTDRdir):
+    shutil.copyfile(os.path.join(*[nonVTDRdir, i]), os.path.join(*['/home/pwuaj/data/SK2/0', i]))
 
-
-gradable1 = []
-ungradable1 = []
-for i in gradable:
-    if i not in gradable1:
-        gradable1.append(i)
-
-for i in ungradable:
-    if i not in ungradable1:
-        ungradable1.append(i)
-print(len(gradable1), len(ungradable1))
-
-# %%
-folder = '/home/pwuaj/data/UWF'
-roots = []
-gradfiles = []
-for root, dir, file in os.walk(folder):
-   for name in file:
-      roots.append(root)
-      gradfiles.append(name)
-
-for i in ungradable1:
-    j = i + '.jpg'
-    if j not in gradfiles:
-        ungradable1.remove(i)
-
-
-classes = [ungradable1, gradable1]
-for i in range(2):
-    files = classes[i]
-    train = round(len(files)*16/25)
-    valid = round(len(files)*4/25)
-    test = round(len(files)*1/5)
-    random.shuffle(files)
-    trainlist = files[:train]
-    validlist = files[train:train+valid]
-    testlist = files[train+valid:]
-    for l in trainlist:
-        if l[-3:] != 'jpg':
-            l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'training', str(i), l]))
-    for l in validlist:
-        if l[-3:] != 'jpg':
-            l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'validation', str(i), l]))
-    for l in testlist:
-        if l[-3:] != 'jpg':
-            l = l + '.jpg'
-        shutil.copyfile(os.path.join(*[roots[gradfiles.index(l)], l]), os.path.join(*['/home/pwuaj/data/grad2', 'test', str(i), l]))
+j = 0
+for i in os.listdir(VTDRdir):
+    while j<641:
+        shutil.copyfile(os.path.join(*[VTDRdir, i]), os.path.join(*['/home/pwuaj/data/SK2/1', i]))
+        j = j+1
