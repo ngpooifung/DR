@@ -188,6 +188,6 @@ for i in os.listdir(nonVTDRdir):
 
 j = 0
 for i in os.listdir(VTDRdir):
-    while j<641:
+    if j<641:
         shutil.copyfile(os.path.join(*[VTDRdir, i]), os.path.join(*['/home/pwuaj/data/SK2/1', i]))
-    j = j+1
+        j = j+1
