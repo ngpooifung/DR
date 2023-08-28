@@ -15,6 +15,11 @@ from PIL import Image
 import torchvision.transforms as transforms
 from torchvision.transforms import ToTensor, Resize
 from sklearn.metrics import accuracy_score
+try:
+    from torchvision.transforms import InterpolationMode
+    BICUBIC = InterpolationMode.BICUBIC
+except ImportError:
+    BICUBIC = Image.BICUBIC
 torch.manual_seed(0)
 # %%
 if torch.cuda.is_available():
