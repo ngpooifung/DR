@@ -84,5 +84,5 @@ def wrapper(test_dir):
 
 
 if __name__ == "__main__":
-    a,b,c  = wrapper('/home/pwuaj/data/RDRraw/test/0/STDR632-20170426@162833-L4-S.jpg')
+    a,b,c  = wrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
     print(a,b,c)
