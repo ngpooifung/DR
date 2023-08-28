@@ -46,7 +46,7 @@ class Resmodel(nn.Module):
     def forward(self, x):
         return self.backbone(x)
 
-def wrapper(test_dir, path):
+def wrapper(test_dir):
     checkpoint = torch.load('RDRlong3/main/main_0010.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
