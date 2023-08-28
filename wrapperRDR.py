@@ -80,7 +80,7 @@ def wrapper(test_dir):
     elif predict == 0:
         cls = 'Non RDR'
 
-    return (cls, prob, 0.75)
+    return (cls, prob.item(), 0.75)
 
 
 if __name__ == "__main__":
