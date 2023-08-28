@@ -52,7 +52,7 @@ class Resmodel(nn.Module):
         return self.backbone(x)
 
 def wrapper(test_dir):
-    checkpoint = torch.load('VTDRlong3/main/main_0005.pth.tar', map_location = device)
+    checkpoint = torch.load('VTDR.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
     model = Resmodel('resnet50')
@@ -80,7 +80,7 @@ def wrapper(test_dir):
     elif predict == 0:
         cls = 'Non VTDR'
 
-    return (cls, prob.item(), 0.75)
+    return (cls, prob.item(), 0.3921)
 
 
 if __name__ == "__main__":
