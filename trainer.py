@@ -235,12 +235,10 @@ class Restrainer(object):
             for counter, (img, lbl) in enumerate(test_loader):
 
                 img = img.to(self.args.device)
-                print(img.shape)
                 path = lbl[0]
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                print(logits.shape)
                 prob = nn.Softmax(dim=1)(logits)[:,1]
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
