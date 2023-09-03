@@ -181,9 +181,9 @@ import random
 
 # %%
 csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
-csv = pd.read_excel(csv, usecols = 'Q, W, Y, AA')
+csv = pd.read_excel(csv, usecols = 'AK, AS, AT, AZ')
 csv
-folder = '/home/pwuaj/data/SK'
+folder = '/home/pwuaj/data/GEI'
 roots = []
 files = []
 for root, dir, file in os.walk(folder):
@@ -191,19 +191,19 @@ for root, dir, file in os.walk(folder):
       roots.append(root)
       files.append(name)
 
-for i in range(3979):
-    name = csv['Image_Name'].iloc[i]
-    U = int(csv['Label_U2'].iloc[i])
+for i in range(217):
+    name = csv['image'].iloc[i]
+    U = int(csv['Label_U3'].iloc[i])
     if U == 0:
-        V = int(csv['Label_V2'].iloc[i])
-        R = int(csv['Label_R2'].iloc[i])
+        V = int(csv['Label_V3'].iloc[i])
+        R = int(csv['Label_R3'].iloc[i])
         try:
-            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/RDR', str(R), name]))
+            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/GEI2/gradable/RDR', str(R), name]))
         except:
             print(name)
         try:
-            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/VTDR', str(V), name]))
+            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/GEI2/gradable/VTDR', str(V), name]))
         except:
             print(name)
     if U == 1:
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/ungradable', name]))
+        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/GEI2/ungradable', name]))
