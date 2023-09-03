@@ -20,7 +20,7 @@ import random
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= th)*1
+# predict = (predict >= 0.75)*1
 # print(th,classification_report(label, predict, digits = 4))
 
 
@@ -180,14 +180,17 @@ import random
 
 
 # %%
-nonVTDRdir = '/home/pwuaj/data/SK/gradable/VTDR/0'
-VTDRdir = '/home/pwuaj/data/SK/gradable/VTDR/1'
+csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
+csv = pd.read_excel(csv, usecols = 'A, D')
+folder = '/home/pwuaj/data/UWF'
+roots = []
+files = []
+for root, dir, file in os.walk(folder):
+   for name in file:
+      roots.append(root)
+      files.append(name)
 
-for i in os.listdir(nonVTDRdir):
-    shutil.copyfile(os.path.join(*[nonVTDRdir, i]), os.path.join(*['/home/pwuaj/data/SK2/0', i]))
-
-j = 0
-for i in os.listdir(VTDRdir):
-    if j<641:
-        shutil.copyfile(os.path.join(*[VTDRdir, i]), os.path.join(*['/home/pwuaj/data/SK2/1', i]))
-        j = j+1
+for i in range(len(572)):
+    name = csv['Image_R0 thr_0.66'].iloc[i]
+    label = int(csv['Label_R0'].iloc[i])
+    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test3', str(label), name]))
