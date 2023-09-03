@@ -197,7 +197,13 @@ for i in range(3979):
     if U == 0:
         V = int(csv['Label_V2'].iloc[i])
         R = int(csv['Label_R2'].iloc[i])
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/RDR', str(R), name]))
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/VTDR', str(V), name]))
+        try:
+            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/RDR', str(R), name]))
+        except:
+            print(name)
+        try:
+            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/gradable/VTDR', str(V), name]))
+        except:
+            print(name)
     if U == 1:
         shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/SK2/ungradable', name]))
