@@ -181,7 +181,8 @@ import random
 
 # %%
 csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
-csv = pd.read_excel(csv, usecols = 'A, D')
+csv = pd.read_excel(csv, usecols = 'F, I')
+csv
 folder = '/home/pwuaj/data/UWF'
 roots = []
 files = []
@@ -190,7 +191,7 @@ for root, dir, file in os.walk(folder):
       roots.append(root)
       files.append(name)
 
-for i in range(572):
-    name = csv['Image_R0 thr_0.66'].iloc[i]
-    label = int(csv['Label_R0'].iloc[i])
-    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test3', str(label), name]))
+for i in range(571):
+    name = csv['Image_V0'].iloc[i]
+    label = int(csv['Label_V0'].iloc[i])
+    shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/VTDRraw/test3', str(label), name]))
