@@ -190,7 +190,7 @@ for root, dir, file in os.walk(folder):
       roots.append(root)
       files.append(name)
 
-for i in range(len(572)):
+for i in range(572):
     name = csv['Image_R0 thr_0.66'].iloc[i]
     label = int(csv['Label_R0'].iloc[i])
     shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/RDRraw/test3', str(label), name]))
