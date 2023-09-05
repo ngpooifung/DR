@@ -52,6 +52,9 @@ class Resmodel(nn.Module):
         return self.backbone(x)
 
 def wrapper(test_dir):
+    accuracy = 91.85/100
+    I = 1.96*math.sqrt((accuracy*(1-accuracy))/815)
+    CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('Grad.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
@@ -80,7 +83,7 @@ def wrapper(test_dir):
     elif predict == 0:
         cls = 'Ungradable'
 
-    return (cls, prob.item(), 0.7)
+    return (cls, prob.item(), CI, 0.7)
 
 
 if __name__ == "__main__":

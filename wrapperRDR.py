@@ -1,6 +1,7 @@
 # %%
 import torch
 import os
+import math
 import torch.distributed as dist
 from model import modeltrainer
 from torch import nn
@@ -52,6 +53,9 @@ class Resmodel(nn.Module):
         return self.backbone(x)
 
 def wrapper(test_dir):
+    accuracy = 89.16/100
+    I = 1.96*math.sqrt((accuracy*(1-accuracy))/572)
+    CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('RDR.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
@@ -80,7 +84,7 @@ def wrapper(test_dir):
     elif predict == 0:
         cls = 'Non RDR'
 
-    return (cls, prob.item(), 0.75)
+    return (cls, prob.item(), CI, 0.75)
 
 
 if __name__ == "__main__":

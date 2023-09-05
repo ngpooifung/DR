@@ -52,6 +52,9 @@ class Resmodel(nn.Module):
         return self.backbone(x)
 
 def wrapper(test_dir):
+    accuracy = 85.67/100
+    I = 1.96*math.sqrt((accuracy*(1-accuracy))/571)
+    CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('VTDR.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
@@ -80,7 +83,7 @@ def wrapper(test_dir):
     elif predict == 0:
         cls = 'Non VTDR'
 
-    return (cls, prob.item(), 0.3921)
+    return (cls, prob.item(), CI, 0.3921)
 
 
 if __name__ == "__main__":
