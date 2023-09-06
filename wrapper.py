@@ -1,6 +1,7 @@
 # %%
 import torch
 import os
+import math
 import torch.distributed as dist
 from model import modeltrainer
 from torch import nn
@@ -152,7 +153,7 @@ def VTDRwrapper(test_dir):
         cls = 'Non VTDR'
 
     return (cls, prob.item(), CI, 0.3921)
-    
+
 if __name__ == "__main__":
     a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
     print(a,b,c,d)
