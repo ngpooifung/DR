@@ -85,7 +85,74 @@ def Gradwrapper(test_dir):
 
     return (cls, prob.item(), CI, 0.7)
 
+def RDRwrapper(test_dir):
+    accuracy = 89.16/100
+    I = 1.96*math.sqrt((accuracy*(1-accuracy))/572)
+    CI = (accuracy-I, accuracy+I)
+    checkpoint = torch.load('RDR.pth.tar', map_location = device)
+    state_dict = checkpoint['state_dict']
 
+    model = Resmodel('resnet50')
+    log = model.load_state_dict(state_dict, strict=True)
+    model = model.to(device)
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    model.eval()
+
+    img = Image.open(test_dir)
+    data_transforms = transforms.Compose([Resize((512, 640),interpolation=BICUBIC),
+                                          _convert_image_to_rgb,
+                                          ToTensor(),
+                                          ])
+    img = data_transforms(img)
+    img = img.unsqueeze(0)
+
+    with torch.no_grad():
+
+        img = img.to(device)
+        logits = model.module(img.type(torch.float32))
+        prob = nn.Softmax(dim=1)(logits)[:,1]
+        predict = (prob >= 0.75)*1
+    if predict == 1:
+        cls = 'RDR'
+    elif predict == 0:
+        cls = 'Non RDR'
+
+    return (cls, prob.item(), CI, 0.75)
+
+def VTDRwrapper(test_dir):
+    accuracy = 85.67/100
+    I = 1.96*math.sqrt((accuracy*(1-accuracy))/571)
+    CI = (accuracy-I, accuracy+I)
+    checkpoint = torch.load('VTDR.pth.tar', map_location = device)
+    state_dict = checkpoint['state_dict']
+
+    model = Resmodel('resnet50')
+    log = model.load_state_dict(state_dict, strict=True)
+    model = model.to(device)
+    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    model.eval()
+
+    img = Image.open(test_dir)
+    data_transforms = transforms.Compose([Resize((512, 640),interpolation=BICUBIC),
+                                          _convert_image_to_rgb,
+                                          ToTensor(),
+                                          ])
+    img = data_transforms(img)
+    img = img.unsqueeze(0)
+
+    with torch.no_grad():
+
+        img = img.to(device)
+        logits = model.module(img.type(torch.float32))
+        prob = nn.Softmax(dim=1)(logits)[:,1]
+        predict = (prob >= 0.3921)*1
+    if predict == 1:
+        cls = 'VTDR'
+    elif predict == 0:
+        cls = 'Non VTDR'
+
+    return (cls, prob.item(), CI, 0.3921)
+    
 if __name__ == "__main__":
     a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
     print(a,b,c,d)
