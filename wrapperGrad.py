@@ -51,7 +51,7 @@ class Resmodel(nn.Module):
     def forward(self, x):
         return self.backbone(x)
 
-def wrapper(test_dir):
+def Gradwrapper(test_dir):
     accuracy = 91.85/100
     I = 1.96*math.sqrt((accuracy*(1-accuracy))/815)
     CI = (accuracy-I, accuracy+I)
@@ -87,5 +87,5 @@ def wrapper(test_dir):
 
 
 if __name__ == "__main__":
-    a,b,c,d  = wrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
+    a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
     print(a,b,c,d)
