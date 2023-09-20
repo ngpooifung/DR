@@ -59,7 +59,7 @@ def Gradwrapper(test_dir):
     model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
-    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
     model.eval()
 
     img = Image.open(test_dir)
@@ -73,7 +73,7 @@ def Gradwrapper(test_dir):
     with torch.no_grad():
 
         img = img.to(device)
-        logits = model.module(img.type(torch.float32))
+        logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
         predict = (prob >= 0.7)*1
     if predict == 1:
@@ -93,7 +93,7 @@ def RDRwrapper(test_dir):
     model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
-    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
     model.eval()
 
     img = Image.open(test_dir)
@@ -107,7 +107,7 @@ def RDRwrapper(test_dir):
     with torch.no_grad():
 
         img = img.to(device)
-        logits = model.module(img.type(torch.float32))
+        logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
         predict = (prob >= 0.75)*1
     if predict == 1:
@@ -127,7 +127,7 @@ def VTDRwrapper(test_dir):
     model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
-    model = DDP(model, device_ids = [local_rank], output_device=local_rank)
+    # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
     model.eval()
 
     img = Image.open(test_dir)
@@ -141,7 +141,7 @@ def VTDRwrapper(test_dir):
     with torch.no_grad():
 
         img = img.to(device)
-        logits = model.module(img.type(torch.float32))
+        logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
         predict = (prob >= 0.3921)*1
     if predict == 1:
