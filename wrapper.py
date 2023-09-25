@@ -11,7 +11,7 @@ from tqdm import tqdm
 import pandas as pd
 from PIL import Image
 import torchvision.transforms as transforms
-from torchvision.transforms import ToTensor, Resize
+from torchvision.transforms import ToTensor, Resize, Normalize
 from sklearn.metrics import accuracy_score
 try:
     from torchvision.transforms import InterpolationMode
@@ -66,6 +66,7 @@ def Gradwrapper(test_dir):
     data_transforms = transforms.Compose([Resize((512, 640),interpolation=BICUBIC),
                                           _convert_image_to_rgb,
                                           ToTensor(),
+                                          Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                           ])
     img = data_transforms(img)
     img = img.unsqueeze(0)
@@ -100,6 +101,7 @@ def RDRwrapper(test_dir):
     data_transforms = transforms.Compose([Resize((512, 640),interpolation=BICUBIC),
                                           _convert_image_to_rgb,
                                           ToTensor(),
+                                          Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                           ])
     img = data_transforms(img)
     img = img.unsqueeze(0)
@@ -134,6 +136,7 @@ def VTDRwrapper(test_dir):
     data_transforms = transforms.Compose([Resize((512, 640),interpolation=BICUBIC),
                                           _convert_image_to_rgb,
                                           ToTensor(),
+                                          Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                           ])
     img = data_transforms(img)
     img = img.unsqueeze(0)
