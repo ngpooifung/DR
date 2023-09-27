@@ -102,7 +102,7 @@ import random
 csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
 csv = pd.read_excel(csv, usecols = 'BB, BD, BF, BI')
 csv
-folder = '/home/pwuaj/data/IS'
+folder = '/home/pwuaj/data/Israel_renamed'
 roots = []
 files = []
 for root, dir, file in os.walk(folder):
