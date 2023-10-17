@@ -76,10 +76,10 @@ class Modeldataset:
         data_transforms = transforms.Compose([
                                               # transforms.RandomResizedCrop(size=size, scale = (0.6,1.0)),
                                               transforms.RandomHorizontalFlip(p = 0.5),
-                                              # transforms.RandomRotation(degrees = 2),
+                                              transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 5),
                                               # ColorJitter(0.01, 0.01),
-                                              # GaussianBlur((7,9), sigma = (0.1, 2.0)),
+                                              GaussianBlur((7,9), sigma = (0.1, 2.0)),
                                               ])
         return data_transforms
 
