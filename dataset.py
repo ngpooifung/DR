@@ -54,7 +54,7 @@ class Imagefolder(datasets.ImageFolder):
         # img = img.astype('float32')
         data_transforms = transforms.Compose([Resize((self.resize, int(self.resize*1.25)),interpolation=BICUBIC),
                                               # CenterCrop(self.resize),
-                                              _convert_image_to_rgb,
+                                              # _convert_image_to_rgb,
                                               ToTensor(),
                                               Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                               # Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
@@ -79,7 +79,7 @@ class Modeldataset:
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 5),
                                               # ColorJitter(0.01, 0.01),
-                                              GaussianBlur((7,9), sigma = (0.1, 1.5)),
+                                              GaussianBlur((7,9), sigma = (0.1, 2)),
                                               ])
         return data_transforms
 
