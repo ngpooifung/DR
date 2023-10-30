@@ -50,6 +50,8 @@ parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
                     help = 'weight')
 parser.add_argument('--lr', type = float, default = 0.0001,
                     help = 'Learning rate')
+parser.add_argument('--dropout', type = float, default = 0.,
+                    help = 'dropout')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
 parser.add_argument('--disable_cuda', action = 'store_true',
@@ -96,7 +98,7 @@ def main():
     else:
         test_loader = None
 
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
 
     if args.process == 'transfer':
         path = os.path.join(args.output, args.finetune)
@@ -142,7 +144,7 @@ def eval():
     checkpoint = torch.load(path, map_location = args.device)
     state_dict = checkpoint['state_dict']
 
-    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim).to(args.device)
+    model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
     # if args.process == 'class_activation':
     # model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
     log = model.load_state_dict(state_dict, strict=True)
