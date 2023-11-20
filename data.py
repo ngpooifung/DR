@@ -99,36 +99,72 @@ import random
 # %%
 namelist = []
 labellist = []
-dir = '/home/pwuaj/data/SK/gradable/VTDR'
+dir = '/home/pwuaj/data/grad/training'
 classes = ['0', '1']
 for c in classes:
     names = os.listdir(os.path.join(dir, c))
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.DataFrame({'VTDRSK':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/VTDRSK.csv')
+df = pd.DataFrame({'Primary Grad training':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/Gradability.csv')
 
 namelist = []
 labellist = []
-dir = '/home/pwuaj/data/GEI/gradable/VTDR'
+dir = '/home/pwuaj/data/grad/test'
 classes = ['0', '1']
 for c in classes:
     names = os.listdir(os.path.join(dir, c))
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.DataFrame({'VTDRGEI':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/VTDRGEI.csv')
+df = pd.DataFrame({'Primary Grad test':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/Gradtest.csv')
 
 namelist = []
 labellist = []
-dir = '/home/pwuaj/data/IS/gradable/VTDR'
+dir = '/home/pwuaj/data/grad/Ex1'
 classes = ['0', '1']
 for c in classes:
     names = os.listdir(os.path.join(dir, c))
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.DataFrame({'VTDRIS':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/VTDRIS.csv')
+df = pd.DataFrame({'Ex1':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/GradEx1.csv')
+
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/grad/SK'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.DataFrame({'SK':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/GradSK.csv')
+
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/grad/GEI'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.DataFrame({'GEI':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/GradGEI.csv')
+
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/grad/IS'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.DataFrame({'IS':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/GradIS.csv')
