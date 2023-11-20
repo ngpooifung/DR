@@ -99,12 +99,12 @@ import random
 # %%
 namelist = []
 labellist = []
-dir = '/home/pwuaj/data/VTDRraw/training'
+dir = '/home/pwuaj/data/VTDRraw/test'
 classes = ['0', '1']
 for c in classes:
     names = os.listdir(os.path.join(dir, c))
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.DataFrame({'VTDRtrain':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/VTDR.csv')
+df = pd.DataFrame({'VTDRtest':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/VTDRtest.csv')
