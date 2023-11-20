@@ -20,19 +20,19 @@ import random
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= 0.84)*1
+# predict = (predict >= 0.3)*1
 # print(th,classification_report(label, predict, digits = 4))
 
 # # %%
 # from sklearn.metrics import roc_curve
 # csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
-# csv = pd.read_excel(csv, usecols = 'BC, BD')
+# csv = pd.read_excel(csv, usecols = 'AF, AG')
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= 0.634)*1
+# predict = (predict >= th)*1
 # print(th,classification_report(label, predict, digits = 4))
 
 
@@ -96,27 +96,15 @@ import random
 #         for name in os.listdir(os.path.join(*[gradable, type])):
 #             shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*[output, str(1), name]))
 
-
-
 # %%
-csv = '/home/pwuaj/hkust/DR/All_20200715.xlsx'
-csv = pd.read_excel(csv, usecols = 'AE, AG')
-csv
-folder = '/home/pwuaj/data/Clarity'
-roots = []
-files = []
-for root, dir, file in os.walk(folder):
-   for name in file:
-      roots.append(root)
-      files.append(name)
-
-for i in range(1321):
-    name = csv['Image_U1'].iloc[i]
-    U = int(csv['Label_U1'].iloc[i])
-    if U == 0:
-        try:
-            shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad/Ex1/1', name]))
-        except:
-            print(name)
-    if U == 1:
-        shutil.copyfile(os.path.join(*[roots[files.index(name)], name]), os.path.join(*['/home/pwuaj/data/grad/Ex1/0', name]))
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/RDRraw/test'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.dataframe({'RDRtest':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/RDRtest.csv')
