@@ -99,12 +99,36 @@ import random
 # %%
 namelist = []
 labellist = []
-dir = '/home/pwuaj/data/VTDRraw/test'
+dir = '/home/pwuaj/data/SK/gradable/VTDR'
 classes = ['0', '1']
 for c in classes:
     names = os.listdir(os.path.join(dir, c))
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.DataFrame({'VTDRtest':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/VTDRtest.csv')
+df = pd.DataFrame({'VTDRSK':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/VTDRSK.csv')
+
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/GEI/gradable/VTDR'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.DataFrame({'VTDRGEI':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/VTDRGEI.csv')
+
+namelist = []
+labellist = []
+dir = '/home/pwuaj/data/IS/gradable/VTDR'
+classes = ['0', '1']
+for c in classes:
+    names = os.listdir(os.path.join(dir, c))
+    for i in names:
+        namelist.append(i)
+        labellist.append(c)
+df = pd.DataFrame({'VTDRIS':namelist, 'Label': labellist})
+df.to_csv('/home/pwuaj/hkust/DR/VTDRIS.csv')
