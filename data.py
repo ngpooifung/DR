@@ -106,5 +106,5 @@ for c in classes:
     for i in names:
         namelist.append(i)
         labellist.append(c)
-df = pd.dataframe({'RDRtest':namelist, 'Label': labellist})
+df = pd.DataFrame({'RDRtest':namelist, 'Label': labellist})
 df.to_csv('/home/pwuaj/hkust/DR/RDRtest.csv')
