@@ -34,6 +34,8 @@ parser.add_argument('--resize', default = 336, type = int,
                     help = 'resize images in training')
 parser.add_argument('--output', type = str, default = '',
                     help = 'Path to output folder')
+parser.add_argument('--transfer', type = str, default = '',
+                    help = 'transfer learning')
 
 # Model
 parser.add_argument('--arch', default='resnet50', type = str,
@@ -100,9 +102,9 @@ def main():
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
 
-    if args.finetune is not None:
-        # path = os.path.join(args.output, args.finetune)
-        checkpoint = torch.load(args.finetune, map_location = args.device)
+    if args.transfer is not None:
+        path = os.path.join(args.transfer, args.finetune)
+        checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         # model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
         log = model.load_state_dict(state_dict, strict=False)
