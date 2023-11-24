@@ -100,16 +100,16 @@ def main():
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
 
-    if args.process == 'transfer':
-        path = os.path.join(args.output, args.finetune)
-        checkpoint = torch.load(path, map_location = args.device)
+    if args.finetune is not None:
+        # path = os.path.join(args.output, args.finetune)
+        checkpoint = torch.load(args.finetune, map_location = args.device)
         state_dict = checkpoint['state_dict']
-        model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
+        # model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
         log = model.load_state_dict(state_dict, strict=False)
         print(log)
-        for name, param in model.named_parameters():
-            if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
-                param.requires_grad = False
+        # for name, param in model.named_parameters():
+            # if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
+                # param.requires_grad = False
 
         model = model.to(args.device)
     # model,_ = clip.load('RN50', device = args.device)
