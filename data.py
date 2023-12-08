@@ -80,7 +80,8 @@ import random
 #         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
 
 
-
+RDRdir = '/home/pwuaj/data/RDRraw'
+VTDRdir = '/home/pwuaj/data/VTDRraw'
 nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '0']))
 VTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '1']))
 nonRDRlist = os.listdir(os.path.join(*[RDRdir, 'training', '0'])) + os.listdir(os.path.join(*[RDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[RDRdir, 'test', '0']))
