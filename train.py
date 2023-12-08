@@ -48,7 +48,7 @@ parser.add_argument('--hidden', default = 100, type = int,
 # Training
 parser.add_argument('--epochs', type = int, default = 100,
                     help = 'Number of training epochs')
-parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
+parser.add_argument('--weight', type = int, nargs = 3, default = (1, 1, 1),
                     help = 'weight')
 parser.add_argument('--lr', type = float, default = 0.0001,
                     help = 'Learning rate')
@@ -107,7 +107,7 @@ def main():
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=False)
-        model.backbone.fc[3] = nn.Linear(64, 2).to(args.device)
+        model.backbone.fc[3] = nn.Linear(64, 2)
         print(log)
         # for name, param in model.named_parameters():
         #     if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias', 'backbone.fc.3.weight', 'backbone.fc.3.bias']:
