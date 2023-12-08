@@ -107,11 +107,11 @@ def main():
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=False)
-        model.backbone.fc[3] = nn.Linear(64, 2)
+        model.backbone.fc[3] = nn.Linear(64, 2).to(args.device)
         print(log)
-        for name, param in model.named_parameters():
-            if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias', 'backbone.fc.3.weight', 'backbone.fc.3.bias']:
-                param.requires_grad = False
+        # for name, param in model.named_parameters():
+        #     if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias', 'backbone.fc.3.weight', 'backbone.fc.3.bias']:
+        #         param.requires_grad = False
 
         model = model.to(args.device)
     # model,_ = clip.load('RN50', device = args.device)
