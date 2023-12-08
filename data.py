@@ -20,8 +20,9 @@ import random
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= 0.3)*1
+# predict = (predict >= 0.17)*1
 # print(th,classification_report(label, predict, digits = 4))
+
 
 # # %%
 # from sklearn.metrics import roc_curve
@@ -58,113 +59,45 @@ import random
 #         for l in testlist:
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/IStest', i, c, l]))
 #             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
-#
-# a = ['RDR', 'VTDR']
-# for i in a:
-#     root = os.path.join(*['/home/pwuaj/data/GEI/gradable', i])
-#     classes = ['0', '1']
-#     for c in classes:
-#         files = os.listdir(os.path.join(*[root, c]))
-#         train = round(len(files)*16/25)
-#         valid = round(len(files)*4/25)
-#         test = round(len(files)*1/5)
-#         random.shuffle(files)
-#         trainlist = files[:train]
-#         validlist = files[train:train+valid]
-#         testlist = files[train+valid:]
-#         for l in trainlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'training', c, l]))
-#         for l in validlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'validation', c, l]))
-#         for l in testlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/GEItest', i, c, l]))
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
+
 
 # # %%
-# SK = '/home/pwuaj/data/SK'
-# GEI = '/home/pwuaj/data/GEI'
-# IS = '/home/pwuaj/data/IS'
-# dir = [IS]
-# types = ['0', '1']
-# for i in dir:
-#     gradable = os.path.join(i, 'gradable/RDR')
-#     ungradable = os.path.join(i, 'ungradable')
-#     output = os.path.join(*['/home/pwuaj/data/grad', i.split('/')[-1]])
-#     for name in os.listdir(ungradable):
-#         shutil.copyfile(os.path.join(*[ungradable, name]), os.path.join(*[output, str(0), name]))
-#     for type in types:
-#         for name in os.listdir(os.path.join(*[gradable, type])):
-#             shutil.copyfile(os.path.join(*[gradable, type, name]), os.path.join(*[output, str(1), name]))
+# label = pd.read_csv('/home/pwuaj/hkust/DR/Gradability.csv')
+# label
+# # %%
+# namelist = list(label['External 4'].dropna())
+# result = pd.read_csv('/home/pwuaj/hkust/DR/gradIS.csv')
+# for i in range(len(result)):
+#     name = result['Path'].iloc[i].split('/')[-1]
+#     prob = result['Probability'].iloc[i]
+#     predict = (prob>0.115)*1
+#     label['Probability.4'][namelist.index(name)] = prob
+#     label['Predicted Label.4'][namelist.index(name)] = predict
+#
+# # %%
+# label.to_csv('/home/pwuaj/hkust/DR/Gradability2.csv')
 
-# %%
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/training'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'Primary Grad training':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/Gradability.csv')
 
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/test'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'Primary Grad test':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/Gradtest.csv')
-
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/Ex1'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'Ex1':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/GradEx1.csv')
-
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/SK'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'SK':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/GradSK.csv')
-
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/GEI'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'GEI':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/GradGEI.csv')
-
-namelist = []
-labellist = []
-dir = '/home/pwuaj/data/grad/IS'
-classes = ['0', '1']
-for c in classes:
-    names = os.listdir(os.path.join(dir, c))
-    for i in names:
-        namelist.append(i)
-        labellist.append(c)
-df = pd.DataFrame({'IS':namelist, 'Label': labellist})
-df.to_csv('/home/pwuaj/hkust/DR/GradIS.csv')
+RDRdir = '/home/pwuaj/data/RDRraw'
+VTDRdir = '/home/pwuaj/data/VTDRraw'
+types = ['training', 'validation', 'test']
+for type in types:
+    mild = []
+    severe = []
+    nonRDRlsit = os.listdir(os.path.join(*[RDRdir, type, '0']))
+    RDRlist = os.listdir(os.path.join(*[RDRdir, type, '1']))
+    nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, type, '0']))
+    VTDRlist = os.listdir(os.path.join(*[VTDRdir, type, '1']))
+    for i in RDRlist:
+        if i in nonVTDRlist:
+            mild.append(i)
+        elif i in VRDRlist:
+            severe.appebd(i)
+        else:
+            print(i)
+    for i in nonRDRlist:
+        shutil.copyfile(os.path.join(*[RDRdir, type, '0', i]), os.path.join(*['/home/pwuaj/data/DR' type, '0']))
+    for i in mild:
+        shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR' type, '1']))
+    for i in severe:
+        shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR' type, '2']))
