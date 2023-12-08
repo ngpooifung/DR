@@ -91,7 +91,7 @@ for type in types:
     for i in RDRlist:
         if i in nonVTDRlist:
             mild.append(i)
-        elif i in VRDRlist:
+        elif i in VTDRlist:
             severe.appebd(i)
         else:
             print(i)
