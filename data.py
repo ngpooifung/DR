@@ -37,30 +37,6 @@ import random
 # print(th,classification_report(label, predict, digits = 4))
 
 
-
-# # %% RDR VTDR
-# a = ['RDR', 'VTDR']
-# for i in a:
-#     root = os.path.join(*['/home/pwuaj/data/IS/gradable', i])
-#     classes = ['0', '1']
-#     for c in classes:
-#         files = os.listdir(os.path.join(*[root, c]))
-#         train = round(len(files)*12/25)
-#         valid = round(len(files)*1/25)
-#         test = round(len(files)*12/25)
-#         random.shuffle(files)
-#         trainlist = files[:train]
-#         validlist = files[train:train+valid]
-#         testlist = files[train+valid:]
-#         for l in trainlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'training', c, l]))
-#         for l in validlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'validation', c, l]))
-#         for l in testlist:
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data/IStest', i, c, l]))
-#             shutil.copyfile(os.path.join(*[root, c, l]), os.path.join(*['/home/pwuaj/data', i, 'test', c, l]))
-
-
 # # %%
 # label = pd.read_csv('/home/pwuaj/hkust/DR/Gradability.csv')
 # label
@@ -76,30 +52,6 @@ import random
 #
 # # %%
 # label.to_csv('/home/pwuaj/hkust/DR/Gradability2.csv')
-
-
-names = []
-labels = []
-types = ['0', '1']
-for type in types:
-    for i in os.listdir(os.path.join('/home/pwuaj/data/RDRraw/validation', type)):
-        names.append(i)
-        labels.append(type)
-df = pd.DataFrame({'Primary validation': names, 'Labels': labels})
-df.to_csv('/home/pwuaj/hkust/DR/RDRval.csv')
-
-names = []
-labels = []
-types = ['0', '1']
-for type in types:
-    for i in os.listdir(os.path.join('/home/pwuaj/data/VTDRraw/validation', type)):
-        names.append(i)
-        labels.append(type)
-df = pd.DataFrame({'Primary validation': names, 'Labels': labels})
-df.to_csv('/home/pwuaj/hkust/DR/VTDRval.csv')
-
-
-
 
 
 
@@ -126,3 +78,13 @@ df.to_csv('/home/pwuaj/hkust/DR/VTDRval.csv')
 #         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '1', i]))
 #     for i in severe:
 #         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
+
+
+
+nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '0']))
+VTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '1']))
+nonRDRlist = os.listdir(os.path.join(*[RDRdir, 'training', '0'])) + os.listdir(os.path.join(*[RDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[RDRdir, 'test', '0']))
+RDRlist = os.listdir(os.path.join(*[RDRdir, 'training', '1'])) + os.listdir(os.path.join(*[RDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[RDRdir, 'test', '1']))
+for i in nonRDRlist:
+    if i in VTDRlist:
+        print(i)
