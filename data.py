@@ -81,13 +81,13 @@ import random
 RDRdir = '/home/pwuaj/data/RDRraw'
 VTDRdir = '/home/pwuaj/data/VTDRraw'
 types = ['training', 'validation', 'test']
+nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '0']))
+VTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '1']))
 for type in types:
     mild = []
     severe = []
-    nonRDRlsit = os.listdir(os.path.join(*[RDRdir, type, '0']))
+    nonRDRlist = os.listdir(os.path.join(*[RDRdir, type, '0']))
     RDRlist = os.listdir(os.path.join(*[RDRdir, type, '1']))
-    nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, type, '0']))
-    VTDRlist = os.listdir(os.path.join(*[VTDRdir, type, '1']))
     for i in RDRlist:
         if i in nonVTDRlist:
             mild.append(i)
