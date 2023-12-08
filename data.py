@@ -78,26 +78,51 @@ import random
 # label.to_csv('/home/pwuaj/hkust/DR/Gradability2.csv')
 
 
-RDRdir = '/home/pwuaj/data/RDRraw'
-VTDRdir = '/home/pwuaj/data/VTDRraw'
-types = ['training', 'validation', 'test']
-nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '0']))
-VTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '1']))
+names = []
+labels = []
+types = ['0', '1']
 for type in types:
-    mild = []
-    severe = []
-    nonRDRlist = os.listdir(os.path.join(*[RDRdir, type, '0']))
-    RDRlist = os.listdir(os.path.join(*[RDRdir, type, '1']))
-    for i in RDRlist:
-        if i in nonVTDRlist:
-            mild.append(i)
-        elif i in VTDRlist:
-            severe.append(i)
-        else:
-            print(i)
-    for i in nonRDRlist:
-        shutil.copyfile(os.path.join(*[RDRdir, type, '0', i]), os.path.join(*['/home/pwuaj/data/DR', type, '0', i]))
-    for i in mild:
-        shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '1', i]))
-    for i in severe:
-        shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
+    for i in os.listdir(os.path.join('/home/pwuaj/data/RDRraw/validation', type)):
+        names.append(i)
+        labels.append(type)
+df = pd.DataFrame({'Primary validation': names, 'Labels': labels})
+df.to_csv('/home/pwuaj/hkust/DR/RDRval.csv')
+
+names = []
+labels = []
+types = ['0', '1']
+for type in types:
+    for i in os.listdir(os.path.join('/home/pwuaj/data/VTDRraw/validation', type)):
+        names.append(i)
+        labels.append(type)
+df = pd.DataFrame({'Primary validation': names, 'Labels': labels})
+df.to_csv('/home/pwuaj/hkust/DR/VTDRval.csv')
+
+
+
+
+
+
+# RDRdir = '/home/pwuaj/data/RDRraw'
+# VTDRdir = '/home/pwuaj/data/VTDRraw'
+# types = ['training', 'validation', 'test']
+# nonVTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '0'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '0']))
+# VTDRlist = os.listdir(os.path.join(*[VTDRdir, 'training', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'validation', '1'])) + os.listdir(os.path.join(*[VTDRdir, 'test', '1']))
+# for type in types:
+#     mild = []
+#     severe = []
+#     nonRDRlist = os.listdir(os.path.join(*[RDRdir, type, '0']))
+#     RDRlist = os.listdir(os.path.join(*[RDRdir, type, '1']))
+#     for i in RDRlist:
+#         if i in nonVTDRlist:
+#             mild.append(i)
+#         elif i in VTDRlist:
+#             severe.append(i)
+#         else:
+#             print(i)
+#     for i in nonRDRlist:
+#         shutil.copyfile(os.path.join(*[RDRdir, type, '0', i]), os.path.join(*['/home/pwuaj/data/DR', type, '0', i]))
+#     for i in mild:
+#         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '1', i]))
+#     for i in severe:
+#         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
