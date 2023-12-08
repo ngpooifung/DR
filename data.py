@@ -81,7 +81,7 @@ import random
 
 
 
-type = SK
+type = 'SK'
 nonRDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/0']))
 RDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1']))
 nonVTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/0']))
