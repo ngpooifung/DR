@@ -108,7 +108,7 @@ def main():
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=False)
         print(log)
-        dim_mlp = model.backbone.fc.in_features
+        dim_mlp = model.backbone.fc[0].in_features
         print(dim_mlp)
         model.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(args.dropout), nn.Linear(64, 2))
         # for name, param in model.named_parameters():
