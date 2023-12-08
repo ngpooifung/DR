@@ -81,24 +81,11 @@ import random
 
 
 
-types = ['SK', 'GEI', 'IS']
-for type in types:
-    nonRDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/0']))
-    RDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1']))
-    nonVTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/0']))
-    VTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/1']))
-    mild = []
-    severe = []
-    for i in RDRlist:
-        if i in nonVTDRlist:
-            mild.append(i)
-        elif i in VTDRlist:
-            severe.append(i)
-        else:
-            print(i)
-    for i in nonRDRlist:
-        shutil.copyfile(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/0', i]), os.path.join(*['/home/pwuaj/data/DR', type, '0', i]))
-    for i in mild:
-        shutil.copyfile(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '1', i]))
-    for i in severe:
-        shutil.copyfile(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
+type = SK
+nonRDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/0']))
+RDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1']))
+nonVTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/0']))
+VTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/1']))
+for i in nonRDRlist:
+    if i in VTDRlist:
+        print(i)
