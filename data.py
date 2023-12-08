@@ -11,17 +11,17 @@ import shutil
 import matplotlib.pyplot as plt
 import random
 
-# # %% read sensitivity
-# from sklearn.metrics import roc_curve
-# csv = '/home/pwuaj/hkust/DR/test.csv'
-# csv = pd.read_csv(csv)
-# predict = np.array(csv['Probability'])
-# # plt.hist(predict, bins = 50)
-# label = np.array(csv['True label'])
-# fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
-# th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >= 0.17)*1
-# print(th,classification_report(label, predict, digits = 4))
+# %% read sensitivity
+from sklearn.metrics import roc_curve
+csv = '/home/pwuaj/hkust/DR/test.csv'
+csv = pd.read_csv(csv)
+predict = np.array(csv['Probability'])
+# plt.hist(predict, bins = 50)
+label = np.array(csv['True label'])
+fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
+th = thresholds[np.argmax(tpr-fpr)]
+predict = (predict >= th)*1
+print(th,classification_report(label, predict, digits = 4))
 
 
 # # %%
@@ -78,14 +78,3 @@ import random
 #         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '1', i]))
 #     for i in severe:
 #         shutil.copyfile(os.path.join(*[RDRdir, type, '1', i]), os.path.join(*['/home/pwuaj/data/DR', type, '2', i]))
-
-
-
-type = 'SK'
-nonRDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/0']))
-RDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/RDR/1']))
-nonVTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/0']))
-VTDRlist = os.listdir(os.path.join(*['/home/pwuaj/data', type, 'gradable/VTDR/1']))
-for i in nonRDRlist:
-    if i in VTDRlist:
-        print(i)
