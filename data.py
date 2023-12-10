@@ -20,7 +20,7 @@ predict = np.array(csv['Probability'])
 label = np.array(csv['True label'])
 fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 th = thresholds[np.argmax(tpr-fpr)]
-predict = (predict >= th)*1
+predict = (predict > 0.68)*1
 print(th,classification_report(label, predict, digits = 4))
 
 
