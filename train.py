@@ -48,7 +48,7 @@ parser.add_argument('--hidden', default = 100, type = int,
 # Training
 parser.add_argument('--epochs', type = int, default = 100,
                     help = 'Number of training epochs')
-parser.add_argument('--weight', type = int, nargs = 3, default = (1, 1, 1),
+parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
                     help = 'weight')
 parser.add_argument('--lr', type = float, default = 0.0001,
                     help = 'Learning rate')
