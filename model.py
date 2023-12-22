@@ -89,7 +89,7 @@ class densemodel(nn.Module):
         self.backbone = self._get_basemodel(base_model)
         self.dropout = dropout
         self.out_dim = out_dim
-        dim_mlp = self.backbone.fc.in_features
+        dim_mlp = self.backbone.classifier.in_features
         self.backbone.classifier = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))        # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
 
     def _get_basemodel(self, model_name):
