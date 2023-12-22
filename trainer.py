@@ -186,7 +186,7 @@ class Restrainer(object):
                 lbl = lbl[1].to(self.args.device)
 
                 logits = self.model.module(img.type(self.dtype))
-                print(logits.shape)
+                print(logits)
                 loss = self.criterion(logits.squeeze(), lbl)
 
                 top1 = topacc(logits, lbl, topk = (1,))
