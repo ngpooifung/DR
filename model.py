@@ -37,7 +37,7 @@ class Resmodel(nn.Module):
         self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))
 
     def _get_basemodel(self, model_name):
-        model = torch.hub.load('pytorch/vision:v0.11.2', model_name, pretrained = True)
+        model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
         return model
 
     def forward(self, x):
@@ -74,7 +74,7 @@ class Inceptionmodel(nn.Module):
         self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))        # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
 
     def _get_basemodel(self, model_name):
-        model = torch.hub.load('pytorch/vision:v0.11.2', model_name, pretrained = True)
+        model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
         return model
 
     def forward(self, x):
@@ -93,7 +93,7 @@ class densemodel(nn.Module):
         self.backbone.classifier = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))        # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
 
     def _get_basemodel(self, model_name):
-        model = torch.hub.load('pytorch/vision:v0.11.2', model_name, pretrained = True)
+        model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
         return model
 
     def forward(self, x):
