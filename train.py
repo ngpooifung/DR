@@ -3,7 +3,6 @@ import argparse
 import torch
 import torchvision
 import numpy as np
-import clip
 from torch import nn
 import torch.backends.cudnn as cudnn
 from dataset import Modeldataset, Imagefolder
