@@ -1,7 +1,6 @@
 # %%
 import numpy as np
 import torch
-import clip
 from PIL import Image
 from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
