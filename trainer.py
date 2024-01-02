@@ -12,7 +12,6 @@ from sklearn.neural_network import MLPClassifier
 import os
 import scipy
 import logging
-import matplotlib.pyplot as plt
 import torch.nn.functional as F
 from tqdm import tqdm
 import pandas as pd
