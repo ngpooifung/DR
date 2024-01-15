@@ -18,6 +18,11 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
+try:
+    from torchvision.transforms import InterpolationMode
+    BICUBIC = InterpolationMode.BICUBIC
+except ImportError:
+    BICUBIC = Image.BICUBIC
 torch.manual_seed(0)
 
 # %%
