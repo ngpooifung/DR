@@ -292,8 +292,8 @@ class Restrainer(object):
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
-                print(lbl)
-                name = os.path.split(lbl[0][0])[1]
+                path= lbl[0][0])
+                name = os.path.split(path)[1]
                 lbl = lbl[1].to(self.args.device)
                 feature = self.model.module(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
@@ -304,7 +304,7 @@ class Restrainer(object):
                 cam = (weight_winner * features).sum(1, keepdim=True)
                 final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
 
-                image = Image.open(lbl[0][0])
+                image = Imgae.open(path)
                 image = data_transforms(image)
 
                 plt.figure()
