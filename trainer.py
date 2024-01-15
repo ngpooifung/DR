@@ -5,6 +5,7 @@ from PIL import Image
 from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
 from torch import nn
+import torchvision.transforms as transforms
 from torchvision.transforms import Resize, ToTensor
 from torch.cuda.amp import GradScaler, autocast
 from sklearn.linear_model import LogisticRegression
