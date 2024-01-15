@@ -292,7 +292,7 @@ class Restrainer(object):
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
-                path= lbl[0][0])
+                path= lbl[0][0]
                 name = os.path.split(path)[1]
                 lbl = lbl[1].to(self.args.device)
                 feature = self.model.module(image.to(self.args.device))
