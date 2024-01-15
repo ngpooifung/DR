@@ -5,6 +5,7 @@ from PIL import Image
 from utils import topacc, save_checkpoint, bceacc
 from torch.utils.tensorboard import SummaryWriter
 from torch import nn
+from torchvision.transforms import Resize, ToTensor
 from torch.cuda.amp import GradScaler, autocast
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
@@ -275,6 +276,14 @@ class Restrainer(object):
         self.model.module.backbone.layer4.register_forward_hook(hook)
         weight = self.model.module.state_dict()['backbone.fc.weight'].detach() #(2, 2048)
 
+        def _convert_image_to_rgb(image):
+            return image.convert("RGB")
+
+        data_transforms = transforms.Compose([Resize((self.args.resize, int(self.args.resize*1.25)),interpolation=BICUBIC),
+                                              _convert_image_to_rgb,
+                                              ToTensor(),
+                                              ])
+
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
                 print(lbl)
@@ -288,6 +297,9 @@ class Restrainer(object):
                 weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
                 cam = (weight_winner * features).sum(1, keepdim=True)
                 final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
+
+                image = Image.open(lbl[0][0])
+                image = data_transforms(image)
 
                 plt.figure()
                 plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
