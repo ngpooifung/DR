@@ -304,7 +304,7 @@ class Restrainer(object):
                 cam = (weight_winner * features).sum(1, keepdim=True)
                 final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
 
-                image = Imgae.open(path)
+                image = Image.open(path)
                 image = data_transforms(image)
 
                 plt.figure()
