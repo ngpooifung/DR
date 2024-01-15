@@ -277,6 +277,7 @@ class Restrainer(object):
 
         with torch.no_grad():
             for image, lbl in tqdm(test_loader):
+                print(lbl)
                 name = os.path.split(lbl[0][0])[1]
                 lbl = lbl[1].to(self.args.device)
                 feature = self.model.module(image.to(self.args.device))
@@ -290,6 +291,6 @@ class Restrainer(object):
 
                 plt.figure()
                 plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
-                # plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.2, cmap = 'cool')
+                plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.2, cmap = 'cool')
                 plt.savefig(os.path.join(*['/home/pwuaj/data/cam', name]))
                 plt.close()
