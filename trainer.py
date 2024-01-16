@@ -299,7 +299,7 @@ class Restrainer(object):
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
                 features = activation[-1]   #(1, 2048, 16, 20)
                 # predicts = torch.from_numpy(predict)
-                predict = torch.tensor([1])
+                predicts = torch.tensor([1])
                 weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
                 print(features.shape, weight_winner.shape)
                 cam = (weight_winner * features).sum(1, keepdim=True)
