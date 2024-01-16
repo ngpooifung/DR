@@ -67,6 +67,8 @@ parser.add_argument('--finetune', default='',
                     help='finetune from checkpoint')
 parser.add_argument('--use_mlp', action='store_true',
                     help='Perform mlp')
+parser.add_argument('--cmap', type = str,
+                    help = 'cmap')
 args = parser.parse_args()
 
 
