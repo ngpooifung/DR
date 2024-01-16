@@ -298,12 +298,15 @@ class Restrainer(object):
                 feature = self.model.module(image.to(self.args.device))
                 top1, predict = topacc(feature, lbl, topk=(1,), predict = True)
                 features = activation[-1]   #(1, 2048, 16, 20)
+                print(features[:,0,:,:])
                 # predicts = torch.from_numpy(predict)
                 predicts = torch.tensor([1])
                 weight_winner = weight[predicts, :].unsqueeze(2).unsqueeze(3) # (1, 2048, 1, 1)
-                print(weight_winner)
-                cam = (weight_winner * features).sum(1, keepdim=True)
-                print(cam.shape)
+                print(weight_winner[:,0,:,:])
+                product = weight_winner * features
+                print(product[:,0,:,:])
+                print(product.shape)
+                cam = product.sum(1, keepdim=True)
                 final_cam = F.interpolate(cam, (self.args.resize, int(self.args.resize*1.25)), mode="bilinear", align_corners=True)
 
                 image = Image.open(path)
