@@ -307,6 +307,7 @@ class Restrainer(object):
                 image = Image.open(path)
                 image = data_transforms(image)
 
+                print(lbl)
                 plt.figure()
                 plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
                 plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.4, cmap = 'cool')
