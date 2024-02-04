@@ -78,7 +78,7 @@ class Modeldataset:
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 10),
                                               # ColorJitter(0.01, 0.01),
-                                              # GaussianBlur((7,9), sigma = (0.1, 2)),
+                                              GaussianBlur((7,9), sigma = (0.1, 2)),
                                               ])
         return data_transforms
 
