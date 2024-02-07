@@ -33,6 +33,8 @@ parser.add_argument('--resize', default = 336, type = int,
                     help = 'resize images in training')
 parser.add_argument('--output', type = str, default = '',
                     help = 'Path to output folder')
+parser.add_argument('--test', type = str, default = 'test',
+                    help = 'Path to output file')
 
 # Model
 parser.add_argument('--arch', default='resnet50', type = str,
