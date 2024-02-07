@@ -33,8 +33,8 @@ class Resmodel(nn.Module):
         self.dropout = dropout
         self.out_dim = out_dim
         dim_mlp = self.backbone.fc.in_features
-        self.backbone.fc = nn.Linear(in_features=dim_mlp, out_features=out_dim, bias=True)
-        # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))
+        # self.backbone.fc = nn.Linear(in_features=dim_mlp, out_features=out_dim, bias=True)
+        self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, self.out_dim))
 
     def _get_basemodel(self, model_name):
         model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
