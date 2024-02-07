@@ -267,7 +267,7 @@ class Restrainer(object):
 
         top1_accuracy /= (counter + 1)
         result = pd.concat(result, ignore_index=True)
-        result.to_csv(os.path.join(self.writer.log_dir, 'test.csv'))
+        result.to_csv(os.path.join(self.writer.log_dir, self.args.test) + '.csv')
         logging.debug(f"Top1 Test accuracy: {top1_accuracy.item()}")
         print(f"Top1 Test accuracy: {top1_accuracy.item()}")
 
