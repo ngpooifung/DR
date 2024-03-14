@@ -59,10 +59,10 @@ class Imagefolder(datasets.ImageFolder):
                                               Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                                               # Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
                                               ])
-        if self.preprocess:
-            img = data_transforms(img)
         if self.transform is not None:
             img = self.transform(img)
+        if self.preprocess:
+            img = data_transforms(img)
 
         return (img, text) if self.clip_csv is not None else (img, sample)
 
@@ -74,6 +74,7 @@ class Modeldataset:
     @staticmethod
     def get_transform(size):
         data_transforms = transforms.Compose([
+                                              ToTensor(),
                                               transforms.RandomHorizontalFlip(),
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 10),
