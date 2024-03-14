@@ -34,6 +34,7 @@ class Imagefolder(datasets.ImageFolder):
         path = sample[0]
         lbl = sample[1]
         img = Image.open(path)
+        img = Resize((self.resize, int(self.resize*1.25)),interpolation=BICUBIC)(img)
         if self.clip_csv is not None:
             text = self.csv['text'][self.csv['label'] == lbl].item()
             name = os.path.split(path)[1]
@@ -52,7 +53,7 @@ class Imagefolder(datasets.ImageFolder):
         # if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
         #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
         # img = img.astype('float32')
-        data_transforms = transforms.Compose([Resize((self.resize, int(self.resize*1.25)),interpolation=BICUBIC),
+        data_transforms = transforms.Compose([
                                               # CenterCrop(self.resize),
                                               _convert_image_to_rgb,
                                               ToTensor(),
