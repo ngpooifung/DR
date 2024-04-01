@@ -141,6 +141,7 @@ csv = pd.read_csv(csv)
 for i in range(len(csv)):
     name = csv['image'].iloc[i] + '.csv'
     severity = csv['level'].iloc[i]
+    print(name, severity)
     RDR = int(severity>=2)*1
     VTDR = int(severity>=3)*1
     shutil.copy(os.path.join*['/home/pwuaj/data/kaggle', name], os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
