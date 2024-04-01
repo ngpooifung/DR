@@ -138,9 +138,8 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 
 csv = '/home/pwuaj/data/trainLabels.csv'
 csv = pd.read_csv(csv)
-csv['level'].iloc[1]>0
 for i in range(len(csv)):
-    name = csv['image'].iloc[i]
+    name = csv['image'].iloc[i] + '.csv'
     severity = csv['level'].iloc[i]
     RDR = (severity>=2)*1
     VTDR = (severity>=3)*1
