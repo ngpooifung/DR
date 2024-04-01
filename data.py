@@ -136,7 +136,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # test = pd.concat(result, axis = 0)
 # test.to_csv('/home/pwuaj/hkust/DR/Phoomgrad.csv')
 
-csv = '/home/pwuaj/hkust/DR/trainLabels.csv'
+csv = '/home/pwuaj/data/trainLabels.csv'
 csv = pd.read_csv(csv)
 csv['level'].iloc[1]>0
 for i in range(len(csv)):
