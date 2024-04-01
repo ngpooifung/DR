@@ -136,13 +136,14 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # test = pd.concat(result, axis = 0)
 # test.to_csv('/home/pwuaj/hkust/DR/Phoomgrad.csv')
 
-csv = '/home/pwuaj/data/trainLabels.csv'
+csv = '/home/pwuaj/hkust/DR/trainLabels.csv'
 csv = pd.read_csv(csv)
 for i in range(len(csv)):
+    i = 0
     name = csv['image'].iloc[i] + '.csv'
     severity = csv['level'].iloc[i]
     print(name, severity)
     RDR = int(severity>=2)*1
     VTDR = int(severity>=3)*1
-    shutil.copy(os.path.join*['/home/pwuaj/data/kaggle', name], os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
-    shutil.copy(os.path.join*['/home/pwuaj/data/kaggle', name], os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
+    shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
+    shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
