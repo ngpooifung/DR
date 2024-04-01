@@ -57,6 +57,8 @@ parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
 parser.add_argument('--disable_cuda', action = 'store_true',
                     help = 'Disable CUDA')
+parser.add_argument('--fundus', action = 'store_true',
+                    help = 'fundus pretraining')
 parser.add_argument('--checkpoint-n-steps', default = 50, type = int,
                     help = 'Save checkpoint every n steps')
 parser.add_argument('--workers', type = int, default = 16,
@@ -102,6 +104,13 @@ def main():
         test_loader = None
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
+
+    if args.fundus:
+        path = os.path.join('RDR_fundus', args.finetune)
+        checkpoint = torch.load(path, map_location = args.device)
+        state_dict = checkpoint['state_dict']
+        log = model.load_state_dict(state_dict, strict=True)
+        model = model.to(args.device)
 
     if args.process == 'transfer':
         path = os.path.join(args.output, args.finetune)
