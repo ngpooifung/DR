@@ -139,7 +139,6 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 csv = '/home/pwuaj/data/trainLabels.csv'
 csv = pd.read_csv(csv)
 for i in range(len(csv)):
-    i = 0
     name = csv['image'].iloc[i] + '.jpeg'
     severity = csv['level'].iloc[i]
     print(name, severity)
