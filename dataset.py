@@ -77,7 +77,7 @@ class Modeldataset:
         data_transforms = transforms.Compose([
                                               transforms.RandomHorizontalFlip(),
                                               # transforms.RandomRotation(degrees = 5),
-                                              # RandomAffine(degrees = 10),
+                                              RandomAffine(degrees = 15, translate = (0.15, 0.15)),
                                               # ColorJitter(0.01, 0.01),
                                               GaussianBlur((7,9), sigma = (0.1, 2)),
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
