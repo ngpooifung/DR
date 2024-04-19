@@ -50,7 +50,7 @@ class Resmodel(nn.Module):
         return self.backbone(x)
 
 def Gradwrapper(test_dir):
-    accuracy = 88.71/100
+    accuracy = 87.61/100
     I = 1.96*math.sqrt((accuracy*(1-accuracy))/815)
     CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('Grad.pth.tar', map_location = device)
@@ -76,16 +76,16 @@ def Gradwrapper(test_dir):
         img = img.to(device)
         logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
-        predict = (prob >= 0.115)*1
+        predict = (prob >= 0.043)*1
     if predict == 1:
         cls = 'Gradable'
     elif predict == 0:
         cls = 'Ungradable'
 
-    return (cls, prob.item(), CI, 0.115)
+    return (cls, prob.item(), CI, 0.043)
 
 def RDRwrapper(test_dir):
-    accuracy = 88.46/100
+    accuracy = 88.61/100
     I = 1.96*math.sqrt((accuracy*(1-accuracy))/572)
     CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('RDR.pth.tar', map_location = device)
@@ -111,16 +111,16 @@ def RDRwrapper(test_dir):
         img = img.to(device)
         logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
-        predict = (prob >= 0.947)*1
+        predict = (prob >= 0.9315)*1
     if predict == 1:
         cls = 'RDR'
     elif predict == 0:
         cls = 'Non RDR'
 
-    return (cls, prob.item(), CI, 0.947)
+    return (cls, prob.item(), CI, 0.9315)
 
 def VTDRwrapper(test_dir):
-    accuracy = 88.44/100
+    accuracy = 88.09/100
     I = 1.96*math.sqrt((accuracy*(1-accuracy))/571)
     CI = (accuracy-I, accuracy+I)
     checkpoint = torch.load('VTDR.pth.tar', map_location = device)
@@ -146,13 +146,13 @@ def VTDRwrapper(test_dir):
         img = img.to(device)
         logits = model(img.type(torch.float32))
         prob = nn.Softmax(dim=1)(logits)[:,1]
-        predict = (prob >= 0.55)*1
+        predict = (prob >= 0.57)*1
     if predict == 1:
         cls = 'VTDR'
     elif predict == 0:
         cls = 'Non VTDR'
 
-    return (cls, prob.item(), CI, 0.55)
+    return (cls, prob.item(), CI, 0.57)
 
 if __name__ == "__main__":
     a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
