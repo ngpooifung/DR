@@ -35,13 +35,12 @@ def _convert_image_to_rgb(image):
 
 class Resmodel(nn.Module):
 
-    def __init__(self, base_model, dropout):
+    def __init__(self, base_model):
         super(Resmodel, self).__init__()
 
         self.backbone = self._get_basemodel(base_model)
-        self.dropout = dropout
         dim_mlp = self.backbone.fc.in_features
-        self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(self.dropout), nn.Linear(64, 2))
+        self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 64), nn.ReLU(), nn.Dropout(0), nn.Linear(64, 2))
 
     def _get_basemodel(self, model_name):
         model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
@@ -57,7 +56,7 @@ def Gradwrapper(test_dir):
     checkpoint = torch.load('grad.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
-    model = Resmodel('resnet50', 0)
+    model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
     # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
@@ -92,7 +91,7 @@ def RDRwrapper(test_dir):
     checkpoint = torch.load('RDR.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
-    model = Resmodel('resnet50', 0.2)
+    model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
     # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
@@ -127,7 +126,7 @@ def VTDRwrapper(test_dir):
     checkpoint = torch.load('VTDR.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
-    model = Resmodel('resnet50', 0.15)
+    model = Resmodel('resnet50')
     log = model.load_state_dict(state_dict, strict=True)
     model = model.to(device)
     # model = DDP(model, device_ids = [local_rank], output_device=local_rank)
