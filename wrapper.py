@@ -12,7 +12,6 @@ import pandas as pd
 from PIL import Image
 import torchvision.transforms as transforms
 from torchvision.transforms import ToTensor, Resize, Normalize
-from sklearn.metrics import accuracy_score
 try:
     from torchvision.transforms import InterpolationMode
     BICUBIC = InterpolationMode.BICUBIC
