@@ -54,7 +54,7 @@ def Gradwrapper(test_dir):
     accuracy = 87.61/100
     I = 1.96*math.sqrt((accuracy*(1-accuracy))/815)
     CI = (accuracy-I, accuracy+I)
-    checkpoint = torch.load('Grad.pth.tar', map_location = device)
+    checkpoint = torch.load('grad.pth.tar', map_location = device)
     state_dict = checkpoint['state_dict']
 
     model = Resmodel('resnet50', 0)
