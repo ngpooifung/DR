@@ -78,12 +78,12 @@ def Gradwrapper(test_dir):
         predict = (prob >= 0.043)*1
     if predict == 1:
         cls = 'Gradable'
-        prob = 0.5 + (prob - 0.043)*0.5/(1 - 0.043)
+        confidence = 0.5 + (prob - 0.043)*0.5/(1 - 0.043)
     elif predict == 0:
         cls = 'Ungradable'
-        prob = prob *0.5/0.043
+        confidence = prob *0.5/0.043
 
-    return (cls, prob.item(), CI, 0.043)
+    return (cls, confidence.item(), prob, 0.043)
 
 def RDRwrapper(test_dir):
     accuracy = 88.61/100
@@ -115,12 +115,12 @@ def RDRwrapper(test_dir):
         predict = (prob >= 0.9315)*1
     if predict == 1:
         cls = 'RDR'
-        prob = 0.5 + (prob - 0.9315)*0.5/(1 - 0.9315)
+        confidence = 0.5 + (prob - 0.9315)*0.5/(1 - 0.9315)
     elif predict == 0:
         cls = 'Non RDR'
-        prob = prob *0.5/0.9315
+        confidence = prob *0.5/0.9315
 
-    return (cls, prob.item(), CI, 0.9315)
+    return (cls, confidence.item(), prob, 0.9315)
 
 def VTDRwrapper(test_dir):
     accuracy = 88.09/100
@@ -152,12 +152,12 @@ def VTDRwrapper(test_dir):
         predict = (prob >= 0.57)*1
     if predict == 1:
         cls = 'VTDR'
-        prob = 0.5 + (prob - 0.57)*0.5/(1 - 0.57)
+        confidence = 0.5 + (prob - 0.57)*0.5/(1 - 0.57)
     elif predict == 0:
         cls = 'Non VTDR'
-        prob = prob *0.5/0.57
+        confidence = prob *0.5/0.57
 
-    return (cls, prob.item(), CI, 0.57)
+    return (cls, confidence.item(), prob, 0.57)
 
 if __name__ == "__main__":
     a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
