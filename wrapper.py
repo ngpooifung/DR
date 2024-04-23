@@ -83,7 +83,7 @@ def Gradwrapper(test_dir):
         cls = 'Ungradable'
         confidence = prob *0.5/0.043
 
-    return (cls, confidence.item(), prob.item(), 0.043)
+    return (prob.item(), 0.043, cls, confidence.item())
 
 def RDRwrapper(test_dir):
     accuracy = 88.61/100
@@ -120,7 +120,7 @@ def RDRwrapper(test_dir):
         cls = 'Non RDR'
         confidence = prob *0.5/0.9315
 
-    return (cls, confidence.item(), prob.item(), 0.9315)
+    return (prob.item(), 0.9315, cls, confidence.item())
 
 def VTDRwrapper(test_dir):
     accuracy = 88.09/100
@@ -157,7 +157,7 @@ def VTDRwrapper(test_dir):
         cls = 'Non VTDR'
         confidence = prob *0.5/0.57
 
-    return (cls, confidence.item(), prob.item(), 0.57)
+    return (prob.item(), 0.57, cls, confidence.item())
 
 if __name__ == "__main__":
     a,b,c,d  = Gradwrapper('/home/pwuaj/data/RDRraw/test/1/STDR389-20170320@111304-L1-S.jpg')
