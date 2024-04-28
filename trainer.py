@@ -288,6 +288,7 @@ class Restrainer(object):
         data_transforms = transforms.Compose([Resize((self.args.resize, int(self.args.resize*1.25)),interpolation=BICUBIC),
                                               _convert_image_to_rgb,
                                               ToTensor(),
+                                              Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                                               ])
 
         with torch.no_grad():
