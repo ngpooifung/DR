@@ -110,6 +110,11 @@ def main():
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=True)
+        model.backbone.fc = nn.Linear(2048, 2)
+        print(log)
+        for name, param in model.named_parameters():
+            if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
+                param.requires_grad = False
         model = model.to(args.device)
 
     if args.process == 'transfer':
