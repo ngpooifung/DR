@@ -110,10 +110,9 @@ def main():
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=True)
-        model.backbone.fc = nn.Sequential(nn.Linear(2024, 64), nn.ReLU(), nn.Linear(64, 2))
         print(log)
         for name, param in model.named_parameters():
-            if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.2.weight', 'backbone.fc.2.bias']:
+            if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
                 param.requires_grad = False
         model = model.to(args.device)
 
