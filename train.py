@@ -106,14 +106,14 @@ def main():
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
 
     if args.fundus:
-        path = os.path.join('RDR_fundus2', args.finetune)
+        path = os.path.join('RDR', args.finetune)
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=True)
         print(log)
-        # for name, param in model.named_parameters():
-        #     if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
-        #         param.requires_grad = False
+        for name, param in model.named_parameters():
+            if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
+                param.requires_grad = False
         model = model.to(args.device)
 
     if args.process == 'transfer':
