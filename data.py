@@ -151,8 +151,9 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # %%
 for i in ['0', '1']:
     folder = os.path.join('/home/pwuaj/data/fundus2/RDR', i)
-    file = random.shuffle(os.listdir(folder))
-    print(file)
+    filelist = os.listdir(folder)
+    print(filelist)
+    filelist = random.shuffle(filelist)
     if i == '0':
         for j in range(484):
             shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw2/training/0', file[j]]))
