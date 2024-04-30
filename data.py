@@ -22,20 +22,20 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # # csv = csv.dropna()
 # # predict = np.array(csv.iloc[:,0])
 # # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/IS.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradEx1.csv')
 # predict = np.array(csv['Probability'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict >0.06)*1
+# predict = (predict > 0.04)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 
 
 # # %% result
-# folder = '/home/pwuaj/hkust/DR/VTDR'
-# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.57, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
+# folder = '/home/pwuaj/hkust/DR/VTDR2'
+# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.7, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
 # results = []
-# for model in ['384', '448', '576', 'resnet', 'dense', 'inception', 'Phoom', 'hp']:
+# for model in [ 'resnet']:
 #     result = []
 #     for dataset in ['test', 'SK', 'GEI', 'IS']:
 #         file = 'VTDR_' + dataset + '_' + model + '.csv'
@@ -55,7 +55,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #         result.append(pd.DataFrame({'Specificity': Specificity, 'Sensitivity': Sensitivity, 'Accuracy': Accuracy, 'auroc': auroc, 'f1': f1, 'cohen': ck, 'average precision': ap, 'balanced accuracy':ba}, index = [dataset]))
 #     results.append(pd.concat(result, axis = 0))
 # test = pd.concat(results, axis = 1)
-# test.to_csv('/home/pwuaj/hkust/DR/VTDR2.csv')
+# test.to_csv('/home/pwuaj/hkust/DR/VTDR.csv')
 
 # %% Plot
 # plt.figure()
@@ -136,13 +136,26 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # test = pd.concat(result, axis = 0)
 # test.to_csv('/home/pwuaj/hkust/DR/Phoomgrad.csv')
 
-csv = '/home/pwuaj/data/trainLabels.csv'
-csv = pd.read_csv(csv)
-for i in range(len(csv)):
-    name = csv['image'].iloc[i] + '.jpeg'
-    severity = csv['level'].iloc[i]
-    print(name, severity)
-    RDR = int(severity>=2)*1
-    VTDR = int(severity>=3)*1
-    shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
-    shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
+# # %%
+# csv = '/home/pwuaj/data/trainLabels.csv'
+# csv = pd.read_csv(csv)
+# for i in range(len(csv)):
+#     name = csv['image'].iloc[i] + '.jpeg'
+#     severity = csv['level'].iloc[i]
+#     print(name, severity)
+#     RDR = int(severity>=2)*1
+#     VTDR = int(severity>=3)*1
+#     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
+#     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
+
+# %%
+folder = '/home/pwuaj/data/fundus2/RDR'
+for i in ['0', '1']:
+    folder = os.path.join(folder, i)
+    file = os.listdir(folder)
+    if i == '0':
+        for j in range(484):
+            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw/0', file[j]]))
+    elif i == '1':
+        for j in range(1348):
+            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw/1', file[j]]))
