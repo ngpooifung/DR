@@ -155,7 +155,7 @@ for i in ['0', '1']:
     file = os.listdir(folder)
     if i == '0':
         for j in range(484):
-            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw/0', file[j]]))
+            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw2/training/0', file[j]]))
     elif i == '1':
         for j in range(1348):
-            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw/1', file[j]]))
+            shutil.copy(os.path.join(folder, file[j]), os.path.join(*['/home/pwuaj/data/RDRraw2/training/1', file[j]]))
