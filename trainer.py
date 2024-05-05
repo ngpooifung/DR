@@ -259,12 +259,11 @@ class Restrainer(object):
                 except:
                     pass
                 prob = nn.Softmax(dim=1)(logits)[:,1]
-                print(prob, prob.dtype)
-                prediction = (prob >= 0.043)*1
-                if prediction == 1:
+                prediction = (prob.cpu() >= 0.043)*1
+                if prediction[0].item() == 1:
                     cls = 'Gradable'
                     confidence = 0.5 + (prob - 0.043)*0.5/(1 - 0.043)
-                elif prediction == 0:
+                elif prediction[0].item() == 0:
                     cls = 'Ungradable'
                     confidence = prob *0.5/0.043
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
