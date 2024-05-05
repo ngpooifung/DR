@@ -259,6 +259,7 @@ class Restrainer(object):
                 except:
                     pass
                 prob = nn.Softmax(dim=1)(logits)[:,1]
+                print(prob, prob.dtype)
                 prediction = (prob >= 0.043)*1
                 if prediction == 1:
                     cls = 'Gradable'
