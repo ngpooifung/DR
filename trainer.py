@@ -259,10 +259,17 @@ class Restrainer(object):
                 except:
                     pass
                 prob = nn.Softmax(dim=1)(logits)[:,1]
+                prediction = (prob >= 0.043)*1
+                if prediction == 1:
+                    cls = 'Gradable'
+                    confidence = 0.5 + (prob - 0.043)*0.5/(1 - 0.043)
+                elif prediction == 0:
+                    cls = 'Ungradable'
+                    confidence = prob *0.5/0.043
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1[0]
-                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': predict, 'Probability': prob.cpu().numpy()}))
+                result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': prediction, 'model output': prob.cpu().numpy(), 'confidence score': confidence.cpu().numpy()}))
                 # result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': (logits>0.5).cpu()*1, 'Probability': logits.squeeze().cpu().numpy()}))
 
         top1_accuracy /= (counter + 1)
