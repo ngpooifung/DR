@@ -269,7 +269,7 @@ class Restrainer(object):
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1[0]
-                result.append(pd.DataFrame({'Path':path, 'True label': lbl, 'Predicted label': predict, 'model output': prob.cpu().numpy()}))
+                result.append(pd.DataFrame({'Path':path, 'True label': lbl.cpu().numpy(), 'Predicted label': predict, 'model output': prob.cpu().numpy()}))
                 # result.append(pd.DataFrame({'Path':path, 'True label':lbl.cpu().numpy(), 'Predicted label': (logits>0.5).cpu()*1, 'Probability': logits.squeeze().cpu().numpy()}))
 
         top1_accuracy /= (counter + 1)
