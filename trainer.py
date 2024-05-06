@@ -259,13 +259,13 @@ class Restrainer(object):
                 except:
                     pass
                 prob = nn.Softmax(dim=1)(logits)[:,1]
-                prediction = (prob.cpu() >= 0.57)*1
+                prediction = (prob.cpu() >= 0.9315)*1
                 if prediction[0].item() == 1:
                     cls = 'VTDR'
-                    confidence = 0.5 + (prob - 0.57)*0.5/(1 - 0.57)
+                    confidence = 0.5 + (prob - 0.9315)*0.5/(1 - 0.9315)
                 elif prediction[0].item() == 0:
                     cls = 'not VTDR'
-                    confidence = prob *0.5/0.57
+                    confidence = prob *0.5/0.9315
                 top1, predict = topacc(logits, lbl, topk=(1,), predict = True)
                 # top1 = accuracy_score(lbl.cpu(), (logits>0.5).cpu())
                 top1_accuracy += top1[0]
