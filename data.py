@@ -150,7 +150,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 
 # %%
 for i in ['0', '1']:
-    folder = os.path.join('/home/pwuaj/data/fundus2/RDR', i)
+    folder = os.path.join('/home/pwuaj/data/fundus/RDR', i)
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
