@@ -79,7 +79,7 @@ class Modeldataset:
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 30, translate = (0.25, 0.25)),
                                               # ColorJitter(0.01, 0.01),
-                                              GaussianBlur((7,9), sigma = (0.1, 2)),
+                                              # GaussianBlur((7,9), sigma = (0.1, 2)),
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                                               ])
         return data_transforms
