@@ -22,12 +22,12 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/RDRSK.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/VTDRtest.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.3)*1
+# predict = (predict > 0.9)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 
 #
@@ -154,8 +154,8 @@ for i in ['0', '1']:
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(316):
+        for j in range(158):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/0', filelist[j]]))
     elif i == '1':
-        for j in range(142):
+        for j in range(71):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/1', filelist[j]]))
