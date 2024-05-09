@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
-
+model.classifier[1]
 from exceptions import InvalidBackboneError
 
 class modeltrainer():
@@ -109,8 +109,8 @@ class efficient(nn.Module):
 
         self.backbone = self._get_basemodel(base_model)
         self.out_dim = out_dim
-        dim_mlp = self.backbone.classifier.in_features
-        self.backbone.classifier = nn.Linear(dim_mlp, out_dim)       # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
+        dim_mlp = self.backbone.classifier[1].in_features
+        self.backbone.classifier[1] = nn.Linear(dim_mlp, out_dim)       # self.backbone.fc = nn.Sequential(nn.Linear(dim_mlp, 128), nn.ELU(), nn.Linear(128, 64), nn.ELU(), nn.Linear(64, 64), nn.ELU(), nn.Linear(64, 1), nn.Sigmoid())
 
     def _get_basemodel(self, model_name):
         model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="IMAGENET1K_V1")
