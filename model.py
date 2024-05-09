@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
-model.classifier[1]
+
 from exceptions import InvalidBackboneError
 
 class modeltrainer():
