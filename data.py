@@ -22,18 +22,18 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/VTDRtest.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/RDR2/RDRtest.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.6)*1
+# predict = (predict > 0.3)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 
-#
+
 # # %% result
 # folder = '/home/pwuaj/hkust/DR'
-# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.3, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
+# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.5, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
 # results = []
 # for model in [ 'resnet']:
 #     result = []
@@ -55,7 +55,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #         result.append(pd.DataFrame({'Specificity': Specificity, 'Sensitivity': Sensitivity, 'Accuracy': Accuracy, 'auroc': auroc, 'f1': f1, 'cohen': ck, 'average precision': ap, 'balanced accuracy':ba}, index = [dataset]))
 #     results.append(pd.concat(result, axis = 0))
 # test = pd.concat(results, axis = 1)
-# test.to_csv('/home/pwuaj/hkust/DR/RDRnew.csv')
+# test.to_csv('/home/pwuaj/hkust/DR/RDR.csv')
 
 # %% Plot
 # plt.figure()
@@ -148,14 +148,21 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
 #     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
 
+# # %%
+# for i in ['0', '1']:
+#     folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
+#     filelist = os.listdir(folder)
+#     random.shuffle(filelist)
+#     if i == '0':
+#         for j in range(316):
+#             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/0', filelist[j]]))
+#     elif i == '1':
+#         for j in range(142):
+#             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/1', filelist[j]]))
+
+
 # %%
-for i in ['0', '1']:
-    folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
-    filelist = os.listdir(folder)
-    random.shuffle(filelist)
-    if i == '0':
-        for j in range(316):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/0', filelist[j]]))
-    elif i == '1':
-        for j in range(142):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/1', filelist[j]]))
+csv = pd.read_csv('/home/pwuaj/hkust/DR/test.csv')
+for i in range(len(csv)):
+    path = csv['list'][i]
+    shutil.copyfile(path, os.path.join(*['/home/pwuaj/data/RDRtest', os.path.split(path)[1]]))
