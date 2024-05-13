@@ -165,4 +165,4 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 csv = pd.read_csv('/home/pwuaj/hkust/DR/test.csv')
 for i in range(len(csv)):
     path = csv['list'][i]
-    shutil.copyfile(path, os.path.join(*['/home/pwuaj/data/RDRtest', os.path.split(path)[1]]))
+    shutil.copyfile(path, os.path.join(*['/home/pwuaj/data/RDRcam/0', os.path.split(path)[1]]))
