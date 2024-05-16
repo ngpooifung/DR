@@ -148,21 +148,14 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/RDR', str(RDR), name]))
 #     shutil.copy(os.path.join(*['/home/pwuaj/data/kaggle', name]), os.path.join(*['/home/pwuaj/data/fundus/VTDR', str(VTDR), name]))
 
-# # %%
-# for i in ['0', '1']:
-#     folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
-#     filelist = os.listdir(folder)
-#     random.shuffle(filelist)
-#     if i == '0':
-#         for j in range(316):
-#             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/0', filelist[j]]))
-#     elif i == '1':
-#         for j in range(142):
-#             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw2/training/1', filelist[j]]))
-
-
 # %%
-csv = pd.read_csv('/home/pwuaj/hkust/DR/test.csv')
-for i in range(len(csv)):
-    path = csv['list'][i]
-    shutil.copyfile(path, os.path.join(*['/home/pwuaj/data/RDRcam/0', os.path.split(path)[1]]))
+for i in ['0', '1']:
+    folder = os.path.join('/home/pwuaj/data/fundus/RDR', i)
+    filelist = os.listdir(folder)
+    random.shuffle(filelist)
+    if i == '0':
+        for j in range(316):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw3/training/0', filelist[j]]))
+    elif i == '1':
+        for j in range(142):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw3/training/1', filelist[j]]))
