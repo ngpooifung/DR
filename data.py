@@ -27,7 +27,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.08)*1
+# predict = (predict > 0.04)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 #
 #
@@ -154,8 +154,8 @@ for i in ['0', '1']:
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(250):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad3/training/1', filelist[j]]))
+        for j in range(48):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw2/training/0', filelist[j]]))
     elif i == '1':
-        for j in range(250):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad3/training/1', filelist[j]]))
+        for j in range(138):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw2/training/1', filelist[j]]))
