@@ -22,18 +22,18 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/VTDRGEI.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradGEI.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.93)*1
+# predict = (predict > 0.42)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 #
 #
 # # %% result 0.5 0.35 0.45
 # folder = '/home/pwuaj/hkust/DR'
-# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.27, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
+# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.42, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
 # results = []
 # for model in [ 'resnet']:
 #     result = []
@@ -55,7 +55,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #         result.append(pd.DataFrame({'Specificity': Specificity, 'Sensitivity': Sensitivity, 'Accuracy': Accuracy, 'auroc': auroc, 'f1': f1, 'cohen': ck, 'average precision': ap, 'balanced accuracy':ba}, index = [dataset]))
 #     results.append(pd.concat(result, axis = 0))
 # test = pd.concat(results, axis = 1)
-# test.to_csv('/home/pwuaj/hkust/DR/gradability.csv')
+# test.to_csv('/home/pwuaj/hkust/DR/gradability2.csv')
 
 # %% Plot
 # plt.figure()
