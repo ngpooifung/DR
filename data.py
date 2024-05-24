@@ -155,7 +155,7 @@ for i in ['0', '1']:
     random.shuffle(filelist)
     if i == '0':
         for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad3/training/1', filelist[j]]))
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
     elif i == '1':
         for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad3/training/1', filelist[j]]))
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
