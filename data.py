@@ -22,18 +22,18 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradGEI.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/RDRtest.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.42)*1
+# predict = (predict > 0.3)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 #
 #
-# # %% result 0.5 0.35 0.45
+# %% result 0.5 0.35 0.45
 # folder = '/home/pwuaj/hkust/DR'
-# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.42, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
+# thresholds = {'384':0.558, '448':0.61, 'resnet': 0.32, '576':0.63, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.827}
 # results = []
 # for model in [ 'resnet']:
 #     result = []
@@ -55,7 +55,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #         result.append(pd.DataFrame({'Specificity': Specificity, 'Sensitivity': Sensitivity, 'Accuracy': Accuracy, 'auroc': auroc, 'f1': f1, 'cohen': ck, 'average precision': ap, 'balanced accuracy':ba}, index = [dataset]))
 #     results.append(pd.concat(result, axis = 0))
 # test = pd.concat(results, axis = 1)
-# test.to_csv('/home/pwuaj/hkust/DR/gradability2.csv')
+# test.to_csv('/home/pwuaj/hkust/DR/gradability10.csv')
 
 # %% Plot
 # plt.figure()
@@ -154,8 +154,8 @@ for i in ['0', '1']:
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
+        for j in range(121):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
+        for j in range(337):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/1', filelist[j]]))
