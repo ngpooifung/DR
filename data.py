@@ -154,8 +154,8 @@ for i in ['0', '1']:
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(61):
+        for j in range(161):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(169):
+        for j in range(449):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/1', filelist[j]]))
