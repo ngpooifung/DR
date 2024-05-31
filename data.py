@@ -157,5 +157,5 @@ for i in ['0', '1']:
         for j in range(40):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(121):
+        for j in range(112):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/1', filelist[j]]))
