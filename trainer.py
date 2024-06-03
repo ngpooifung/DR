@@ -317,8 +317,9 @@ class Restrainer(object):
                 image = Image.open(path)
                 image = data_transforms(image)
 
-                plt.figure()
-                plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
-                plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.25, cmap = self.args.cmap)
-                plt.savefig(os.path.join(*['/home/pwuaj/data/cam2', name]))
-                plt.close()
+                if lbl.item() ==1:
+                    plt.figure()
+                    plt.imshow(np.asarray(image).squeeze().transpose(1,2,0))
+                    plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.25, cmap = self.args.cmap)
+                    plt.savefig(os.path.join(*['/home/pwuaj/data/cam', name]))
+                    plt.close()
