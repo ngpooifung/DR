@@ -152,9 +152,9 @@ for i in ['0', '1']:
     folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
     filelist = os.listdir(folder)
     random.shuffle(filelist)
-    if i == '0':
-        for j in range(105):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/0', filelist[j]]))
+    # if i == '0':
+    #     for j in range(105):
+    #         shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(47):
+        for j in range(56):
             shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/1', filelist[j]]))
