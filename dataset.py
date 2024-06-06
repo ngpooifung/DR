@@ -75,7 +75,7 @@ class Modeldataset:
     @staticmethod
     def get_transform(size):
         data_transforms = transforms.Compose([
-                                              # transforms.RandomHorizontalFlip(),
+                                              transforms.RandomHorizontalFlip(),
                                               # transforms.RandomRotation(degrees = 5),
                                               # RandomAffine(degrees = 30, translate = (0.25, 0.25)),
                                               # ColorJitter(0.01, 0.01),
