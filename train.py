@@ -103,7 +103,7 @@ def main():
     if args.dir2 is not None:
         train_dataset2 = Modeldataset(args.dir2).get_dataset(resize = args.resize, transform = True)
         train_sampler2 = DistributedSampler(train_dataset2)
-        train_loader2 = torch.utils.data.DataLoader(trainn_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler2)
+        train_loader2 = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler2)
     else:
         train_loader2 = None
 
