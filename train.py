@@ -25,6 +25,8 @@ parser.add_argument('--process', choices=function_names,
 # Data
 parser.add_argument('--dir', type = str,
                     help = 'Path to training data directory')
+parser.add_argument('--dir2', type = str, default = None,
+                    help = 'Path to training data directory2')
 parser.add_argument('--test-dir', type = str, default = None,
                     help = 'Path to test data directory')
 parser.add_argument('--clip_csv', type = str, default = None,
@@ -50,6 +52,8 @@ parser.add_argument('--epochs', type = int, default = 100,
 parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
                     help = 'weight')
 parser.add_argument('--lr', type = float, default = 0.0001,
+                    help = 'Learning rate')
+parser.add_argument('--wf', type = float, default = 0.1,
                     help = 'Learning rate')
 parser.add_argument('--dropout', type = float, default = 0.,
                     help = 'dropout')
@@ -96,6 +100,13 @@ def main():
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler)
 
+    if args.dir2 is not None:
+        trainn_dataset2 = Modeldataset(args.dir2).get_dataset(resize = args.resize, transform = True)
+        train_sampler2 = DistributedSampler(train_dataset2)
+        train_loader2 = torch.utils.data.DataLoader(trainn_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler2)
+    else:
+        train_loader2 = None
+
     if args.test_dir is not None:
         test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
         test_sampler = DistributedSampler(test_dataset)
@@ -136,7 +147,7 @@ def main():
                                                            last_epoch=-1)
 
     trainer = Restrainer(model, optimizer, scheduler, args)
-    trainer.train(train_loader, test_loader)
+    trainer.train(train_loader, test_loader, train_loader2)
 
 def eval():
     if not args.disable_cuda and torch.cuda.is_available():

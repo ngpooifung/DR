@@ -22,24 +22,24 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/RDRSK.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradtest.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.3)*1
+# predict = (predict > 0.27)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
-# #
-# # %% result 0.5 0.35 0.45
-# folder = '/home/pwuaj/hkust/DR/Grad'
-# thresholds = {'384':0.558, '448':0.61, '576':0.3, 'resnet': 0.043, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.055}
+
+# %% result 0.5 0.35 0.45
+# folder = '/home/pwuaj/hkust/DR'
+# thresholds = {'384':0.558, '448':0.61, '576':0.3, 'resnet': 0.2, 'dense':0.7, 'inception':0.39, 'Phoom':0.69, 'hp': 0.055}
 # results = []
 # for model in ['resnet']:
 #     result = []
 #     for dataset in ['test', 'Ex1', 'SK', 'GEI', 'IS']:
-#         file = 'grad_' + dataset +'_resnet.csv'
+#         file = 'grad' + dataset +'.csv'
 #         csv = pd.read_csv(os.path.join(*[folder, file]))
-#         predict = np.array(csv['Probability'])
+#         predict = np.array(csv['model output'])
 #         label = np.array(csv['True label'])
 #         predict = (predict > thresholds[model])*1
 #         report = classification_report(label, predict, digits = 4).split()
@@ -54,7 +54,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 #         result.append(pd.DataFrame({'Specificity': Specificity, 'Sensitivity': Sensitivity, 'Accuracy': Accuracy, 'auroc': auroc, 'f1': f1, 'cohen': ck, 'average precision': ap, 'balanced accuracy':ba}, index = [dataset]))
 #     results.append(pd.concat(result, axis = 0))
 # test = pd.concat(results, axis = 1)
-# test.to_csv('/home/pwuaj/hkust/DR/grad05.csv')
+# test.to_csv('/home/pwuaj/hkust/DR/grad02.csv')
 
 # %% Plot
 # plt.figure()
@@ -153,8 +153,67 @@ for i in ['0', '1']:
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
+        for j in range(484):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(100):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/grad/training2/1', filelist[j]]))
+        for j in range(1348):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/1', filelist[j]]))
+#
+# # %%
+# import matplotlib.pyplot as plt
+# import numpy as np
+#
+# species = ("New model 1", "New model 2", "New model 3")
+# penguin_means = {
+#     'Gradability': (-5.17, -1.42, -3.43),
+#     'RDR': (-5.56, -6.13, -7.43),
+#     'VTDR': (-2.11, -3.83, -1.54),
+# }
+#
+# x = np.arange(len(species))  # the label locations
+# width = 0.25  # the width of the bars
+# multiplier = 0
+#
+# fig, ax = plt.subplots(layout='constrained')
+#
+# for attribute, measurement in penguin_means.items():
+#     offset = width * multiplier
+#     rects = ax.bar(x + offset, measurement, width, label=attribute)
+#     ax.bar_label(rects, padding=3)
+#     multiplier += 1
+#
+# # Add some text for labels, title and custom x-axis tick labels, etc.
+# ax.set_ylabel('OS change')
+# ax.set_title('Change of overfit score by models')
+# ax.set_xticks(x + width, species)
+# ax.legend(loc='upper left', ncols=3)
+# ax.set_ylim(-10, 10)
+# # ax.tick_params(top=True, labeltop=True, bottom=False, labelbottom=False)
+# plt.show()
+# ax.figure.savefig('/home/pwuaj/hkust/DR/OS.png')
+#
+#
+# # %%
+# threshold = 0.27
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradtest.csv')
+# prediction = (np.array(csv['model output']) > threshold)*1
+# csv.insert(4, 'prediction', prediction)
+# csv2 = csv[csv['prediction'] == 0]
+# FN = csv2[csv2['True label'] == 1]['model output']
+# # %%
+# TP = (np.array(TP) - threshold)/(1-threshold)
+# FP = (np.array(FP) - threshold)/(1-threshold)
+# TN = 1 - np.array(TN)/threshold
+# FN = 1 - np.array(FN)/threshold
+# # %%
+# import matplotlib.pyplot as plt
+# import numpy as np
+#
+# fruit_weights = [TP, FP, TN, FN]
+# labels = ['True positive', 'False positive', 'True negative', 'False negative']
+#
+# fig, ax = plt.subplots()
+# ax.set_ylabel('Gradability confidence score')
+# ax.boxplot(fruit_weights, labels=labels, showmeans = True)  # will be used to label x-ticks
+# plt.show()
+# ax.figure.savefig('/home/pwuaj/hkust/DR/Gradbox2.png')
