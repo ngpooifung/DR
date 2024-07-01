@@ -252,6 +252,10 @@ class Restrainer(object):
                     loss.backward()
                     self.optimizer.step()
 
+                self.scheduler.step()
+                top1_train_accuracy /= (counter + 1)
+                top1_train2_accuracy /= (counter + 1)
+
 
             if test_loader is not None:
                 with torch.no_grad():
