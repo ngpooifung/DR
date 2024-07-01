@@ -217,7 +217,7 @@ class Restrainer(object):
                 self.scheduler.step()
                 top1_train_accuracy /= (counter + 1)
             else:
-                for l in len(train_loader):
+                for l in range(len(train_loader)):
                     img, lbl = next(iterator)
                     img2, lbl2 = next(iterator2)
 
