@@ -63,8 +63,6 @@ parser.add_argument('--disable_cuda', action = 'store_true',
                     help = 'Disable CUDA')
 parser.add_argument('--fundus', action = 'store_true',
                     help = 'fundus pretraining')
-parser.add_argument('--checkpoint-n-steps', default = 50, type = int,
-                    help = 'Save checkpoint every n steps')
 parser.add_argument('--workers', type = int, default = 16,
                     help = 'Number of data loading workers')
 parser.add_argument('--batch_size', type = int, default = 32,

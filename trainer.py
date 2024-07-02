@@ -240,7 +240,7 @@ class Restrainer(object):
                         pass
                     loss2 = self.criterion(logits2.squeeze(), lbl2)
 
-                    loss = loss1 + self.args.wf*loss2
+                    loss = (1-self.args.wf)*loss1 + self.args.wf*loss2
 
                     top1 = topacc(logits, lbl, topk = (1,))
                     top1_train_accuracy += top1[0]
