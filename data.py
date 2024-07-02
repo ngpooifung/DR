@@ -22,12 +22,12 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 # csv = csv.dropna()
 # predict = np.array(csv.iloc[:,0])
 # label = np.array(csv.iloc[:,1])
-# csv = pd.read_csv('/home/pwuaj/hkust/DR/gradtest.csv')
+# csv = pd.read_csv('/home/pwuaj/hkust/DR/RDRtest.csv')
 # predict = np.array(csv['model output'])
 # label = np.array(csv['True label'])
 # fpr, tpr, thresholds = roc_curve(label, predict, drop_intermediate = False)
 # th = thresholds[np.argmax(tpr-fpr)]
-# predict = (predict > 0.27)*1
+# predict = (predict > 0.43)*1
 # print(th,classification_report(label, predict, digits = 4), roc_auc_score(label, predict))
 
 # %% result 0.5 0.35 0.45
@@ -149,15 +149,15 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 
 # %%
 for i in ['0', '1']:
-    folder = os.path.join('/home/pwuaj/data/fundus/RDR', i)
+    folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(484):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/0', filelist[j]]))
+        for j in range(1266):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/0', filelist[j]]))
     elif i == '1':
-        for j in range(1348):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/training2/1', filelist[j]]))
+        for j in range(567):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/1', filelist[j]]))
 #
 # # %%
 # import matplotlib.pyplot as plt
