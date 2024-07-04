@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
+from sklearn.manifold import TSNE
 try:
     from torchvision.transforms import InterpolationMode
     BICUBIC = InterpolationMode.BICUBIC
@@ -246,22 +247,29 @@ class Restrainer(object):
         logging.info("Training has finished.")
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
-    def tsne(self, test_loader):
-        self.model.eval()
+    def get_features(self, test_loader):
+        all_features = []
+        all_labels = []
 
         with torch.no_grad():
-            img_map = []
-            lbl_map = []
-            for counter, (img, lbl) in enumerate(test_loader):
+            for images, labels in tqdm(test_loader):
+                images = images.to(self.args.device)
+                features = self.model.module(images.type(self.dtype))
 
-                img = img.to(self.args.device)
-                lbl = lbl[1]
-                features = self.model.module(img.type(self.dtype))
-                print(features.shape)
-                img_map.append(features.cpu())
-                lbl_map.extend(lbl)
-            img_map = torch.concat(img_map)
-            print(img_map.shape, len(lbl_map), lbl_map)
+                all_features.append(features)
+                all_labels.append(labels[1])
+
+        return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
+
+    def tsne(self. test_loader):
+        self.model.eval()
+        test_features, test_labels = self.get_features(test_loader)
+        tsne = TSNE(n_components=2, perplexity=30).fit_transform(test_features)
+
+        fig, ax = plt.subplots()
+        ax.scatter(tsne[:,0], tsne[:,1], c = all_labels, cmap = 'tab10')
+        plt.show()
+        ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
 
     def eval(self, test_loader):
         self.model.eval()
