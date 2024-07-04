@@ -235,7 +235,7 @@ class Restrainer(object):
                     top1_valid_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
-            print(f"Epoch: {epoch_counter}\tLoss: {loss:.5f}\tTop1 accuracy: {top1_train_accuracy.item():.5f}\tTop1 accuracy2: {top1_train2_accuracy.item():.5f}\tTop1 valid accuracy: {top1_valid_accuracy.item():.5f}\tLR: {self.scheduler.get_last_lr():.5f}")
+            print(f"Epoch: {epoch_counter}\tLoss: {loss:.5f}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 accuracy2: {top1_train2_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
 
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
                 checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
