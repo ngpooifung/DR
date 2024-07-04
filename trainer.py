@@ -267,7 +267,7 @@ class Restrainer(object):
         tsne = TSNE(n_components=2, perplexity=30).fit_transform(test_features)
 
         fig, ax = plt.subplots()
-        ax.scatter(tsne[:,0], tsne[:,1], c = all_labels, cmap = 'tab10')
+        ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10')
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
 
