@@ -261,7 +261,7 @@ class Restrainer(object):
                 img_map.append(features.cpu())
                 lbl_map.extend(lbl)
             img_map = torch.concat(img_map)
-            print(img_map.shape, lbl_map.shape)
+            print(img_map.shape, len(lbl_map), lbl_map)
 
     def eval(self, test_loader):
         self.model.eval()
