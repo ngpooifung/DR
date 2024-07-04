@@ -261,7 +261,7 @@ class Restrainer(object):
 
         return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
 
-    def tsne(self. test_loader):
+    def tsne(self, test_loader):
         self.model.eval()
         test_features, test_labels = self.get_features(test_loader)
         tsne = TSNE(n_components=2, perplexity=30).fit_transform(test_features)
