@@ -246,7 +246,7 @@ class Restrainer(object):
         logging.info("Training has finished.")
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
-    def tsne(self. test_loader):
+    def tsne(self, test_loader):
         self.model.eval()
 
         with torch.no_grad():
