@@ -7,7 +7,7 @@ from torch import nn
 import torch.backends.cudnn as cudnn
 from dataset import Modeldataset, Imagefolder
 from model import modeltrainer
-from trainer import Restrainer, Classictrainer, Comtrainer
+from trainer import Restrainer
 from exceptions import NotImplementError
 import os
 import torch.distributed as dist
