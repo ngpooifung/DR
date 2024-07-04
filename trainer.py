@@ -265,7 +265,7 @@ class Restrainer(object):
         self.model.eval()
         test_features, test_labels = self.get_features(test_loader)
         print(test_features.shape, len(test_labels))
-        tsne = TSNE(n_components=2, perplexity=30).fit_transform(test_features)
+        tsne = TSNE(n_components=2, perplexity=5).fit_transform(test_features)
 
         fig, ax = plt.subplots()
         ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s = 0.3)
