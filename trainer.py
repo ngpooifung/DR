@@ -26,45 +26,6 @@ except ImportError:
 torch.manual_seed(0)
 
 # %%
-class Comtrainer(object):
-    def __init__(self, model, clip_model, args):
-        self.clip_model = clip_model.float()
-        self.model = model.float()
-        self.args = args
-
-    def get_features(self, dataloader):
-        all_features = []
-        all_labels = []
-
-        with torch.no_grad():
-            for images, labels in tqdm(dataloader):
-                f1 = self.clip_model.module.encode_image(images.to(self.args.device))
-                f2 = self.model(images.to(self.args.device))
-                features = torch.cat((f2, f1),1)
-                all_features.append(features)
-                all_labels.append(labels[1])
-
-        return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
-
-    def Logistic(self, train_loader, test_loader = None):
-        self.clip_model.eval()
-        self.model.eval()
-
-        train_features, train_labels = self.get_features(train_loader)
-        print(train_features.shape)
-        test_features, test_labels = self.get_features(test_loader)
-
-        if self.args.use_mlp:
-            classifier = MLPClassifier(max_iter = 100000)
-        else:
-            classifier=LogisticRegression(max_iter=100000)
-
-        classifier.fit(train_features, train_labels)
-
-        # Evaluate using the logistic regression classifier
-        predictions = classifier.predict(test_features)
-        accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
-        print(f"Accuracy = {accuracy:.3f}")
 
 class Classictrainer(object):
     def __init__(self, model, optimizer, scheduler, args):
@@ -274,7 +235,7 @@ class Restrainer(object):
                     top1_valid_accuracy /= (counter + 1)
 
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
-            print(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1_train_accuracy.item()}\tTop1 accuracy2: {top1_train2_accuracy.item()}\tTop1 valid accuracy: {top1_valid_accuracy.item()}\tLR: {self.scheduler.get_last_lr()}")
+            print(f"Epoch: {epoch_counter}\tLoss: {loss:.5f}\tTop1 accuracy: {top1_train_accuracy.item():.5f}\tTop1 accuracy2: {top1_train2_accuracy.item():.5f}\tTop1 valid accuracy: {top1_valid_accuracy.item():.5f}\tLR: {self.scheduler.get_last_lr():.5f}")
 
             if (epoch_counter + 1) % self.args.checkpoint_n_steps == 0:
                 checkpoint_name = '%s_%04d.pth.tar'%(self.args.process, epoch_counter+1)
@@ -284,6 +245,23 @@ class Restrainer(object):
 
         logging.info("Training has finished.")
         logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+
+    def tsne(self. test_loader):
+        self.model.eval()
+
+        with torch.no_grad():
+            img_map = []
+            lbl_map = []
+            for counter, (img, lbl) in enumerate(test_loader):
+
+                img = img.to(self.args.device)
+                lbl = lbl[1]
+                features = self.model.module(img.type(self.dtype))
+                print(features.shape)
+                img_map.append(features.cpu())
+                lbl_map.extend(lbl)
+            img_map = torch.concat(img_map)
+            print(img_map.shape, lbl_map.shape)
 
     def eval(self, test_loader):
         self.model.eval()
