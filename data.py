@@ -149,15 +149,15 @@ from sklearn.metrics import roc_curve, precision_recall_curve, cohen_kappa_score
 
 # %%
 for i in ['0', '1']:
-    folder = os.path.join('/home/pwuaj/data/fundus/VTDR', i)
+    folder = os.path.join('/home/pwuaj/data/fundus/RDR', i)
     filelist = os.listdir(folder)
     random.shuffle(filelist)
     if i == '0':
-        for j in range(1266):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/0', filelist[j]]))
+        for j in range(163):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/0', filelist[j]]))
     elif i == '1':
-        for j in range(567):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/VTDRraw/training2/1', filelist[j]]))
+        for j in range(409):
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/1', filelist[j]]))
 #
 # # %%
 # import matplotlib.pyplot as plt
