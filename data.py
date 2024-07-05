@@ -154,10 +154,10 @@ for i in ['0', '1']:
     random.shuffle(filelist)
     if i == '0':
         for j in range(163):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/0', filelist[j]]))
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/2', filelist[j]]))
     elif i == '1':
         for j in range(409):
-            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/1', filelist[j]]))
+            shutil.copy(os.path.join(folder, filelist[j]), os.path.join(*['/home/pwuaj/data/RDRraw/test2/3', filelist[j]]))
 #
 # # %%
 # import matplotlib.pyplot as plt
