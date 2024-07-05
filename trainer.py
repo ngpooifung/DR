@@ -269,6 +269,8 @@ class Restrainer(object):
 
         fig, ax = plt.subplots()
         ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s=self.args.ms)
+        ax.set_title('TSNE scatter plot')
+        ax.legend()
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
 
