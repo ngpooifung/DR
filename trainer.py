@@ -270,11 +270,11 @@ class Restrainer(object):
         fig, ax = plt.subplots()
         scatter = ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s=self.args.ms)
         handles, labels = scatter.legend_elements(prop = "colors")
+        labels = ['UWF/no RDR', 'UWF/RDR', 'fundus/non RDR', 'fundus/RDR']
         ax.set_title('TSNE scatter plot')
         ax.legend(handles, labels, loc = "upper right", title = "classes")
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
-        print(handles, labels)
 
     def eval(self, test_loader):
         self.model.eval()
