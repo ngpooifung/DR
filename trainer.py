@@ -274,7 +274,7 @@ class Restrainer(object):
         ax.legend(handles, labels, loc = "upper right", title = "classes")
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
-        print(handles, lables)
+        print(handles, labels)
 
     def eval(self, test_loader):
         self.model.eval()
