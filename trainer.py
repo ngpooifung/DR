@@ -271,7 +271,7 @@ class Restrainer(object):
         scatter = ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s=self.args.ms)
         handles, labels = scatter.legend_elements(prop = "colors")
         labels = ['UWF/no VTDR', 'UWF/VTDR', 'fundus/non VTDR', 'fundus/VTDR']
-        ax.set_title('TSNE scatter plot for the UWF+fundus framework')
+        ax.set_title('TSNE scatter plot for the previous framework')
         ax.legend(handles, labels, loc = "upper right", title = "classes")
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
