@@ -172,7 +172,7 @@ def eval():
         model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
     log = model.load_state_dict(state_dict, strict=True)
     if args.process == 'tsne':
-        model.backbone.fc = nn.Identity()
+        model.backbone.fc[3] = nn.Identity()
     model = model.to(args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
