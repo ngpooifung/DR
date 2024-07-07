@@ -15,7 +15,7 @@ import scipy
 import logging
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
-import umap.umap_ as umap
+import umap
 from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
