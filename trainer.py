@@ -267,7 +267,7 @@ class Restrainer(object):
         test_features, test_labels = self.get_features(test_loader)
         print(test_features.shape, len(test_labels))
         if self.args.umap:
-            tsne = umap.Umap(n_neighbors=self.args.per, min_dist=0.1, n_components=2, metric='euclidean')
+            tsne = umap.UMAP(n_neighbors=self.args.per, min_dist=0.1, n_components=2, metric='euclidean')
         else:
             tsne = TSNE(n_components=2, perplexity=self.args.per).fit_transform(test_features)
 
@@ -275,7 +275,7 @@ class Restrainer(object):
         scatter = ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s=self.args.ms)
         handles, labels = scatter.legend_elements(prop = "colors")
         labels = ['UWF/no RDR', 'UWF/RDR', 'fundus/non RDR', 'fundus/RDR']
-        ax.set_title('TSNE scatter plot for the previous RDR framework')
+        ax.set_title('UMAP scatter plot for the previous RDR framework')
         ax.legend(handles, labels, loc = "upper right", title = "classes")
         plt.show()
         ax.figure.savefig('/home/pwuaj/hkust/DR/tsne.png')
