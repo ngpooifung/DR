@@ -65,6 +65,8 @@ parser.add_argument('--batch_size', type = int, default = 32,
                     help = 'Batch size')
 parser.add_argument('--per', type = int, default = 30,
                     help = 'perplexity')
+parser.add_argument('--umap', action = 'store_true',
+                    help = 'use umap')
 parser.add_argument('--ms', type = float, default = 1,
                     help = 'markersize')
 parser.add_argument('--checkpoint_n_steps', type = int, default = 50,

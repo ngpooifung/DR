@@ -15,6 +15,7 @@ import scipy
 import logging
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+import umap
 from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
@@ -265,7 +266,10 @@ class Restrainer(object):
         self.model.eval()
         test_features, test_labels = self.get_features(test_loader)
         print(test_features.shape, len(test_labels))
-        tsne = TSNE(n_components=2, perplexity=self.args.per).fit_transform(test_features)
+        if self.args.umap:
+            tsne = umap.Umap(n_neighbors=self.args.per, min_dist=0.1, n_components=2, metric='euclidean')
+        else:
+            tsne = TSNE(n_components=2, perplexity=self.args.per).fit_transform(test_features)
 
         fig, ax = plt.subplots()
         scatter = ax.scatter(tsne[:,0], tsne[:,1], c = test_labels, cmap = 'tab10', s=self.args.ms)
