@@ -267,7 +267,7 @@ class Restrainer(object):
         test_features, test_labels = self.get_features(test_loader)
         print(test_features.shape, len(test_labels))
         if self.args.umap:
-            tsne = umap.UMAP(n_neighbors=self.args.per, min_dist=0.1, n_components=2, metric='euclidean')
+            tsne = umap.UMAP(n_neighbors=self.args.per, min_dist=0.1, n_components=2, metric='euclidean').fit_transform(test_features)
         else:
             tsne = TSNE(n_components=2, perplexity=self.args.per).fit_transform(test_features)
 
