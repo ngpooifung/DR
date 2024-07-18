@@ -382,17 +382,16 @@ class Restrainer(object):
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                                               ])
 
-        with torch.no_grad():
-            for image, lbl in tqdm(test_loader):
-                path= lbl[0][0]
-                name = os.path.split(path)[1]
-                lbl = lbl[1].to(self.args.device)
-                grayscale_cams = cam(image.to(self.args.device), targets=targets)
-                img = Image.open(path)
-                img = data_transforms(img)
-                cam_image = show_cam_on_image(img, grayscale_cams[0, :], use_rgb=True)
+        for image, lbl in tqdm(test_loader):
+            path= lbl[0][0]
+            name = os.path.split(path)[1]
+            lbl = lbl[1].to(self.args.device)
+            grayscale_cams = cam(image.to(self.args.device), targets=targets)
+            img = Image.open(path)
+            img = data_transforms(img)
+            cam_image = show_cam_on_image(img, grayscale_cams[0, :], use_rgb=True)
 
-                if lbl.item() ==1:
-                    images = np.hstack((img, cam_image))
-                    image = PIL.Image.fromarray(images)
-                    image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
+            if lbl.item() ==1:
+                images = np.hstack((img, cam_image))
+                image = PIL.Image.fromarray(images)
+                image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
