@@ -388,11 +388,12 @@ class Restrainer(object):
             lbl = lbl[1].to(self.args.device)
             grayscale_cams = cam(image.to(self.args.device), targets=targets)
             img = Image.open(path)
-            print(np.array(img))
             img = data_transforms(img)
             cam_image = show_cam_on_image(np.asarray(img).squeeze().transpose(1,2,0), grayscale_cams[0, :], use_rgb=True)
+            print(img.dtype, grayscale_cams.dtype, cam_image.dtype)
 
             if lbl.item() ==1:
                 images = np.hstack((np.asarray(img).squeeze().transpose(1,2,0), cam_image))
+                print(imgaes.dtype)
                 image = Image.fromarray(images)
                 image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
