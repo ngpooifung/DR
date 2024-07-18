@@ -368,7 +368,7 @@ class Restrainer(object):
     def gradcam(self, test_loader):
         self.model.eval()
         targets = [ClassifierOutputTarget(1)]
-        target_layers = [self.model.layer4]
+        target_layers = [self.model.module.backbone.layer4]
         cam = GradCAM(model=self.model, target_layers=target_layers)
 
         def _convert_image_to_rgb(image):
