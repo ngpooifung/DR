@@ -389,6 +389,7 @@ class Restrainer(object):
             grayscale_cams = cam(image.to(self.args.device), targets=targets)
             img = Image.open(path)
             img = data_transforms(img)
+            print(imag.shape, grayscale_cams[0, :].shape)
             cam_image = show_cam_on_image(img, grayscale_cams[0, :], use_rgb=True)
 
             if lbl.item() ==1:
