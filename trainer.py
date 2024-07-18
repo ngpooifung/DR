@@ -19,6 +19,9 @@ from tqdm import tqdm
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.manifold import TSNE
+from pytorch_grad_cam import GradCAM,GradCAMPlusPlus
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from pytorch_grad_cam.utils.image import show_cam_on_image,preprocess_image
 try:
     from torchvision.transforms import InterpolationMode
     BICUBIC = InterpolationMode.BICUBIC
@@ -360,3 +363,36 @@ class Restrainer(object):
                     plt.imshow(final_cam.squeeze().detach().cpu().numpy(), alpha=0.25, cmap = self.args.cmap)
                     plt.savefig(os.path.join(*['/home/pwuaj/data/cam', name]))
                     plt.close()
+
+
+    def gradcam(self, test_loader):
+        self.model.eval()
+        targets = [ClassifierOutputTarget(1)]
+        target_layers = [self.model.layer4]
+        cam = GradCAM(model=self.model, target_layers=target_layers)
+
+        def _convert_image_to_rgb(image):
+            return image.convert("RGB")
+
+        data_transforms = transforms.Compose([
+                                              Resize(self.args.resize, interpolation=BICUBIC),
+                                              CenterCrop((self.args.resize, int(self.args.resize*1.25))),
+                                              _convert_image_to_rgb,
+                                              ToTensor(),
+                                              # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+                                              ])
+
+        with torch.no_grad():
+            for image, lbl in tqdm(test_loader):
+                path= lbl[0][0]
+                name = os.path.split(path)[1]
+                lbl = lbl[1].to(self.args.device)
+                grayscale_cams = cam(image.to(self.args.device), targets=targets)
+                img = Image.open(path)
+                img = data_transforms(img)
+                cam_image = show_cam_on_image(img, grayscale_cams[0, :], use_rgb=True)
+
+                if lbl.item() ==1:
+                    images = np.hstack((img, cam_image))
+                    image = PIL.Image.fromarray(images)
+                    image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
