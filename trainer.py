@@ -368,7 +368,7 @@ class Restrainer(object):
     def gradcam(self, test_loader):
         self.model.eval()
         targets = [ClassifierOutputTarget(1)]
-        target_layers = [self.model.module.backbone.layer4]
+        target_layers = [self.model.module.backbone.layer4[-1]]
         cam = GradCAM(model=self.model, target_layers=target_layers)
 
         def _convert_image_to_rgb(image):
@@ -391,10 +391,8 @@ class Restrainer(object):
             img = data_transforms(img)
             img = np.asarray(img).squeeze().transpose(1,2,0)
             cam_image = show_cam_on_image(img, grayscale_cams[0, :], use_rgb=True)
-            print(img.dtype, grayscale_cams.dtype, cam_image.dtype)
 
             if lbl.item() ==1:
                 images = np.hstack((np.uint8(255*img), cam_image))
-                print(images.dtype)
                 image = Image.fromarray(images)
                 image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
