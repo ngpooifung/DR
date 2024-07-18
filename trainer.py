@@ -394,7 +394,7 @@ class Restrainer(object):
             print(img.dtype, grayscale_cams.dtype, cam_image.dtype)
 
             if lbl.item() ==1:
-                images = np.hstack(np.uint8(255*img), cam_image)
+                images = np.hstack((np.uint8(255*img), cam_image))
                 print(images.dtype)
                 image = Image.fromarray(images)
                 image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
