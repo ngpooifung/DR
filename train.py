@@ -168,8 +168,8 @@ def eval():
     state_dict = checkpoint['state_dict']
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
-    if args.process == 'class_activation':
-        model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
+    # if args.process == 'class_activation':
+    #     model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
     log = model.load_state_dict(state_dict, strict=True)
     if args.process == 'tsne':
         model.backbone.fc = nn.Identity()
@@ -182,7 +182,7 @@ def eval():
     if args.process == 'eval':
         trainer.eval(test_loader)
     elif args.process == 'class_activation':
-        trainer.class_activation(test_loader)
+        trainer.gradcam(test_loader)
     elif args.process == 'tsne':
         trainer.tsne(test_loader)
 
