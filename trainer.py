@@ -369,7 +369,7 @@ class Restrainer(object):
         self.model.eval()
         targets = [ClassifierOutputTarget(1)]
         target_layers = [self.model.module.backbone.layer4[-1]]
-        cam = GradCAM(model=self.model, target_layers=target_layers, use_cuda=torch.cuda.is_available()))
+        cam = GradCAM(model=self.model, target_layers=target_layers, use_cuda=torch.cuda.is_available())
 
         def _convert_image_to_rgb(image):
             return image.convert("RGB")
