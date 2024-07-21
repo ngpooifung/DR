@@ -395,4 +395,9 @@ class Restrainer(object):
             if lbl.item() ==1:
                 images = np.hstack((np.uint8(255*img), cam_image))
                 image = Image.fromarray(images)
-                image.save(os.path.join(*['/home/pwuaj/data/cam', name]))
+                image.save(os.path.join(*['/home/pwuaj/data/cam/1', name]))
+
+            elif lbl.item() ==0:
+                images = np.hstack((np.uint8(255*img), cam_image))
+                image = Image.fromarray(images)
+                image.save(os.path.join(*['/home/pwuaj/data/cam/0', name]))
