@@ -386,7 +386,7 @@ class Restrainer(object):
             path= lbl[0][0]
             name = os.path.split(path)[1]
             lbl = lbl[1].to(self.args.device)
-            grayscale_cams = cam(image.to(self.args.device), targets=targets, aug_smooth=True)
+            grayscale_cams = cam(image.to(self.args.device), targets=targets)
             img = Image.open(path)
             img = data_transforms(img)
             img = np.asarray(img).squeeze().transpose(1,2,0)
