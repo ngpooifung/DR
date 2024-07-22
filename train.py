@@ -182,7 +182,7 @@ def eval():
     if args.process == 'eval':
         trainer.eval(test_loader)
     elif args.process == 'class_activation':
-        trainer.gradcam(test_loader)
+        trainer.class_activation(test_loader)
     elif args.process == 'tsne':
         trainer.tsne(test_loader)
 
