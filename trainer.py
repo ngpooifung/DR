@@ -333,8 +333,8 @@ class Restrainer(object):
             return image.convert("RGB")
 
         data_transforms = transforms.Compose([
-                                              Resize((self.args.resize, int(self.args.resize*1.25)), interpolation=BICUBIC),
-                                              # CenterCrop((self.args.resize, int(self.args.resize*1.25))),
+                                              Resize(self.args.resize, interpolation=BICUBIC),
+                                              CenterCrop((self.args.resize, int(self.args.resize*1.25))),
                                               _convert_image_to_rgb,
                                               ToTensor(),
                                               # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
