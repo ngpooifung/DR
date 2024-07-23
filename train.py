@@ -128,10 +128,11 @@ def main():
         checkpoint = torch.load(path, map_location = args.device)
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=False)
-        model.backbone.fc = nn.Linear(2048, 2)
+        # model.backbone.fc = nn.Linear(2048, 2)
         print(log)
         for name, param in model.named_parameters():
-            if name not in ['backbone.fc.weight', 'backbone.fc.bias']:
+            print(name)
+            if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
                 param.requires_grad = False
 
         model = model.to(args.device)
@@ -168,8 +169,8 @@ def eval():
     state_dict = checkpoint['state_dict']
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
-    if args.process == 'class_activation':
-        model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
+    # if args.process == 'class_activation':
+    #     model.backbone.fc = nn.Linear(model.backbone.fc[0].in_features, 2)
     log = model.load_state_dict(state_dict, strict=True)
     if args.process == 'tsne':
         model.backbone.fc = nn.Identity()
