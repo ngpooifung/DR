@@ -129,9 +129,7 @@ def main():
         state_dict = checkpoint['state_dict']
         log = model.load_state_dict(state_dict, strict=False)
         # model.backbone.fc = nn.Linear(2048, 2)
-        print(log)
         for name, param in model.named_parameters():
-            print(name)
             if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
                 param.requires_grad = False
 
