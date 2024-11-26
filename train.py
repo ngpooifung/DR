@@ -25,11 +25,9 @@ parser.add_argument('--process', choices=function_names,
 # Data
 parser.add_argument('--dir', type = str,
                     help = 'Path to training data directory')
-parser.add_argument('--dir2', type = str, default = None,
-                    help = 'Path to training data directory2')
 parser.add_argument('--test-dir', type = str, default = None,
                     help = 'Path to test data directory')
-parser.add_argument('--resize', default = 336, type = int,
+parser.add_argument('--resize', default = 512, type = int,
                     help = 'resize images in training')
 parser.add_argument('--output', type = str, default = '',
                     help = 'Path to output folder')
@@ -49,16 +47,12 @@ parser.add_argument('--weight', type = int, nargs = 2, default = (1, 1),
                     help = 'weight')
 parser.add_argument('--lr', type = float, default = 0.0001,
                     help = 'Learning rate')
-parser.add_argument('--wf', type = float, default = 0.1,
-                    help = 'Learning rate')
 parser.add_argument('--dropout', type = float, default = 0.,
                     help = 'dropout')
 parser.add_argument('--weight_decay', type = float, default = 1e-4,
                     help = 'Weight decay')
 parser.add_argument('--disable_cuda', action = 'store_true',
                     help = 'Disable CUDA')
-parser.add_argument('--fundus', action = 'store_true',
-                    help = 'fundus pretraining')
 parser.add_argument('--workers', type = int, default = 16,
                     help = 'Number of data loading workers')
 parser.add_argument('--batch_size', type = int, default = 32,
@@ -96,13 +90,6 @@ def main():
     train_sampler = DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler)
 
-    if args.dir2 is not None:
-        train_dataset2 = Modeldataset(args.dir2).get_dataset(resize = args.resize, transform = True)
-        train_sampler2 = DistributedSampler(train_dataset2)
-        train_loader2 = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, drop_last=False, sampler = train_sampler2)
-    else:
-        train_loader2 = None
-
     if args.test_dir is not None:
         test_dataset = Modeldataset(args.test_dir).get_dataset(resize = args.resize, transform = False)
         test_sampler = DistributedSampler(test_dataset)
@@ -111,17 +98,6 @@ def main():
         test_loader = None
 
     model = modeltrainer()._get_model(base_model = args.arch, out_dim = args.out_dim, dropout = args.dropout).to(args.device)
-
-    if args.fundus:
-        path = os.path.join('RDR', args.finetune)
-        checkpoint = torch.load(path, map_location = args.device)
-        state_dict = checkpoint['state_dict']
-        log = model.load_state_dict(state_dict, strict=True)
-        print(log)
-        # for name, param in model.named_parameters():
-        #     if name not in ['backbone.fc.0.weight', 'backbone.fc.0.bias','backbone.fc.3.weight', 'backbone.fc.3.bias']:
-        #         param.requires_grad = False
-        model = model.to(args.device)
 
     if args.process == 'transfer':
         path = os.path.join(args.output, args.finetune)
@@ -134,7 +110,6 @@ def main():
                 param.requires_grad = False
 
         model = model.to(args.device)
-    # model,_ = clip.load('RN50', device = args.device)
     model = DDP(model, device_ids = [local_rank], output_device=local_rank)
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
@@ -142,7 +117,7 @@ def main():
                                                            last_epoch=-1)
 
     trainer = Restrainer(model, optimizer, scheduler, args)
-    trainer.train(train_loader, test_loader, train_loader2)
+    trainer.train(train_loader, test_loader)
 
 def eval():
     if not args.disable_cuda and torch.cuda.is_available():
