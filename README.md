@@ -44,9 +44,11 @@ torchrun --standalone --nnodes=1 --nproc_per_node=1  train.py \
 ## models
 I uploaded a list of models that I used to generate results, they are under the models folder. For each type (RDR, VTDR, gradability), eight models are uploaded. 
 model suffix:
-384/448/484/576: models trained with different image sizes
-inception/dense121/efficient: models trained with different architectures
-no suffix: the chosen model with resnet50 and image size 512
+```python
+384/448/484/576: models trained with different image sizes \
+inception/dense121/efficient: models trained with different architectures \
+no suffix: the chosen model with resnet50 and image size 512 \
+```
 
 
 
