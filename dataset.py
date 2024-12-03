@@ -38,9 +38,9 @@ class Imagefolder(datasets.ImageFolder):
         sample = self.samples[idx]
         path = sample[0]
         lbl = sample[1]
-        img = Image.open(path)
-        # img = cv2.imread(path)
-        # img = Image.fromarray(claheimg(img))
+        # img = Image.open(path)
+        img = cv2.imread(path)
+        img = Image.fromarray(claheimg(img))
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
