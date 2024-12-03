@@ -31,8 +31,10 @@ class Imagefolder(datasets.ImageFolder):
         sample = self.samples[idx]
         path = sample[0]
         lbl = sample[1]
-        img = Image.open(path)
+        # img = Image.open(path)
+        img = cv2.imread(path)
         img = self.clahe.apply(img)
+        img = Image.fromarray(cv2.cvtColor(img, cv2.Color_BGR2RGB))
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
