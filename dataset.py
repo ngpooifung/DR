@@ -17,14 +17,12 @@ except ImportError:
     BICUBIC = Image.BICUBIC
 # %%
 class Imagefolder(datasets.ImageFolder):
-    def __init__(self, img_dir, resize = 336, transform=None, preprocess = True, clip_csv = None):
+    def __init__(self, img_dir, resize = 336, transform=None, preprocess = True):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
         self.preprocess = preprocess
-        self.clip_csv = clip_csv
-        if clip_csv is not None:
-            self.csv = pd.read_csv(clip_csv)
+        self.clahe = cv2.create_CLAHE(clipLimit=2.0, tileGridSize=(8,8))
 
     def __len__(self):
         return len(self.samples)
@@ -34,24 +32,7 @@ class Imagefolder(datasets.ImageFolder):
         path = sample[0]
         lbl = sample[1]
         img = Image.open(path)
-        if self.clip_csv is not None:
-            text = self.csv['text'][self.csv['label'] == lbl].item()
-            name = os.path.split(path)[1]
-            subject,date,eye,_ = name.split('-')
-            subject = subject[4:]
-            date = date.split('@')[0]
-            if eye[0] == 'L':
-                eye = 'left eye'
-            else:
-                eye = 'right eye'
-            text = f"Subject {subject}'s {eye} is {text}"
-        # if img.ndim ==2:
-        #     img = img[..., np.newaxis]
-        #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-        # shape = img.shape
-        # if (self.size[0] > shape[0]) | (self.size[1] > shape[1]):
-        #     raise ValueError(f'Size={self.size} > {shape[0]},{shape[1]}')
-        # img = img.astype('float32')
+        # img = self.clahe.apply(img)
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
@@ -65,7 +46,7 @@ class Imagefolder(datasets.ImageFolder):
         if self.transform is not None:
             img = self.transform(img)
 
-        return (img, text) if self.clip_csv is not None else (img, sample)
+        return (img, sample)
 
 # %%
 class Modeldataset:
@@ -84,11 +65,11 @@ class Modeldataset:
                                               ])
         return data_transforms
 
-    def get_dataset(self, resize = 336, transform = True, preprocess = True, clip_csv = None):
+    def get_dataset(self, resize = 336, transform = True, preprocess = True):
         if transform:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess, clip_csv = clip_csv)
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, transform = self.get_transform(resize), preprocess = preprocess)
         else:
-            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, preprocess = preprocess, clip_csv = clip_csv)
+            dataset = Imagefolder(img_dir = self.root_folder, resize = resize, preprocess = preprocess)
 
         return dataset
 
