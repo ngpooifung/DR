@@ -16,13 +16,20 @@ try:
 except ImportError:
     BICUBIC = Image.BICUBIC
 # %%
+def claheimg(img):
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    lab_img = cv2.cvtColor(img, cv2.Color_BGR2LAB)
+    lab_planes = cv2.split(lab_img)
+    lab_planes[0] = clahe.apply(lab_planes[0])
+    lab_img = cv2.merge(lab_planes)
+    return cv2.cvtColor(lab_img, cv2.COLOR_LAB2RGB)
+
 class Imagefolder(datasets.ImageFolder):
     def __init__(self, img_dir, resize = 336, transform=None, preprocess = True):
         super(Imagefolder, self).__init__(img_dir)
         self.transform = transform
         self.resize = resize
         self.preprocess = preprocess
-        self.clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 
     def __len__(self):
         return len(self.samples)
@@ -31,10 +38,9 @@ class Imagefolder(datasets.ImageFolder):
         sample = self.samples[idx]
         path = sample[0]
         lbl = sample[1]
-        # img = Image.open(path)
-        img = cv2.imread(path)
-        img = self.clahe.apply(img)
-        img = Image.fromarray(cv2.cvtColor(img, cv2.Color_BGR2RGB))
+        img = Image.open(path)
+        # img = cv2.imread(path)
+        # img = Image.fromarray(claheimg(img))
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
