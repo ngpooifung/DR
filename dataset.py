@@ -18,7 +18,7 @@ except ImportError:
 # %%
 def claheimg(img):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-    lab_img = cv2.cvtColor(img, cv2.Color_BGR2LAB)
+    lab_img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
     lab_planes = cv2.split(lab_img)
     lab_planes[0] = clahe.apply(lab_planes[0])
     lab_img = cv2.merge(lab_planes)
