@@ -32,7 +32,7 @@ class Imagefolder(datasets.ImageFolder):
         path = sample[0]
         lbl = sample[1]
         img = Image.open(path)
-        # img = self.clahe.apply(img)
+        img = self.clahe.apply(img)
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
