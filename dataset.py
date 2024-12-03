@@ -22,7 +22,7 @@ class Imagefolder(datasets.ImageFolder):
         self.transform = transform
         self.resize = resize
         self.preprocess = preprocess
-        self.clahe = cv2.create_CLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        self.clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 
     def __len__(self):
         return len(self.samples)
