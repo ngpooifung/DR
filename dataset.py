@@ -19,7 +19,7 @@ except ImportError:
 def claheimg(img):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
     lab_img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-    l,a,b = lab_img[:,:0], lab_img[:,:,1], lab_img[:,:,2]
+    l,a,b = lab_img[:,:,0], lab_img[:,:,1], lab_img[:,:,2]
     l = clahe.apply(l)
     lab_img = np.dstack((l,a,b))
     return cv2.cvtColor(lab_img, cv2.COLOR_LAB2RGB)
