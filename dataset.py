@@ -4,6 +4,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import tifffile
 import cv2
+import numpy as np
 import torchvision.transforms.functional as TF
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize, GaussianBlur, ColorJitter, RandomAffine
 import random
