@@ -22,6 +22,7 @@ def claheimg(img):
     lab_planes = cv2.split(lab_img)
     lab_planes[0] = clahe.apply(lab_planes[0])
     lab_img = cv2.merge(lab_planes)
+    print(good)
     return cv2.cvtColor(lab_img, cv2.COLOR_LAB2RGB)
 
 class Imagefolder(datasets.ImageFolder):
@@ -41,7 +42,6 @@ class Imagefolder(datasets.ImageFolder):
         # img = Image.open(path)
         img = cv2.imread(path)
         img = Image.fromarray(claheimg(img))
-        print('good')
         data_transforms = transforms.Compose([
                                               Resize(self.resize, interpolation=BICUBIC),
                                               CenterCrop((self.resize, int(self.resize*1.25))),
